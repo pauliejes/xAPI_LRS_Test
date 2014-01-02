@@ -14,7 +14,7 @@ Learning (ADL) Initiative.
 * The conformance test will test ONLY an LRS and test ONLY mandatory requirements within the xAPI Specification.
 * An LRS that passes this conformance test can and should be used to test conformance of content/clients of xAPI.
 * All tests must be passed to achieve conformance, as opposed to “passing” all requirements in the TR document (these should be the same, but conformance is driven by the test results)
-* It is anticipated that additional Unit Tests for communities of practice may be created, such as for CMI5.  Those collections of Unit Tests can be included in this group, but are not part of the conformance endorsed by ADL.
+* It is anticipated that additional tests for communities of practice may be created, such as for CMI5.  Those collections of tests can be included in this group, but are not part of the conformance endorsed by ADL.
 
 ### Conformance Testing Requirments Document
 
