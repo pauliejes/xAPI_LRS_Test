@@ -26,18 +26,18 @@ Learning (ADL) Initiative.
 
 ### Process 
 
-* The group will work to create the TR document and test cases, which will be called Unit Tests.
-* The group will use current Unit Tests to create a process for new Unit Tests.
+* The group will work to create the TR document and test cases, which will be called tests.
+* The group will use current tests to create a process for new tests.
 * In the event of a requirement needed in the TR, but does not show up in the spec document, an issue will be created within the specification group.
 * Differing TR expectations must have group consensus before bringing a change to the specification group.
 * After the TR document is complete, the specification will be examined for requirements not referenced by the TR document.
 * Another post-TR document thing to look at is LRS to LRS Statement transfer and if specific requirements are needed.
 
-### Unit Tests
+### Tests
 
-* Every TR will have one or more unit test associated with it.  
-* Unit Tests and the TR will reference each other, as opposed to the TR document to specification references, which only go one way.
-* There may be more than one Unit Test that references the same TR document entry.
-* Unit Tests may only test things referenced within the TR document.
-* Issues can be opened within this group to perform gap analysis on whether what the Unit Test is testing should be a part of the TR document.  This will most commonly occur on existing Unit Tests as they migrate into this effort.
-* All Unit Tests upon being run must explicitly state if they pass or fail, and if there is a failure, refer to the exact requirement that has failed via the TR document numbering system.
+* Every TR will have one or more test associated with it.  
+* Tests and the TR will reference each other, as opposed to the TR document to specification references, which only go one way.
+* There may be more than one test that references the same TR document entry.
+* Tests may only test things referenced within the TR document.
+* Issues can be opened within this group to perform gap analysis on whether what the test is testing should be a part of the TR document.  This will most commonly occur on existing tests as they migrate into this effort.
+* All tests upon being run must explicitly state if they pass or fail, and if there is a failure, refer to the exact requirement that has failed via the TR document numbering system.
