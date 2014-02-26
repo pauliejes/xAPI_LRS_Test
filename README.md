@@ -3,6 +3,8 @@ Experience API LRS Test
 
 ## Policies and Procedures for Conformance Testing Group:
 
+## Forum Link: https://groups.google.com/a/adlnet.gov/forum/#!forum/xapi-spec
+
 ### Goal
 
 This group exists to create a single conformance test to be used as the official Experience API 
