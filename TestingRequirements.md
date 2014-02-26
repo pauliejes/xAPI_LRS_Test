@@ -59,6 +59,10 @@ All requirements should follow the same basic verbs, some verbs, however, will r
 * Is Defined By - Allows the definition of a new term to increase readability of requirements.  The definition 
 links to a document section.  A specific requirement is not necessary.  Being "defined" doesn't remove any previous requirements i.e. an "Agent" is still either an "actor" property or "object" property.
 
+### LRS vs. "System"
+
+In the xAPI Specification, there are references to the Learning Record Store (LRS) as well as to a generic "system".  The LRS is not considered to be one of these systems for the sake of conformance as the LRS simply stores and retrieves statements, whereas "systems" referenced within the xAPI Specification are expected to perform either an additional task or a different task.  Requirements with MUST or MUST NOT that relate to systems will not be vetted in this document.  A similar case can be made for other non-LRS entities such as "Anyone".
+
 
 <a name="creqprop"/>
 ## 2.0 Conformance Requirements
@@ -90,7 +94,7 @@ The details of each property of a statement are described in the table below.
 * An "id" property is a UUID following RFC 4122 (Syntax, RFC 4122)
 * An "actor" property uses the "objectType" property at most one time (Multiplicity, 4.1.a)
 * An "objectType" property is a String (Type, 4.1.2.1.table1.row1.a)
-* An "objectType" property is either "Agent" or "Group" (Vocabulary, 4.1.2.1.table1.row1.b, 4.1.2.1.table1.row1.b)
+* An "actor" property's "objectType" property is either "Agent" or "Group" (Vocabulary, 4.1.2.1.table1.row1.b, 4.1.2.1.table1.row1.b)
 * An Agent is defined by "objectType" of an "actor" or "object" with value "Agent" (4.1.2.1.table1.row1)
 * An Agent uses the "name" property at most one time (Multiplicity, 4.1.a)
 * A "name" property is a String (Type, 4.1.2.1.table1.row2.a)
@@ -142,13 +146,38 @@ by one of "mbox", "mbox_sha1sum", "open_id", or "account" being used (4.1.2.2.ta
 * An "account" property uses the "name" property at most one time (Multiplicity, 4.1.a)
 * An "account" property uses the "name" property (Multiplicity, 4.1.2.4.table1.row2.b)
 * An "account" property's "name" property is a String (Type, 4.1.2.4.table1.row1.a)
+* A "verb" property uses the "id" property at most one time (Multiplicity, 4.1.3.table1.row1.aultiplicity, 4.1.a)
+* A "verb" property contains an "id" property (Multiplicity, 4.1.3.table1.row1.b)
+* A "verb" property's "id" property is an IRI (Type, 4.1.3.table1.row1.a)
+* A "verb" property uses the "display" property at most one time (Multiplicity, 4.1.a)
+* A "verb" property's "display" property is a Language Map (Type, 4.1.3.table1.row2.a)
+* A Language Map is defined as a list of language tag/String pairs has at least 1 entry  **Implicit**
+* A Language Map follows RFC5646 (Format, 5.2.a, RFC5646)
+* A "display" property uses a Language Map (Format, 4.1.3.table1.row1.a)
+* An "object" property uses the "objectType" property at most one time (Multiplicity, 4.1.a)
+* An "object" property uses the "id" property at most one time (Multiplicity, 4.1.a)
+* An "object" property uses the "definition" property at most one time (Multiplicity, 4.1.a)
+* An "object" property contains an "id" property (Multiplicity, 4.1.4.1.table1.row2.b)
+* An "object" property's "id" property is an IRI (Type, 4.1.4.1.table1.row2.a)
+* An "object" property's "objectType" property is either "Activity", "Agent", "Group", "SubStatement",  or"StatementRef" (Vocabulary, 4.1.4.b)
+* An Activity is defined by the "objectType" of an "object" with value "Activity" (4.1.4.1.table1.row1.b)
+* An Activity uses the "definition" property at most one time (Multiplicity, 4.1.a)
+* An Activity's "definition" property is an Object (Type, 4.1.4.1.table1.row3.a)
+* An Activity Object is the contents of a "definition" property object of an Activity (Format, 4.1.4.1.table2)
+* An Activity Object contains at least one of the following properties:  **Implicit**(Format, 4.1.4.1.table2)
+
+
 
 ### 2.2 Learning Record Store (LRS) Requirements
 
 * An LRS rejects with 400 Bad Request any Statement violating a Statement Requirement. (Varies, Varies)
-* An LRS generates the "id" property o
-* f a Statement if none is provided (Modify, 4.1.1.a)
+* An LRS generates the "id" property of a Statement if none is provided (Modify, 4.1.1.a)
 * An LRS rejects with 409 Conflict the "id" property of a Statement if the "id" already exists in the LRS
  (Modify, 4.1.1.a) **Implicit**
-* 
-* 
+* An LRS generates an "objectType" property of "Activity" to any "object" property if none is provided (Modify, 4.1.4.a) **Implicit**
+
+
+### 2.3 Miscellaneous Requirements
+
+* The display property MUST be used to illustrate the meaning which is already determined by the Verb IRI. (No way to automate this)
+* The display property MUST NOT be used to alter the meaning of a Verb. (No way to validate this)
