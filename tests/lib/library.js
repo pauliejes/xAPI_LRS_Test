@@ -14,9 +14,9 @@ var dictionary = new Dictionary()
 
 module.exports = (function() {
 
-    var endpoint = "https://testsite.waxlrs.com/TCAPI/statements";
-    var username = "bob";
-    var password = "orange";
+    var endpoint = "http://cloud.scorm.com/tc/public/statements";
+    var username = "test";
+    var password = "somepass";
 
 
     var context = {
