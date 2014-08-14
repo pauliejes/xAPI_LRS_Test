@@ -4,6 +4,7 @@
 var Yadda = require("yadda"),
     Glob = require("glob").Glob,
     libraries = require("../steps"),
+    stat = require("../utils/request").stat,
     interpreterContext = {},
     runner = new Yadda.Yadda(libraries, interpreterContext),
 
@@ -121,3 +122,7 @@ files.forEach(
         runFeatureFile(file);
     }
 );
+
+after(function () {
+    stat();
+});
