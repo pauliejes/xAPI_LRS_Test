@@ -1,3 +1,8 @@
+var fs = require("fs"),
+    path = require("path"),
+    request = require("request"),
+    lrsRes = require("./utils/lrsResources");
+
 module.exports = function(grunt) {
     //
     // turn off strict because of how we are using the 'require' to
@@ -60,8 +65,42 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-mocha-test");
 
-    grunt.registerTask("stage1", ["jshint", "mochaTest:stage1-core"]);
-    grunt.registerTask("stage2", ["jshint", "mochaTest:stage2-statementStructure"]);
+    // Define tasks
+    grunt.registerTask(
+        "updateConsistent",
+        "Updates the ./var/consistency.json file",
+        function () {
+            var done = this.async();
+            request(
+                {
+                    url: lrsRes.endpoint + "statements?limit=1",
+                    method: "GET",
+                    headers: {
+                        "X-Experience-API-Version": lrsRes.version,
+                        "Authorization": lrsRes.authString
+                    },
+                },
+                function (err, res) {
+                    if (err) {
+                        grunt.fail.warn(err);
+                    }
+                    fs.writeFile(
+                        path.join(__dirname, "./var", "consistent.json"),
+                        JSON.stringify(res.headers["x-experience-api-consistent-through"]),
+                        function (err) {
+                            if (err) {
+                                grunt.fail.warn(err);
+                            }
+                            done();
+                        }
+                    );
+                }
+            );
+        }
+    );
 
-    grunt.registerTask("default", ["jshint", "mochaTest:stage1-core", "mochaTest:stage2-statementStructure"]);
+    grunt.registerTask("stage1", ["jshint", "mochaTest:stage1-core"]);
+    grunt.registerTask("stage2", ["jshint", "updateConsistent", "mochaTest:stage2-statementStructure"]);
+
+    grunt.registerTask("default", ["jshint", "mochaTest:stage1-core", "updateConsistent", "mochaTest:stage2-statementStructure"]);
 };

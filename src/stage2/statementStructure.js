@@ -7,6 +7,10 @@ var fs = require("fs"),
     statementDir = __dirname + "/../var/statements",
     stat = require("../utils/request").stat,
     statementRe = /[-\w]+\.json$/,
+    consistentThrough = new Date(require("../var/consistent.json")),
+    isConsistent = function (fname) {
+        return new Date(require(statementDir + "/" + fname).stored) > consistentThrough;
+    },
     scenarioContext = {
         scenarioResource: {}
     },
@@ -32,7 +36,8 @@ fs.readdirSync(statementDir).forEach(
                     "Given a loadable statement with filename: " + fname,
                     "When the statement is retrieved",
                     "Then the statement structure matches",
-                ]
+                ],
+                annotations: isConsistent(fname) ? { pending: true } : {}
             }
         );
     }
