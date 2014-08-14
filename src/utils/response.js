@@ -38,10 +38,8 @@ responses = {
 };
 
 module.exports = function (obj, type) {
-    if (obj.response.status === 200) {
+    if (obj.response.statusCode === 200) {
         return (responses[type](obj)) && versionCheck(obj, type);
     }
-    else {
-        return versionCheck(obj, type);
-    }
+    return versionCheck(obj, type);
 };

@@ -1,13 +1,12 @@
 "use strict";
 
-var assert = require("assert"),
+var assertions = require("../utils/assertions"),
+    makeRequest = require("../utils/request").makeRequest,
     English = require("yadda").localisation.English,
     fs = require("fs"),
     path = require("path"),
     async = require("async"),
     factory = require("../utils/factory"),
-    makeRequest = require("../utils/request").makeRequest,
-    response = require("../utils/response"),
     selectn = require("selectn"),
     moment = require("moment"),
     convertName,
@@ -195,7 +194,7 @@ library.when(
                     makeRequest(
                         req,
                         function (err, res) {
-                            assert.ok([200, 204].indexOf(res.statusCode) > -1);
+                            assertions.statusCodes(res.statusCode, [200, 204]);
                             callback(err, res);
                         }
                     );
@@ -215,15 +214,8 @@ library.then(
     "(?:[Tt]he) ?LRS responds with HTTP $statusCodes",
     function (codes, next) {
         var statusCodes = codes.split(/(?:,)? (?:or )?/),
-            responseStatus = this.scenarioResource.main.response.statusCode.toString();
-
-        if (statusCodes.indexOf(responseStatus) === -1) {
-            console.log("Response status: " + responseStatus + ", expected: [" + statusCodes + "]");
-        }
-        assert.ok(
-            statusCodes.indexOf(responseStatus) > -1,
-            "Response status: " + responseStatus + ", expected: [" + statusCodes + "]"
-        );
+            status = this.scenarioResource.main.response.statusCode.toString();
+        assertions.statusCodes(status, statusCodes);
         next();
     }
 );
@@ -231,16 +223,12 @@ library.then(
 library.then(
     "(?:[Tt]he) request (?:is|was) successful",
     function (next) {
-        var responseStatus = this.scenarioResource.main.response.statusCode,
-            writeId
-            ;
-        assert.ok(responseStatus === 200 || responseStatus === 204,
-                "Response status: " + responseStatus + ", expected: [200, 204]");
-        if (responseStatus !== 200 && responseStatus !== 204) {
-            next();
-        }
-        writeId = responseStatus === 200 ?
-            JSON.parse(this.scenarioResource.main.response.body)[0] : this.scenarioResource.main.request.content.id;
+        var status = this.scenarioResource.main.response.statusCode,
+            writeId;
+        assertions.statusCodes(status, [200, 204]);
+        writeId = status === 200 ?
+            JSON.parse(this.scenarioResource.main.response.body)[0] :
+            this.scenarioResource.main.request.content.id;
         fs.writeFile(
             path.join(__dirname, "../var/statements", writeId + ".json"),
             JSON.stringify({
@@ -249,7 +237,7 @@ library.then(
                 structure: this.scenarioResource.main.request.content
             }),
             function (err) {
-                if(err) {
+                if (err) {
                     console.log(err);
                 }
                 next();
@@ -261,7 +249,7 @@ library.then(
 library.then(
     "(?:[Tt]he) response is a (?:correct|valid) $type response",
     function (type, next) {
-        assert.ok(response(this.scenarioResource.main, type));
+        assertions.responseStructure(this.scenarioResource.main, type);
         next();
     }
 );
