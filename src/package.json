@@ -11,6 +11,18 @@
     {
       "name": "Brian J. Miller",
       "email": "brian.miller@tincanapi.com"
+    },
+    {
+      "name": "Chris Hooks",
+      "email": "chris.hooks@scorm.com"
+    },
+    {
+      "name": "Jake Noble",
+      "email": "jake.noble@scorm.com"
+    },
+    {
+      "name": "Nolan",
+      "email": "nolan330@gmail.com"
     }
   ],
   "license": "Apache-2.0",
