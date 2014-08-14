@@ -1,1 +1,7 @@
+config.json
+src/var/statements/
 node_modules
+npm-debug.log
+.idea/
+*.swp
+.DS_Store
