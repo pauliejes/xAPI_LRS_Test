@@ -67,6 +67,32 @@ module.exports = function(grunt) {
 
     // Define tasks
     grunt.registerTask(
+        "clearSandbox",
+        "Cleans up statements sent to a sandbox during testing",
+        function () {
+            var done = this.async();
+            if (lrsRes.endpoint.indexOf("sandbox") > -1) {
+                request(
+                    {
+                        url: lrsRes.endpoint + "extended?action=clear_sandbox",
+                        method: "GET",
+                        headers: {
+                            "X-Experience-API-Version": lrsRes.version,
+                            "Authorization": lrsRes.authString
+                        }
+                    },
+                    function (err) {
+                        if (err) {
+                            grunt.fail.warn(err);
+                        }
+                        done(err);
+                    }
+                );
+            }
+        }
+    );
+
+    grunt.registerTask(
         "updateConsistent",
         "Updates the ./var/consistency.json file",
         function () {
