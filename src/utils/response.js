@@ -6,40 +6,37 @@ var formats = require("./formats"),
     responses
 ;
 
-contentTypeCheck = function (obj, type) {
+contentTypeCheck = function (res, type) {
     if (type !== "json") {
         return false;
     }
-    return obj.response.headers["content-type"] === "application/json" ||
-        obj.response.headers["content-type"].indexOf("application/json;") === 0;
+    return res.headers["content-type"] === "application/json" ||
+        res.headers["content-type"].indexOf("application/json;") === 0;
 };
 
-versionCheck = function (obj) {
-    return obj.response.headers["x-experience-api-version"] === "1.0.1" ||
-           obj.response.headers["x-experience-api-version"] === "1.0.0";
+versionCheck = function (res) {
+    return res.headers["x-experience-api-version"] === "1.0.1" ||
+           res.headers["x-experience-api-version"] === "1.0.0";
 };
 
 responses = {
-    about: function (obj) {
+    about: function (res) {
         //TODO:schema check
-        return contentTypeCheck(obj, "json");
+        return contentTypeCheck(res, "json");
     },
-    saveStatement: function (obj) {
-        //TODO: schema check
-        return contentTypeCheck(obj, "json");
+    saveStatement: function (res) {
+        return contentTypeCheck(res, "json");
     },
-    getStatement: function (obj) {
-        //TODO:schema check
-        return contentTypeCheck(obj, "json") && iso8601DateTime.test(obj.response.headers["x-experience-api-consistent-through"]);
-    },
-    agentProfile: function () {
-        //TODO:schema check
+    getStatement: function (res) {
+        return contentTypeCheck(res, "json") && iso8601DateTime.test(res.headers["x-experience-api-consistent-through"]);
     }
 };
 
-module.exports = function (obj, type) {
-    if (obj.response.statusCode === 200) {
-        return (responses[type](obj)) && versionCheck(obj, type);
+module.exports = function (res, type) {
+    if (res.statusCode === 200) {
+        return (responses[type](res)) && versionCheck(res, type);
     }
-    return versionCheck(obj, type);
+    else {
+        return versionCheck(res, type);
+    }
 };

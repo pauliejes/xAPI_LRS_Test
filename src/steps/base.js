@@ -249,7 +249,7 @@ library.then(
 library.then(
     "(?:[Tt]he) response is a (?:correct|valid) $type response",
     function (type, next) {
-        assertions.responseStructure(this.scenarioResource.main, type);
+        assertions.responseStructure(this.scenarioResource.main.response, type);
         next();
     }
 );
