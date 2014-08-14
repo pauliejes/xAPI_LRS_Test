@@ -2,10 +2,6 @@
   "name": "xapi-lrs-test",
   "version": "0.0.0",
   "description": "LRS conformance testing suite.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "",
   "contributors": [
     {
@@ -39,8 +35,5 @@
     "selectn": "^0.9.6",
     "yadda": "^0.10.14",
     "async": "^0.9.0"
-  },
-  "devDependencies": {
-    "grunt-contrib-watch": "^0.6.1"
   }
 }
