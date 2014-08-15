@@ -84,9 +84,20 @@ Scenario:
         400  | typical | accountAndTypeAgentInstructor context  | instructor account name
         400  | typical | accountAndTypeAgentInstructor context  | instructor account homePage
         400  | typical | allProperties context                  | team mbox
-        204  | typical | allProperties context                  | team objectType
         400  | typical | allProperties context                  | statement id
-        204  | typical | allProperties context                  | statement objectType
+
+Scenario:
+
+    Given a [type] saveStatement request
+    Given the statement context is changed to a [object]
+    Given the statement context [property] is removed
+    When the request is made
+    Then the request was successful
+
+    Where:
+        type    | object                | property
+        typical | allProperties context | team objectType
+        typical | allProperties context | statement objectType
 
 @Pending
 Scenario:

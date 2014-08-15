@@ -59,12 +59,12 @@ Scenario:
     Given the statement result is changed to a [object]
     Given the statement result [property] is removed
     When the request is made
-    Then the LRS responds with HTTP [HTTP]
+    Then the request was successful
 
     Where:
-        HTTP | type    | object               | property
-        204  | typical | allProperties result | score
-        204  | typical | allProperties result | success
-        204  | typical | allProperties result | completion
-        204  | typical | allProperties result | response
-        204  | typical | allProperties result | duration
+        type    | object               | property
+        typical | allProperties result | score
+        typical | allProperties result | success
+        typical | allProperties result | completion
+        typical | allProperties result | response
+        typical | allProperties result | duration

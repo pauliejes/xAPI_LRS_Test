@@ -49,5 +49,17 @@ Scenario:
     Then the LRS responds with HTTP [HTTP]
 
     Where:
-        HTTP | type    | modifier      | property
-        400  | typical | allProperties | id
+        HTTP | type    | object                             | property
+        400  | typical | allProperties activity             | id
+
+Scenario:
+
+    Given a [type] saveStatement request
+    Given the statement object is changed to a [object]
+    Given the statement object [property] is removed
+    When the request is made
+    Then the request was successful
+
+    Where:
+        type    | object                             | property
+        typical | allProperties activity             | objectType

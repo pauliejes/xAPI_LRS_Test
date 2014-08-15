@@ -81,7 +81,6 @@ Scenario:
         400  | typical | mboxSha1Only agent                 | mbox_sha1sum
         400  | typical | openidOnly agent                   | openid
         400  | typical | accountOnly agent                  | account
-        204  | typical | mboxAndType group                  | objectType
         400  | typical | mboxAndType group                  | mbox
         400  | typical | mboxSha1AndType group              | mbox_sha1sum
         400  | typical | openidAndType group                | openid
@@ -89,6 +88,18 @@ Scenario:
         400  | typical | accountAndType group               | account name
         400  | typical | accountAndType group               | account homePage
         400  | typical | allPropertiesMboxAgentMember group | objectType
+
+Scenario:
+
+    Given a [type] saveStatement request
+    Given the statement actor is changed to a [object]
+    Given the statement actor [property] is removed
+    When the request is made
+    Then the request was successful
+
+    Where:
+        type    | object            | property
+        typical | mboxAndType group | objectType
 
 @Pending
 Scenario:

@@ -5,6 +5,18 @@ Scenario:
     Given a [type] saveStatement request
     Given the statement authority is changed to a [object]
     When the request is made
+    Then the request was successful
+
+    Where:
+        type    | object
+        typical | consumerOnly authority
+        typical | consumerAndUser authority
+
+Scenario:
+
+    Given a [type] saveStatement request
+    Given the statement authority is changed to a [object]
+    When the request is made
     Then the LRS responds with HTTP 403
 
     Where:
