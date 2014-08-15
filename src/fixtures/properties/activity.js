@@ -10,6 +10,17 @@ activities = {
         "id": "http://example.org/absolute/URI/with/absolute/path/to/resource.txt",
         "objectType": "Activity"
     },
+    "idOnly": {
+        "id": "http://example.org/absolute/URI/with/absolute/path/to/resource.txt"
+    },
+    idAndObjectType: {
+        "id": "http://example.org/absolute/URI/with/absolute/path/to/resource.txt",
+        "objectType": "Activity",
+    },
+    idAndDefinition: {
+        "id": "http://example.org/absolute/URI/with/absolute/path/to/resource.txt",
+        "definition": factory.make("typical activityDefinition")
+    },
     "allProperties": {
         "id": "http://example.org/absolute/URI/with/absolute/path/to/resource.txt",
         "objectType": "Activity",
