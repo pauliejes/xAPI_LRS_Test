@@ -7,22 +7,22 @@ require("./activityDefinition");
 activities = {
     "empty": {},
     "typical": {
-        "id": "http://example.org/absolute/URI/with/absolute/path/to/resource.txt",
+        "id": "http://tincanapi.com/conformancetest/activityid",
         "objectType": "Activity"
     },
     "idOnly": {
-        "id": "http://example.org/absolute/URI/with/absolute/path/to/resource.txt"
+        "id": "http://tincanapi.com/conformancetest/activityid"
     },
     idAndObjectType: {
-        "id": "http://example.org/absolute/URI/with/absolute/path/to/resource.txt",
+        "id": "http://tincanapi.com/conformancetest/activityid",
         "objectType": "Activity",
     },
     idAndDefinition: {
-        "id": "http://example.org/absolute/URI/with/absolute/path/to/resource.txt",
+        "id": "http://tincanapi.com/conformancetest/activityid",
         "definition": factory.make("typical activityDefinition")
     },
     "allProperties": {
-        "id": "http://example.org/absolute/URI/with/absolute/path/to/resource.txt",
+        "id": "http://tincanapi.com/conformancetest/activityid",
         "objectType": "Activity",
         "definition": factory.make("typical activityDefinition")
     }

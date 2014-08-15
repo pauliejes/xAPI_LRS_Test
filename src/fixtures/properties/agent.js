@@ -7,11 +7,11 @@ require("./agentAccount");
 agents = {
     "empty": {},
     "typical": {
-        "mbox": "mailto:test@tincan.edu",
+        "mbox": "mailto:conformancetest@tincanapi.com",
         "objectType": "Agent"
     },
     "mboxAndType": {
-        "mbox": "mailto:test@tincan.edu",
+        "mbox": "mailto:conformancetest@tincanapi.com",
         "objectType": "Agent"
     },
     "mboxSha1AndType": {
@@ -19,7 +19,7 @@ agents = {
         "objectType": "Agent"
     },
     "openidAndType": {
-        "openid": "alice.openid.example.org",
+        "openid": "brian.openid.tincanapi.com",
         "objectType": "Agent"
     },
     "accountAndType": {
@@ -27,13 +27,13 @@ agents = {
         "objectType": "Agent"
     },
     "mboxOnly": {
-        "mbox": "mailto:test@tincan.edu"
+        "mbox": "mailto:conformancetest@tincanapi.com"
     },
     "mboxSha1Only": {
         "mbox_sha1sum": "test"
     },
     "openidOnly": {
-        "openid": "alice.openid.example.org"
+        "openid": "brian.openid.tincanapi.com"
     },
     "accountOnly": {
         "account": factory.make("typical agentAccount")

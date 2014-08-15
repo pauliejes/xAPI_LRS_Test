@@ -5,13 +5,13 @@ var factory = require("../../utils/factory"),
 verbs = {
     "empty": {},
     "typical": {
-        "id": "http://tincanapi.com/TinCanJS/Test/Verb",
+        "id": "http://tincanapi.com/conformancetest/verbid",
         "display": {
             "en-US": "test"
         }
     },
     "idOnly": {
-        "id": "http://tincanapi.com/TinCanJS/Test/Verb"
+        "id": "http://tincanapi.com/conformancetest/verbid"
     },
     "idAndDisplay": {
         "id": "http://tincanapi.com/TinCanJS/Test/Verb",

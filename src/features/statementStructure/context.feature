@@ -28,11 +28,11 @@ Scenario:
         HTTP | type    | object                             | property                                | value
         400  | typical | allProperties context              | registration                            | bad id
         400  | typical | allProperties context              | instructor                              | notAnAgent
-        400  | typical | mboxAndTypeAgentInstructor context | instructor mbox                         | test@tincan.edu
+        400  | typical | mboxAndTypeAgentInstructor context | instructor mbox                         | conformancetest@tincanapi.com
         400  | typical | mboxAndTypeAgentInstructor context | instructor mbox                         | bad mbox
         400  | typical | mboxAndTypeAgentInstructor context | instructor objectType                   | notAgent
         400  | typical | allProperties context              | team objectType                         | notAGroup
-        400  | typical | allProperties context              | team mbox                               | test@tincan.edu
+        400  | typical | allProperties context              | team mbox                               | conformancetest@tincanapi.com
         400  | typical | allProperties context              | team mbox                               | bad mbox
         400  | typical | allProperties context              | language                                | bad language
         400  | typical | allProperties context              | statement id                            | bad id

@@ -7,10 +7,10 @@ groups = {
     "empty": {},
     "typical": {
         "objectType": "Group",
-        "mbox": "mailto:test@test.com"
+        "mbox": "mailto:conformancetest@tincanapi.com"
     },
     "mboxAndType": {
-        "mbox": "mailto:test@tincan.edu",
+        "mbox": "mailto:conformancetest@tincanapi.com",
         "objectType": "Group"
     },
     "mboxSha1AndType": {
@@ -27,7 +27,7 @@ groups = {
     },
     "mboxTypeAndName": {
         "objectType": "Group",
-        "mbox": "mailto:test@test.com",
+        "mbox": "mailto:conformancetest@tincanapi.com",
         "name": "test group"
     },
     "mboxSha1TypeAndName": {
@@ -47,7 +47,7 @@ groups = {
     },
     "mboxTypeAndMember": {
         "objectType": "Group",
-        "mbox": "mailto:test@test.com",
+        "mbox": "mailto:conformancetest@tincanapi.com",
         "member": [factory.make("typical agent")],
     },
     "mboxSha1TypeAndMember": {
@@ -67,37 +67,37 @@ groups = {
     },
     "allPropertiesTypicalAgentMember": {
         "objectType": "Group",
-        "mbox": "mailto:test@test.com",
+        "mbox": "mailto:conformancetest@tincanapi.com",
         "name": "test group",
         "member": [factory.make("typical agent")]
     },
     "allPropertiesMboxAgentMember": {
         "objectType": "Group",
-        "mbox": "mailto:test@test.com",
+        "mbox": "mailto:conformancetest@tincanapi.com",
         "name": "test group",
         "member": [factory.make("mboxOnly agent")]
     },
     "allPropertiesMboxSha1AgentMember": {
         "objectType": "Group",
-        "mbox": "mailto:test@test.com",
+        "mbox": "mailto:conformancetest@tincanapi.com",
         "name": "test group",
         "member": [factory.make("mboxSha1Only agent")]
     },
     "allPropertiesOpenidAgentMember": {
         "objectType": "Group",
-        "mbox": "mailto:test@test.com",
+        "mbox": "mailto:conformancetest@tincanapi.com",
         "name": "test group",
         "member": [factory.make("openidOnly agent")]
     },
     "allPropertiesAccountAgentMember": {
         "objectType": "Group",
-        "mbox": "mailto:test@test.com",
+        "mbox": "mailto:conformancetest@tincanapi.com",
         "name": "test group",
         "member": [factory.make("accountOnly agent")]
     },
     "allPropertiesTwoTypicalAgentsMember": {
         "objectType": "Group",
-        "mbox": "mailto:test@test.com",
+        "mbox": "mailto:conformancetest@tincanapi.com",
         "name": "test group",
         "member": [factory.make("typical agent"), factory.make("typical agent")]
     }

@@ -6,15 +6,15 @@ agentAccounts = {
     "empty": {},
     "typical": {
         "name": "test",
-        "homePage": "test.com"
+        "homePage": "tincanapi.com"
     },
     "consumer": {
-        "homePage": "http://example.com/xAPI/OAuth/Token",
+        "homePage": "http://tincanapi.com/xAPI/OAuth/Token",
         "name": "oauth_consumer_x75db"
     },
     "allProperties": {
         "name": "test",
-        "homePage": "test.com"
+        "homePage": "tincanapi.com"
     }
 };
 

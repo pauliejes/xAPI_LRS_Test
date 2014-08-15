@@ -7,7 +7,6 @@ Scenario:
     When the request is made
     Then the request was successful
 
-@Only
 Scenario:
 
     Given a [type] saveStatement request

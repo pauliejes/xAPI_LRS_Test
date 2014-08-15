@@ -32,13 +32,13 @@ Scenario:
 
     Where:
         HTTP | type    | object                                | property                  | value
-        400  | typical | mboxAndType agent                     | mbox                      | test@tincan.edu
+        400  | typical | mboxAndType agent                     | mbox                      | conformancetest@tincanapi.com
         400  | typical | mboxAndType agent                     | mbox                      | bad mbox
         400  | typical | mboxAndType agent                     | objectType                | notAgent
-        400  | typical | mboxAndType group                     | mbox                      | test@tincan.edu
+        400  | typical | mboxAndType group                     | mbox                      | conformancetest@tincanapi.com
         400  | typical | mboxAndType group                     | mbox                      | bad mbox
         400  | typical | mboxAndType group                     | objectType                | notGroup
-        400  | typical | allPropertiesMboxAgentMember group    | member 0 mbox             | test@tincan.edu
+        400  | typical | allPropertiesMboxAgentMember group    | member 0 mbox             | conformancetest@tincanapi.com
         400  | typical | allPropertiesMboxAgentMember group    | member 0 mbox             | bad mbox
 
 @Pending

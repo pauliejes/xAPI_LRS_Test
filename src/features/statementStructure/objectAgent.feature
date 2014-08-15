@@ -24,7 +24,7 @@ Scenario:
 
     Where:
         HTTP | type    | object                                | property                  | value
-        400  | typical | mboxAndType agent                     | mbox                      | test@tincan.edu
+        400  | typical | mboxAndType agent                     | mbox                      | conformancetest@tincanapi.com
         400  | typical | mboxAndType agent                     | mbox                      | bad mbox
         400  | typical | mboxAndType agent                     | objectType                | notAgent
 
