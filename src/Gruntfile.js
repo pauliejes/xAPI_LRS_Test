@@ -70,25 +70,30 @@ module.exports = function(grunt) {
         "clearSandbox",
         "Cleans up statements sent to a sandbox during testing",
         function () {
-            var done = this.async();
-            if (lrsRes.endpoint.indexOf("sandbox") > -1) {
-                request(
-                    {
-                        url: lrsRes.endpoint + "extended?action=clear_sandbox",
-                        method: "GET",
-                        headers: {
-                            "X-Experience-API-Version": lrsRes.version,
-                            "Authorization": lrsRes.authString
-                        }
-                    },
-                    function (err) {
-                        if (err) {
-                            grunt.fail.warn(err);
-                        }
-                        done(err);
-                    }
-                );
+            var done;
+
+            if (lrsRes.endpoint.indexOf("sandbox") === -1) {
+                grunt.warn("Not a sandbox");
             }
+
+            done = this.async();
+
+            request(
+                {
+                    url: lrsRes.endpoint + "extended?action=clear_sandbox",
+                    method: "GET",
+                    headers: {
+                        "X-Experience-API-Version": lrsRes.version,
+                        "Authorization": lrsRes.authString
+                    }
+                },
+                function (err) {
+                    if (err) {
+                        grunt.fail.warn(err);
+                    }
+                    done(err);
+                }
+            );
         }
     );
 
