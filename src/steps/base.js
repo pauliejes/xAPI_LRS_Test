@@ -44,13 +44,13 @@ setObj = function (obj, subObj, value) {
 setAll = function (res, path, subObj, value) {
     var i;
 
-    if(res.primers) {
+    if (res.primers) {
         for(i = 0; i < res.primers.length; i += 1) {
             setObj(selectn(path, res.primers[i]), subObj, value);
         }
     }
     setObj(selectn(path, res.main), subObj, value);
-    if(res.verify) {
+    if (res.verify) {
         setObj(selectn(path, res.verify), subObj, value);
     }
 };
@@ -62,20 +62,22 @@ library.given(
         var splitObj = object.split(" "),
             type = false;
 
-        if(["typeof", "typeOf"].indexOf(splitObj[0]) > -1) {
+        if (["typeof", "typeOf"].indexOf(splitObj[0]) > -1) {
             type = true;
             splitObj = splitObj.splice(1);
         }
-        if(["main", "primers", "verify"].indexOf(splitObj[0]) === -1) {
+        if (["main", "primers", "verify"].indexOf(splitObj[0]) === -1) {
             splitObj.unshift("main");
         }
         console.log("-------------------------------");
         console.log(object + ": ");
-        if(type) {
+        if (type) {
             console.log(typeof (selectn(splitObj.join("."), this.scenarioResource)));
-        } else if(object === "scenarioResource") {
+        }
+        else if (object === "scenarioResource") {
             console.log(this.scenarioResource);
-        } else {
+        }
+        else {
             console.log(selectn(splitObj.join("."), this.scenarioResource));
         }
         console.log("-------------------------------");
@@ -116,11 +118,13 @@ library.given(
             if (cluster.primers.hasOwnProperty("list")) {
                 if (cluster.primers.order && cluster.primers.order === "parallel") {
                     this.scenarioResource.series = false;
-                } else {
+                }
+                else {
                     this.scenarioResource.series = true;
                 }
                 this.scenarioResource.primers = populate(cluster.primers.list);
-            } else {
+            }
+            else {
                 this.scenarioResource.series = true;
                 this.scenarioResource.primers = populate(cluster.primers);
             }
@@ -129,7 +133,7 @@ library.given(
         this.scenarioResource.main = {
             request: cluster.main
         };
-        if(cluster.verify) {
+        if (cluster.verify) {
             this.scenarioResource.verify = {
                 request: cluster.verify
             };
@@ -145,7 +149,8 @@ library.given([
     function (req, subObj, obj, value, next) {
         if (req.toLowerCase() === "the" || req.toLowerCase() === "the main request's") {
             setObj(this.scenarioResource.main.request[convertName(obj)], convertName(subObj), value);
-        } else {
+        }
+        else {
             setAll(this.scenarioResource, "request." + convertName(obj), convertName(subObj), value);
         }
         next();
@@ -160,7 +165,7 @@ library.given([
         var path = objPath.split(" "),
             subObj;
 
-        if(path[0] === "statement" || path[0] === "document") {
+        if (path[0] === "statement" || path[0] === "document") {
             path[0] = "content";
         }
 
@@ -170,7 +175,8 @@ library.given([
 
         if (req.toLowerCase() === "the" || req.toLowerCase() === "the main request's") {
             setObj(selectn(path, this.scenarioResource.main), subObj[0], value);
-        } else {
+        }
+        else {
             setAll(this.scenarioResource, path, subObj[0], value);
         }
         next();

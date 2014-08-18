@@ -14,15 +14,16 @@ library.then(
 
         assert.equal(main.response.statusCode.toString(), "200");
 
-        if(main.request.headers["Content-Type"]) {
+        if (main.request.headers["Content-Type"]) {
             assert.equal(main.response.headers["content-type"], primer.request.headers["Content-Type"]);
         }
-        if(main.request.content) {
-            if( main.response.headers["content-type"] &&
+        if (main.request.content) {
+            if ( main.response.headers["content-type"] &&
                 main.response.headers["content-type"].indexOf("application/json") === 0 &&
                 typeof primer.request.content === "object") {
                 assert.equal(main.response.body, JSON.stringify(primer.request.content));
-            } else {
+            }
+            else {
                 assert.equal(main.response.body, primer.request.content);
             }
         }
@@ -40,7 +41,8 @@ library.then(
             function (err, res) {
                 if (res.statusCode.toString() !== "404") {
                     next(new Error("The verify request did not return the expected status (404), instead returned: " + res.status));
-                } else {
+                }
+                else {
                     next();
                 }
             }
@@ -57,9 +59,11 @@ library.then(
             function (err, res) {
                 if (res.statusCode.toString() !== "200") {
                     next(new Error("The verify request did not return the expected status (200), instead returned: " + res.status));
-                } else if (res.body !== "[]") {
+                }
+                else if (res.body !== "[]") {
                     next(new Error("The verify request did not return the expected empty array body, instead returned: " + res.body));
-                } else {
+                }
+                else {
                     next();
                 }
             }
