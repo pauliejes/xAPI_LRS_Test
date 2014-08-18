@@ -1,4 +1,4 @@
-config.json
+config.json*
 src/var/consistent.json
 src/var/statements/
 node_modules
