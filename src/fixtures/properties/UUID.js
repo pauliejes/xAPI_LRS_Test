@@ -1,14 +1,13 @@
 "use strict";
 var factory = require("../../utils/factory"),
-    uuid = require("node-uuid"),
-    uuids
-    ;
+    uuid = require("node-uuid");
 
-uuids = {
-    "good": function () {
-        return uuid.v4();
-    },
-    "bad": "bad-uuid"
-};
-
-factory.register("UUID", uuids);
+factory.register(
+    "UUID",
+    {
+        "good": function () {
+            return uuid.v4();
+        },
+        "bad": "bad-uuid"
+    }
+);

@@ -23,19 +23,7 @@ Scenario:
         HTTP | type    | object                                | property                  | value
         400  | typical | allProperties statementRef            | objectType                | notStatementRef
         400  | typical | allProperties statementRef            | id                        | bad id
-
-@Pending
-Scenario:
-
-    Given a [type] saveStatement request
-    Given the statement object is changed to a [object]
-    Given the statement object [property] is set to [value]
-    When the request is made
-    Then the LRS responds with HTTP [HTTP]
-
-    Where:
-        HTTP | type    | object                                                  | property                   | value
-        400  | typical | allProperties statementRef                              | objectType                 | statementRef
+        400  | typical | allProperties statementRef            | objectType                | statementRef
 
 Scenario:
 

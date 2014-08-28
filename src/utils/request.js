@@ -1,22 +1,15 @@
+/* global _suiteCfg */
 "use strict";
-var lrsCfg = require("../config.json"),
-    request = require("request"),
+var request = require("request"),
     qs = require("querystring"),
-    isApplicationJSON,
+    lrs = _suiteCfg.lrs,
     requestStatTotal = 0,
     requestStat = {},
     updateStat,
-    splitUrl,
-    statKey,
-    reqKey
-;
-
-isApplicationJSON = function (headers) {
-    return headers.hasOwnProperty("Content-Type") && headers["Content-Type"] === "application/json";
-};
+    buildUrl;
 
 updateStat = function (cfg) {
-    statKey = reqKey(cfg);
+    var statKey = cfg.request.method + " /" + cfg.request.resource;
     if (typeof requestStat[statKey] === "undefined") {
         requestStat[statKey] = 0;
     }
@@ -24,7 +17,7 @@ updateStat = function (cfg) {
     requestStatTotal += 1;
 };
 
-splitUrl = function (resource, params) {
+buildUrl = function (resource, params) {
     var prop;
     if (typeof params !== "undefined" && Object.keys(params).length > 0) {
         for (prop in params) {
@@ -34,34 +27,34 @@ splitUrl = function (resource, params) {
         }
         resource += "?" + qs.stringify(params);
     }
-    return resource.indexOf("http") === 0 ? resource : lrsCfg.endpoint + resource;
-};
-
-reqKey = function (cfg) {
-    return cfg.request.method + " /" + cfg.request.resource;
+    return resource.indexOf("http") === 0 ? resource : lrs.endpoint + resource;
 };
 
 module.exports = {
-    stat: function () {
-        console.log("Request counts:");
-        console.log(JSON.stringify(requestStat, null, 4).slice(1, -1));
-        console.log("Total: ", requestStatTotal);
-        console.log("---------------");
+    stat: function (logFunc) {
+        logFunc("Request counts:");
+        logFunc(JSON.stringify(requestStat, null, 4).slice(1, -1));
+        logFunc("Total: ", requestStatTotal);
+        logFunc("---------------");
     },
+
     makeRequest: function (cfg, callback) {
         updateStat(cfg);
-        request({
-            url: splitUrl(cfg.request.resource, cfg.request.params),
-            method: cfg.request.method,
-            headers: cfg.request.headers,
-            //TODO: body must be a string or buffer.  Use content-type header and typeof content to decide conversion.
-            body: typeof cfg.request.content === "object" ? JSON.stringify(cfg.request.content) : cfg.request.content,
-        },
-        function (err, res) {
-            cfg.response = res;
-            if (typeof callback !== "undefined" && typeof callback === "function") {
-                callback(err, res);
+
+        request(
+            {
+                url: buildUrl(cfg.request.resource, cfg.request.params),
+                method: cfg.request.method,
+                headers: cfg.request.headers,
+                //TODO: body must be a string or buffer.  Use content-type header and typeof content to decide conversion.
+                body: typeof cfg.request.content === "object" ? JSON.stringify(cfg.request.content) : cfg.request.content,
+            },
+            function (err, res) {
+                cfg.response = res;
+                if (typeof callback !== "undefined" && typeof callback === "function") {
+                    callback(err, res);
+                }
             }
-        });
+        );
     }
 };

@@ -1,6 +1,16 @@
 {
-    "username": "",
-    "password": "",
-    "endpoint": "",
-    "version": ""
+    "lrs": {
+        "username": "",
+        "password": "",
+        "endpoint": "",
+        "version": ""
+    },
+    "diagnostics": {
+        "requestCount": false,
+        "stepHash": false
+    },
+    "stage1": {
+        "featureSpec": "features",
+        "pending": {}
+    }
 }

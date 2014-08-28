@@ -1,36 +1,36 @@
+/* global _suiteCfg */
 "use strict";
 var factory = require("../../utils/factory"),
-    lrsRes = require("../../utils/lrsResources"),
-    retrieveStateIds
-    ;
+    lrs = _suiteCfg.lrs;
 
-retrieveStateIds = {
-    typical: {
-        "resource": "activities/state",
-        "headers": {
-            "X-Experience-API-Version": lrsRes.version,
-            "Authorization": lrsRes.authString
+factory.register(
+    "retrieveStateIds",
+    {
+        typical: {
+            "resource": "activities/state",
+            "headers": {
+                "X-Experience-API-Version": lrs.version,
+                "Authorization": lrs.authString
+            },
+            "method": "GET",
+            "params": {
+                "activityId": factory.make("typical activity").id,
+                "agent": factory.make("typical agent")
+            }
         },
-        "method": "GET",
-        "params": {
-            "activityId": factory.make("typical activity").id,
-            "agent": factory.make("typical agent")
-        }
-    },
-    registered: {
-        "resource": "activities/state",
-        "headers": {
-            "X-Experience-API-Version": lrsRes.version,
-            "Authorization": lrsRes.authString
+        withRegistration: {
+            "resource": "activities/state",
+            "headers": {
+                "X-Experience-API-Version": lrs.version,
+                "Authorization": lrs.authString
+            },
+            "method": "GET",
+            "params": {
+                "activityId": factory.make("typical activity").id,
+                "agent": factory.make("typical agent"),
+                "registration": factory.make("good UUID")
+            }
         },
-        "method": "GET",
-        "params": {
-            "activityId": factory.make("typical activity").id,
-            "agent": factory.make("typical agent"),
-            "registration": factory.make("good UUID")
-        }
-    },
-    //TODO: since parameter and corresponding tests/cluster
-};
-
-factory.register("retrieveStateIds", retrieveStateIds);
+        //TODO: since parameter and corresponding tests/cluster
+    }
+);

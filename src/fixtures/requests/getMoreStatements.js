@@ -1,22 +1,18 @@
+/* global _suiteCfg */
 "use strict";
 var factory = require("../../utils/factory"),
-    lrsRes = require("../../utils/lrsResources"),
-    getMoreStatementsRequests
-;
+    lrs = _suiteCfg.lrs;
 
-require("../properties/statement");
-
-getMoreStatementsRequests = {
-    typical: function () {
-        return {
+factory.register(
+    "getMoreStatements",
+    {
+        typical: {
             "resource": "place holder url",
             "headers": {
-                "X-Experience-API-Version": lrsRes.version,
-                "Authorization": lrsRes.authString
+                "X-Experience-API-Version": lrs.version,
+                "Authorization": lrs.authString
             },
-            "method": "GET",
-        };
+            "method": "GET"
+        }
     }
-};
-
-factory.register("getMoreStatements", getMoreStatementsRequests);
+);

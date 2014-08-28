@@ -1,24 +1,24 @@
 "use strict";
-var factory = require("../../utils/factory"),
-    authorities;
+var factory = require("../../utils/factory");
 
 require("./agentAccount");
 require("./agent");
 
-authorities = {
-   "empty": {},
-   "consumerOnly": {
-       "objectType": "Agent",
-       "account": factory.make("consumer agentAccount")
-   },
-   "consumerAndUser": {
-       "objectType": "Group",
-       "member": [{
-               "account": factory.make("consumer agentAccount")
-           },
-           factory.make("mboxOnly agent")
-       ]
-   }
-};
-
-factory.register("authority", authorities);
+factory.register(
+    "authority",
+    {
+       "empty": {},
+       "consumerOnly": {
+           "objectType": "Agent",
+           "account": factory.make("consumer agentAccount")
+       },
+       "consumerAndUser": {
+           "objectType": "Group",
+           "member": [{
+                   "account": factory.make("consumer agentAccount")
+               },
+               factory.make("mboxOnly agent")
+           ]
+       }
+    }
+);

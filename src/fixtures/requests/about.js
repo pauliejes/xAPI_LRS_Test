@@ -1,22 +1,22 @@
+/* global _suiteCfg */
 "use strict";
 var factory = require("../../utils/factory"),
-    lrsRes = require("../../utils/lrsResources"),
-    aboutRequests
-;
+    lrs = _suiteCfg.lrs;
 
-aboutRequests = {
-    typical: {
-        "resource": "about",
-        "headers": {
-            "X-Experience-API-Version": lrsRes.version,
-            "Authorization": lrsRes.authString
+factory.register(
+    "about",
+    {
+        typical: {
+            "resource": "about",
+            "headers": {
+                "X-Experience-API-Version": lrs.version,
+                "Authorization": lrs.authString
+            },
+            "method": "GET"
         },
-        "method": "GET"
-    },
-    minimal: {
-        "resource": "about",
-        "method": "GET"
+        minimal: {
+            "resource": "about",
+            "method": "GET"
+        }
     }
-};
-
-factory.register("about", aboutRequests);
+);

@@ -1,114 +1,111 @@
-Feature: statement structure object test
+Feature: statement structure object substatement test
 
-@Pending
 Scenario:
 
     Given a [type] saveStatement request
-    Given the statement object is changed to a [object]
+    Given the statement object is changed to a [value] subStatement
     When the request is made
     Then the request was successful
 
     Where:
-        typical | mboxOnlyAgentActor subStatement
-        typical | mboxSha1OnlyAgentActor subStatement
-        typical | openidOnlyAgentActor subStatement
-        typical | accountOnlyAgentActor subStatement
-        typical | mboxAndTypeAgentActor subStatement
-        typical | mboxSha1AndTypeAgentActor subStatement
-        typical | openidAndTypeAgentActor subStatement
-        typical | accountAndTypeAgentActor subStatement
-        typical | mboxAndTypeGroupActor subStatement
-        typical | mboxSha1AndTypeGroupActor subStatement
-        typical | openidAndTypeGroupActor subStatement
-        typical | accountAndTypeGroupActor subStatement
-        typical | idOnlyVerb subStatement
-        typical | mboxAndTypeAgentObject subStatement
-        typical | mboxSha1AndTypeAgentObject subStatement
-        typical | openidAndTypeAgentObject subStatement
-        typical | accountAndTypeAgentObject subStatement
-        typical | mboxAndTypeGroupObject subStatement
-        typical | mboxSha1AndTypeGroupObject subStatement
-        typical | openidAndTypeGroupObject subStatement
-        typical | accountAndTypeGroupObject subStatement
-        typical | allPropertiesTypicalAgentMemberGroupObject subStatement
-        typical | allPropertiesActivityObject subStatement
-        typical | typicalStatementRefObject subStatement
-        typical | allProperties subStatement
+        type    | value
+        typical | mboxOnlyAgentActor
+        typical | mboxSha1OnlyAgentActor
+        typical | openidOnlyAgentActor
+        typical | accountOnlyAgentActor
+        typical | mboxAndTypeAgentActor
+        typical | mboxSha1AndTypeAgentActor
+        typical | openidAndTypeAgentActor
+        typical | accountAndTypeAgentActor
+        typical | mboxAndTypeGroupActor
+        typical | mboxSha1AndTypeGroupActor
+        typical | openidAndTypeGroupActor
+        typical | accountAndTypeGroupActor
+        typical | idOnlyVerb
+        typical | mboxAndTypeAgentObject
+        typical | mboxSha1AndTypeAgentObject
+        typical | openidAndTypeAgentObject
+        typical | accountAndTypeAgentObject
+        typical | mboxAndTypeGroupObject
+        typical | mboxSha1AndTypeGroupObject
+        typical | openidAndTypeGroupObject
+        typical | accountAndTypeGroupObject
+        typical | allPropertiesTypicalAgentMemberGroupObject
+        typical | allPropertiesActivityObject
+        typical | typicalStatementRefObject
+        typical | allProperties
 
-@Pending
 Scenario:
 
     Given a [type] saveStatement request
-    Given the statement object is changed to a [object]
+    Given the statement object is changed to a [kind] subStatement
     Given the statement object [property] is set to [value]
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 
     Where:
-        HTTP | type    | object                                                  | property                   | value
-        400  | typical | allProperties subStatement                              | objectType                 | notSubStatement
-        400  | typical | allProperties subStatement                              | objectType                 | subStatement
-        400  | typical | mboxOnlyAgentActor subStatement                         | actor mbox                 | test@tincan.edu
-        400  | typical | mboxOnlyAgentActor subStatement                         | actor mbox                 | badMbox
-        400  | typical | openidOnlyAgentActor subStatement                       | actor openid               | bad openid
-        400  | typical | accountOnlyAgentActor subStatement                      | actor account homePage     | bad homePage
-        400  | typical | mboxAndTypeAgentActor subStatement                      | actor objectType           | notAgent
-        400  | typical | mboxAndTypeAgentActor subStatement                      | actor objectType           | agent
-        400  | typical | idAndDisplayVerb subStatement                           | verb id                    | bad id
-        400  | typical | mboxOnlyAgentObject subStatement                        | object mbox                | test@tincan.edu
-        400  | typical | mboxOnlyAgentObject subStatement                        | object mbox                | badMbox
-        400  | typical | openidOnlyAgentObject subStatement                      | object openid              | bad openid
-        400  | typical | accountOnlyAgentObject subStatement                     | object account homePage    | bad homePage
-        400  | typical | mboxAndTypeAgentObject subStatement                     | object objectType          | notAgent
-        400  | typical | mboxAndTypeAgentObject subStatement                     | objectType                 | agent
-        400  | typical | allPropertiesTypicalAgentMemberGroupObject subStatement | object member 0 mbox       | test@tincan.edu
-        400  | typical | allPropertiesTypicalAgentMemberGroupObject subStatement | object member 0 mbox       | bad mbox
-        400  | typical | allPropertiesTypicalAgentMemberGroupObject subStatement | object member 0 objectType | notAgent
-        400  | typical | allPropertiesTypicalAgentMemberGroupObject subStatement | object member 0 objectType | agent
-        400  | typical | typicalStatementRefObject subStatement                  | object objectType          | statementRef
-        400  | typical | typicalStatementRefObject subStatement                  | object objectType          | notStatementRef
-        400  | typical | typicalStatementRefObject subStatement                  | object id                  | bad id
+        HTTP | type    | kind                                       | property                   | value
+        400  | typical | allProperties                              | objectType                 | notSubStatement
+        400  | typical | allProperties                              | objectType                 | subStatement
+        400  | typical | mboxOnlyAgentActor                         | actor mbox                 | test@tincan.edu
+        400  | typical | mboxOnlyAgentActor                         | actor mbox                 | badMbox
+        400  | typical | openidOnlyAgentActor                       | actor openid               | bad openid
+        400  | typical | accountOnlyAgentActor                      | actor account homePage     | bad homePage
+        400  | typical | mboxAndTypeAgentActor                      | actor objectType           | notAgent
+        400  | typical | mboxAndTypeAgentActor                      | actor objectType           | agent
+        400  | typical | typical                                    | verb id                    | bad id
+        400  | typical | mboxOnlyAgentObject                        | object mbox                | test@tincan.edu
+        400  | typical | mboxOnlyAgentObject                        | object mbox                | badMbox
+        400  | typical | openidOnlyAgentObject                      | object openid              | bad openid
+        400  | typical | accountOnlyAgentObject                     | object account homePage    | bad homePage
+        400  | typical | mboxAndTypeAgentObject                     | object objectType          | notAgent
+        400  | typical | mboxAndTypeAgentObject                     | objectType                 | agent
+        400  | typical | allPropertiesTypicalAgentMemberGroupObject | object member 0 mbox       | test@tincan.edu
+        400  | typical | allPropertiesTypicalAgentMemberGroupObject | object member 0 mbox       | bad mbox
+        400  | typical | allPropertiesTypicalAgentMemberGroupObject | object member 0 objectType | notAgent
+        400  | typical | allPropertiesTypicalAgentMemberGroupObject | object member 0 objectType | agent
+        400  | typical | typicalStatementRefObject                  | object objectType          | statementRef
+        400  | typical | typicalStatementRefObject                  | object objectType          | notStatementRef
+        400  | typical | typicalStatementRefObject                  | object id                  | bad id
 
-@Pending
 Scenario:
 
     Given a [type] saveStatement request
-    Given the statement object is changed to a [object]
+    Given the statement object is changed to a [kind] subStatement
     Given the statement object [property] is removed
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 
     Where:
-        HTTP | type    | object                                   | property
-        400  | typical | mboxAndTypeAgentActor subStatement       | actor mbox
-        400  | typical | mboxSha1AndTypeAgentActor subStatement   | actor mbox_sha1sum
-        400  | typical | openidAndTypeAgentActor subStatement     | actor openid
-        400  | typical | accountAndTypeAgentActor subStatement    | actor account
-        400  | typical | accountAndTypeAgentActor subStatement    | actor account name
-        400  | typical | accountAndTypeAgentActor subStatement    | actor account homePage
-        400  | typical | mboxOnlyAgentActor subStatement          | actor mbox
-        400  | typical | mboxSha1OnlyAgentActor subStatement      | actor mbox_sha1sum
-        400  | typical | openidOnlyAgentActor subStatement        | actor openid
-        400  | typical | accountOnlyAgentActor subStatement       | actor account
-        400  | typical | mboxAndTypeGroupActor subStatement       | actor objectType
-        400  | typical | mboxAndTypeGroupActor subStatement       | actor mbox
-        400  | typical | mboxSha1AndTypeGroupActor subStatement   | actor mbox_sha1sum
-        400  | typical | openidAndTypeGroupActor subStatement     | actor openid
-        400  | typical | accountAndTypeGroupActor subStatement    | actor account
-        400  | typical | accountAndTypeGroupActor subStatement    | actor account name
-        400  | typical | accountAndTypeGroupActor subStatement    | actor account homePage
-        400  | typical | idOnlyVerb subStatement                  | verb id
-        400  | typical | idAndDisplayVerb subStatement            | verb id
-        400  | typical | mboxAndTypeAgentObject subStatement      | object mbox
-        400  | typical | mboxSha1AndTypeAgentObject subStatement  | object mbox_sha1sum
-        400  | typical | openidAndTypeAgentObject subStatement    | object openid
-        400  | typical | accountAndTypeAgentObject subStatement   | object account
-        400  | typical | accountAndTypeAgentObject subStatement   | object account name
-        400  | typical | accountAndTypeAgentObject subStatement   | object account homePage
-        400  | typical | mboxOnlyAgentObject subStatement         | object mbox
-        400  | typical | mboxSha1OnlyAgentObject subStatement     | object mbox_sha1sum
-        400  | typical | openidOnlyAgentObject subStatement       | object openid
-        400  | typical | accountOnlyAgentObject subStatement      | object account
-        400  | typical | typicalStatementRefObject subStatement   | object id
-        400  | typical | typicalStatementRefObject subStatement   | object objectType
-        400  | typical | allPropertiesActivityObject subStatement | object id
+        HTTP | type    | kind                        | property
+        400  | typical | mboxAndTypeAgentActor       | actor mbox
+        400  | typical | mboxSha1AndTypeAgentActor   | actor mbox_sha1sum
+        400  | typical | openidAndTypeAgentActor     | actor openid
+        400  | typical | accountAndTypeAgentActor    | actor account
+        400  | typical | accountAndTypeAgentActor    | actor account name
+        400  | typical | accountAndTypeAgentActor    | actor account homePage
+        400  | typical | mboxOnlyAgentActor          | actor mbox
+        400  | typical | mboxSha1OnlyAgentActor      | actor mbox_sha1sum
+        400  | typical | openidOnlyAgentActor        | actor openid
+        400  | typical | accountOnlyAgentActor       | actor account
+        400  | typical | mboxAndTypeGroupActor       | actor objectType
+        400  | typical | mboxAndTypeGroupActor       | actor mbox
+        400  | typical | mboxSha1AndTypeGroupActor   | actor mbox_sha1sum
+        400  | typical | openidAndTypeGroupActor     | actor openid
+        400  | typical | accountAndTypeGroupActor    | actor account
+        400  | typical | accountAndTypeGroupActor    | actor account name
+        400  | typical | accountAndTypeGroupActor    | actor account homePage
+        400  | typical | typical                     | verb id
+        400  | typical | mboxAndTypeAgentObject      | object mbox
+        400  | typical | mboxSha1AndTypeAgentObject  | object mbox_sha1sum
+        400  | typical | openidAndTypeAgentObject    | object openid
+        400  | typical | accountAndTypeAgentObject   | object account
+        400  | typical | accountAndTypeAgentObject   | object account name
+        400  | typical | accountAndTypeAgentObject   | object account homePage
+        400  | typical | mboxOnlyAgentObject         | object mbox
+        400  | typical | mboxSha1OnlyAgentObject     | object mbox_sha1sum
+        400  | typical | openidOnlyAgentObject       | object openid
+        400  | typical | accountOnlyAgentObject      | object account
+        400  | typical | typicalStatementRefObject   | object id
+        400  | typical | typicalStatementRefObject   | object objectType
+        400  | typical | allPropertiesActivityObject | object id

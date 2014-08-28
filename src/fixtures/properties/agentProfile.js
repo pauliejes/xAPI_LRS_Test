@@ -1,16 +1,16 @@
 "use strict";
-var factory = require("../../utils/factory"),
-    agentProfiles;
+var factory = require("../../utils/factory");
 
 require("./agent");
 
-agentProfiles = {
-    "typical": function() {
-        return {
-            "id": "typical agent profile id",
-            "agent": factory.make("typical agent")
-        };
+factory.register(
+    "agentProfile",
+    {
+        "typical": function () {
+            return {
+                "id": "typical agent profile id",
+                "agent": factory.make("typical agent")
+            };
+        }
     }
-};
-
-factory.register("agentProfile", agentProfiles);
+);

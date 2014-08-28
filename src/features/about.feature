@@ -27,7 +27,6 @@ Scenario: should return HTTP [HTTP] a [type] about request is sent with the [pro
         200  | typical | version header   | 0.8.0
         200  | typical | version header   | bad version
 
-@Pending
 Scenario: should return HTTP [HTTP] a [type] about request is sent with the [property] is set to [value]
 
     Given a [type] about request

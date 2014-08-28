@@ -33,7 +33,7 @@ library.then(
 
 library.then(
     "(?:[Tt]he) deleteState response is verified",
-    function(next) {
+    function (next) {
         assert.equal(this.scenarioResource.main.response.statusCode.toString(), "204");
 
         makeRequest(
@@ -52,7 +52,7 @@ library.then(
 
 library.then(
     "(?:[Tt]he) clearState response is verified",
-    function(next) {
+    function (next) {
         assert.equal(this.scenarioResource.main.response.statusCode.toString(), "204");
         makeRequest(
             this.scenarioResource.verify,
@@ -73,12 +73,16 @@ library.then(
 
 library.then(
     "(?:[Tt]he) retrieveStateIds response is verified",
-    function(next) {
+    function (next) {
         var body = JSON.parse(this.scenarioResource.main.response.body, "utf8");
+
         assert.equal(this.scenarioResource.primers.length, body.length);
-        this.scenarioResource.primers.forEach( function(primer) {
-            assert.ok(body.indexOf(primer.request.params.stateId) !== -1);
-        });
+
+        this.scenarioResource.primers.forEach(
+            function (primer) {
+                assert.ok(body.indexOf(primer.request.params.stateId) !== -1);
+            }
+        );
         next();
     }
 );

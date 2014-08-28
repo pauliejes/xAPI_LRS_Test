@@ -1,4 +1,6 @@
-config.json*
+src/config.json
+src/config*.json
+src/pending.json
 src/var/consistent.json
 src/var/statements/
 node_modules

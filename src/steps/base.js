@@ -1,3 +1,4 @@
+/* global _suiteCfg */
 "use strict";
 
 var assertions = require("../utils/assertions"),
@@ -56,10 +57,25 @@ setAll = function (res, path, subObj, value) {
 };
 
 library = English.library();
+
+library.given(
+    "[Ll]og",
+    function (next) {
+        var logFunc = _suiteCfg._logger;
+
+        logFunc("-------------------------------");
+        logFunc(this);
+        logFunc("-------------------------------");
+
+        next();
+    }
+);
+
 library.given(
     "[Ll]og $object",
     function (object, next) {
-        var splitObj = object.split(" "),
+        var logFunc = _suiteCfg._logger,
+            splitObj = object.split(" "),
             type = false;
 
         if (["typeof", "typeOf"].indexOf(splitObj[0]) > -1) {
@@ -69,18 +85,18 @@ library.given(
         if (["main", "primers", "verify"].indexOf(splitObj[0]) === -1) {
             splitObj.unshift("main");
         }
-        console.log("-------------------------------");
-        console.log(object + ": ");
+        logFunc("-------------------------------");
+        logFunc(object + ": ");
         if (type) {
-            console.log(typeof (selectn(splitObj.join("."), this.scenarioResource)));
+            logFunc(typeof (selectn(splitObj.join("."), this.scenarioResource)));
         }
         else if (object === "scenarioResource") {
-            console.log(this.scenarioResource);
+            logFunc(this.scenarioResource);
         }
         else {
-            console.log(selectn(splitObj.join("."), this.scenarioResource));
+            logFunc(selectn(splitObj.join("."), this.scenarioResource));
         }
-        console.log("-------------------------------");
+        logFunc("-------------------------------");
         next();
     }
 );
@@ -231,20 +247,25 @@ library.then(
     function (next) {
         var status = this.scenarioResource.main.response.statusCode,
             writeId;
+
         assertions.statusCodes(status, [200, 204]);
         writeId = status === 200 ?
             JSON.parse(this.scenarioResource.main.response.body)[0] :
             this.scenarioResource.main.request.content.id;
+
         fs.writeFile(
             path.join(__dirname, "../var/statements", writeId + ".json"),
-            JSON.stringify({
-                stored: moment(),
-                trace: this.trace,
-                structure: this.scenarioResource.main.request.content
-            }),
+            JSON.stringify(
+                {
+                    stored: moment(),
+                    hash: this.hash,
+                    trace: this.trace,
+                    structure: this.scenarioResource.main.request.content
+                }
+            ),
             function (err) {
                 if (err) {
-                    console.log(err);
+                    _suiteCfg.logger(err);
                 }
                 next();
             }

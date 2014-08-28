@@ -1,15 +1,16 @@
-/* global featureFile, scenarios, steps, _featureSpec, after */
+/* global featureFile, scenarios, steps, after, _suiteCfg */
 "use strict";
 
 var Yadda = require("yadda"),
     Glob = require("glob").Glob,
+    crypto = require("crypto"),
     libraries = require("../steps"),
     stat = require("../utils/request").stat,
     interpreterContext = {},
     runner = new Yadda.Yadda(libraries, interpreterContext),
 
     // the Glob instance used to find the files and directories
-    // based on the _featureSpec provided via the requires in
+    // based on the _suiteCfg.stage1.featureSpec provided via the requires in
     // the Gruntfile
     g,
 
@@ -22,9 +23,20 @@ var Yadda = require("yadda"),
     // a cache of the feature files that have already been run
     // since features may be found as part of a directory and
     // on their own, but we only ever want to run them once
-    cache = {};
+    cache = {},
+    markPending = {};
 
-Yadda.plugins.mocha.AsyncStepLevelPlugin.init();
+Yadda.plugins.mocha.StepLevelPlugin.init();
+
+Object.keys(_suiteCfg.stage1.pending).forEach(
+    function (key) {
+        _suiteCfg.stage1.pending[key].forEach(
+            function (id) {
+                markPending[id] = key;
+            }
+        );
+    }
+);
 
 //
 // simple routine that takes a file name to pass to the Yadda runner
@@ -39,18 +51,33 @@ function runFeatureFile (file) {
 
     featureFile(
         file,
-        function(feature) {
+        function (feature) {
             var featureResource = {};
+
+            feature.scenarios.forEach(
+                function (scenario) {
+                    scenario.stepHash = crypto.createHash("md5").update(JSON.stringify(scenario.steps), "utf8").digest("hex");
+
+                    if (_suiteCfg.diagnostics.stepHash) {
+                        scenario.title += " (" + scenario.stepHash + ")";
+                    }
+
+                    if (markPending[scenario.stepHash]) {
+                        scenario.title = "PENDING (" + markPending[scenario.stepHash] + "): " + scenario.title;
+                        scenario.annotations.pending = true;
+                    }
+                }
+            );
 
             scenarios(
                 feature.scenarios,
-                function(scenario) {
+                function (scenario) {
                     var scenarioResource = {},
                         trace = [];
 
                     steps(
                         scenario.steps,
-                        function(step, done) {
+                        function (step, done) {
                             trace.push(step);
 
                             runner.yadda(
@@ -58,7 +85,8 @@ function runFeatureFile (file) {
                                 {
                                     featureResource: featureResource,
                                     scenarioResource: scenarioResource,
-                                    trace: trace
+                                    trace: trace,
+                                    hash: scenario.stepHash
                                 },
                                 done
                             );
@@ -78,7 +106,7 @@ function runFeatureFile (file) {
 // not since we handle them differently
 //
 g = new Glob(
-    _featureSpec,
+    _suiteCfg.stage1.featureSpec,
     {
         sync: true
     }
@@ -104,14 +132,10 @@ g.found.forEach(
     }
 );
 
-//
-// TODO: better to run directories first or single files first?
-//
-
 dirs.forEach(
     function (dir) {
         new Yadda.FeatureFileSearch(dir).each(
-            function(file) {
+            function (file) {
                 runFeatureFile(file);
             }
         );
@@ -123,6 +147,10 @@ files.forEach(
     }
 );
 
-after(function () {
-    stat();
-});
+after(
+    function () {
+        if (_suiteCfg.diagnostics.requestCount) {
+            stat(_suiteCfg._logger);
+        }
+    }
+);

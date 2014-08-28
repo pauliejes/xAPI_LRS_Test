@@ -40,26 +40,15 @@ Scenario:
         400  | typical | mboxAndType group                     | objectType                | notGroup
         400  | typical | allPropertiesMboxAgentMember group    | member 0 mbox             | conformancetest@tincanapi.com
         400  | typical | allPropertiesMboxAgentMember group    | member 0 mbox             | bad mbox
-
-@Pending
-Scenario:
-
-    Given a [type] saveStatement request
-    Given the statement actor is changed to a [object]
-    Given the statement actor [property] is set to [value]
-    When the request is made
-    Then the LRS responds with HTTP [HTTP]
-
-    Where:
-        HTTP | type    | object                                | property                  | value
         400  | typical | openidAndType agent                   | openid                    | bad openid
-        400  | typical | accountAndType group                  | account homePage          | bad homePage
-        400  | typical | mboxAndType agent                     | objectType                | agent
-        400  | typical | mboxAndType group                     | objectType                | group
-        400  | typical | openidAndType group                   | openid                    | bad openid
         400  | typical | accountAndType agent                  | account homePage          | bad homePage
+        400  | typical | mboxAndType agent                     | objectType                | agent
+        400  | typical | openidAndType group                   | openid                    | bad openid
+        400  | typical | accountAndType group                  | account homePage          | bad homePage
+        400  | typical | mboxAndType group                     | objectType                | group
         400  | typical | allPropertiesOpenidAgentMember group  | member 0 openid           | bad openid
         400  | typical | allPropertiesAccountAgentMember group | member 0 account homePage | bad homePage
+        400  | typical | openidOnly agent                      | openid                    | bad URI
 
 Scenario:
 
@@ -100,12 +89,3 @@ Scenario:
     Where:
         type    | object            | property
         typical | mboxAndType group | objectType
-
-@Pending
-Scenario:
-
-    Given a typical saveStatement request
-    Given the statement actor is changed to an openid agent
-    Given the statement actor openid is change to badURI
-    When the request is made
-    Then the LRS responds with HTTP 400

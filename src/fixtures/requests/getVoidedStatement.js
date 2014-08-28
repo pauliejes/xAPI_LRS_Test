@@ -1,24 +1,21 @@
+/* global _suiteCfg */
 "use strict";
 var factory = require("../../utils/factory"),
-    lrsRes = require("../../utils/lrsResources"),
-    getVoidedStatementRequests;
+    lrs = _suiteCfg.lrs;
 
-require("../properties/statement"),
-
-getVoidedStatementRequests = {
-    typical: function () {
-        return {
+factory.register(
+    "getVoidedStatement",
+    {
+        typical: {
             "resource": "statements",
             "headers": {
-                "X-Experience-API-Version": lrsRes.version,
-                "Authorization": lrsRes.authString
+                "X-Experience-API-Version": lrs.version,
+                "Authorization": lrs.authString
             },
             "method": "GET",
             "params": {
-                "voidedStatementId": factory.make("typical statment id")
-            },
-        };
+                "voidedStatementId": factory.make("typical statement").id
+            }
+        }
     }
-};
-
-factory.register("getVoidedStatement", getVoidedStatementRequests);
+);

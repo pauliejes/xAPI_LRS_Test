@@ -13,7 +13,6 @@ var fs = require("fs"),
                 }
             }
         );
-    }
-;
+    };
 
 cacheFixtures(startDir);

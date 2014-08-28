@@ -57,17 +57,6 @@ Scenario: should return HTTP [HTTP] when a(n) [type] saveState request is sent w
         204  | typical | agent parameter      | an accountOnly agent
         204  | typical | content              | test content
         204  | typical | content              | a typical statement
-
-@Pending
-Scenario: should return HTTP [HTTP] when a(n) [type] saveState request is sent with [property] set to [value]
-
-    Given a [type] saveState request
-    Given the [property] is set to [value]
-    When the request is made
-    Then the LRS responds with HTTP [HTTP]
-
-    Where:
-        HTTP | type    | property             | value
         400  | typical | agent parameter      | an empty agent
 
 Scenario: should return HTTP [HTTP] when a(n) [type] saveState request is sent with the agent parameter set to a [modifier] agent with its [property] set to [value]
@@ -86,29 +75,17 @@ Scenario: should return HTTP [HTTP] when a(n) [type] saveState request is sent w
         400  | typical | mboxAndType     | objectType       | Activity
         400  | typical | mboxOnly        | mbox             | test@tincan.edu
         400  | typical | mboxOnly        | mbox             | bad mbox
-
-@Pending
-Scenario: should return HTTP [HTTP] when a(n) [type] saveState request is sent with the agent parameter set to a [modifier] agent with its [property] set to [value]
-
-    Given a [type] saveState request
-    Given the agent parameter is set to a [modifier] agent
-    Given the params agent [property] is set to [value]
-    When the request is made
-    Then the LRS responds with HTTP [HTTP]
-
-    Where:
-        HTTP | type    | modifier        | property         | value
         400  | typical | mboxAndType     | objectType       | agent
         400  | typical | openidAndType   | openid           | badURI
-        400  | typical | accountAndType  | account homePage | badURI
         400  | typical | openidOnly      | openid           | badURI
+        400  | typical | accountAndType  | account homePage | badURI
         400  | typical | accountOnly     | account homePage | badURI
 
 Scenario: should return HTTP [HTTP] when a(n) [type] saveState request is sent with the agent parameter set to a [modifier] agent with its [property] removed
 
     Given a [type] saveState request
     Given the agent parameter is set to a [modifier] agent
-    Given the params agent [property] is set to removed
+    Given the params agent [property] is removed
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 
@@ -118,16 +95,4 @@ Scenario: should return HTTP [HTTP] when a(n) [type] saveState request is sent w
         400  | typical | accountAndType  | account name
         400  | typical | accountOnly     | account homePage
         400  | typical | accountOnly     | account name
-
-@Pending
-Scenario: should return HTTP [HTTP] when a(n) [type] saveState request is sent with the agent parameter set to a [modifier] agent with its [property] removed
-
-    Given a [type] saveState request
-    Given the agent parameter is set to a [modifier] agent
-    Given the params agent [property] is set to removed
-    When the request is made
-    Then the LRS responds with HTTP [HTTP]
-
-    Where:
-        HTTP | type    | modifier        | property
         400  | typical | mboxAndType     | mbox

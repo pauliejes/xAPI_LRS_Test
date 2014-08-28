@@ -1,11 +1,10 @@
 "use strict";
-var factory = require("../../utils/factory"),
-    timestamps
-    ;
+var factory = require("../../utils/factory");
 
-timestamps = {
-    "good": "2014-07-23T12:34:02-05:00",
-    "bad": "bad-timestamp"
-};
-
-factory.register("timestamp", timestamps);
+factory.register(
+    "timestamp",
+    {
+        "good": "2014-07-23T12:34:02-05:00",
+        "bad": "bad-timestamp"
+    }
+);

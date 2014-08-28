@@ -27,21 +27,9 @@ Scenario:
         400  | typical | mboxAndType agent                     | mbox                      | conformancetest@tincanapi.com
         400  | typical | mboxAndType agent                     | mbox                      | bad mbox
         400  | typical | mboxAndType agent                     | objectType                | notAgent
-
-@Pending
-Scenario:
-
-    Given a [type] saveStatement request
-    Given the statement object is changed to a [object]
-    Given the statement object [property] is set to [value]
-    When the request is made
-    Then the LRS responds with HTTP [HTTP]
-
-    Where:
-        HTTP | type    | object                                                  | property                   | value
-        400  | typical | openidAndType agent                                     | openid                     | bad openid
-        400  | typical | mboxAndType agent                                       | objectType                 | agent
-        400  | typical | accountAndType agent                                    | account homePage           | bad homePage
+        400  | typical | openidAndType agent                   | openid                    | bad openid
+        400  | typical | mboxAndType agent                     | objectType                | agent
+        400  | typical | accountAndType agent                  | account homePage          | bad homePage
 
 Scenario:
 

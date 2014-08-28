@@ -56,15 +56,15 @@ Scenario:
 Scenario:
 
     Given a [type] saveStatement request
-    Given the statement result is changed to a [object]
+    Given the statement result is changed to a [object] result
     Given the statement result [property] is removed
     When the request is made
     Then the request was successful
 
     Where:
-        type    | object               | property
-        typical | allProperties result | score
-        typical | allProperties result | success
-        typical | allProperties result | completion
-        typical | allProperties result | response
-        typical | allProperties result | duration
+        type    | object        | property
+        typical | allProperties | score
+        typical | allProperties | success
+        typical | allProperties | completion
+        typical | allProperties | response
+        typical | allProperties | duration

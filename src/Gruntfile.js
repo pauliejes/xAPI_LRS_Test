@@ -1,7 +1,6 @@
 var fs = require("fs"),
     path = require("path"),
-    request = require("request"),
-    lrsRes = require("./utils/lrsResources");
+    request = require("request");
 
 module.exports = function(grunt) {
     //
@@ -10,18 +9,76 @@ module.exports = function(grunt) {
     //
     /* jshint strict: false */
     //"use strict";
-    var timeout = grunt.option("timeout") || 10000,
-        slow = grunt.option("slow") || 1000;
+
+    var cfgFile = __dirname + "/config.json",
+        cfg,
+        mochaTestOpts = {
+            reporter: "spec",
+            bail: false,
+            timeout: 10000,
+            slow: 1000
+        };
+
+    if (grunt.option("config")) {
+        cfgFile = grunt.option("config");
+        if (! /^\//.test(cfgFile)) {
+            cfgFile = __dirname + "/" + cfgFile;
+        }
+    }
+
+    try {
+        cfg = require("./utils/config")(cfgFile);
+    }
+    catch (ex) {
+        grunt.fail.fatal(ex);
+    }
+
+    cfg._logger = console.log;
+    cfg.diagnostics = cfg.diagnostics || {};
+
+    //
+    // provide a quick flag to turn them all on
+    //
+    if (grunt.option("diagnostics")) {
+        cfg.diagnostics.requestCount = true;
+        cfg.diagnostics.stepHash = true;
+    }
+
+    //
+    // also provide flags for commonly used settings that should be
+    // easy to toggle
+    //
+    if (grunt.option("count")) {
+        cfg.diagnostics.requestCount = true;
+    }
+    if (grunt.option("hash")) {
+        cfg.diagnostics.stepHash = true;
+    }
+
+    if (cfg.lrs.endpoint.slice(-1) !== "/") {
+        cfg.lrs.endpoint += "/";
+    }
+
+    [
+        "reporter",
+        "bail",
+        "timeout",
+        "slow",
+        "grep"
+    ].forEach(
+        function (key) {
+            if (typeof grunt.option(key) !== "undefined") {
+                mochaTestOpts[key] = grunt.option(key);
+            }
+            else if (typeof cfg[key] !== "undefined") {
+                mochaTestOpts[key] = cfg[key];
+            }
+        }
+    );
 
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
 
-        /**
-        *  Linting
-        *  =======
-        *
-        *  Catch errors quickly with JS Hint
-        */
         jshint: {
             all: [
                 "Gruntfile.js",
@@ -33,31 +90,41 @@ module.exports = function(grunt) {
         },
 
         mochaTest: {
-            options: {
-                reporter: "spec",
-                clearRequireCache: true,
-                timeout: timeout,
-                slow: slow
-            },
+            options: mochaTestOpts,
             "stage1-core": {
                 options: {
                     require: function () {
-                        /* global _featureSpec */
+                        /* global _suiteCfg */
                         /* jshint -W020 */
-                        _featureSpec = "features";
-                        if (grunt.option("feature")) {
-                            _featureSpec = grunt.option("feature");
+                        _suiteCfg = cfg;
+
+                        _suiteCfg.stage1 = _suiteCfg.stage1 || {};
+                        _suiteCfg.stage1.featureSpec = _suiteCfg.stage1.featureSpec || "features";
+                        _suiteCfg.stage1.pending = _suiteCfg.stage1.pending || {};
+
+                        if (grunt.option("feature") || grunt.option("features")) {
+                            _suiteCfg.stage1.featureSpec = grunt.option("feature") || grunt.option("features");
                         }
                     }
                 },
                 src: ["stage1/core.js"]
             },
             "stage2-statementStructure": {
+                options: {
+                    require: function () {
+                        /* global _suiteCfg */
+                        /* jshint -W020 */
+                        _suiteCfg = cfg;
+                    }
+                },
                 src: ["stage2/statementStructure.js"]
             }
         },
 
-        clean: ["var/statements/*.json"]
+        clean: [
+            "var/statements/*.json",
+            "var/consistent.json"
+        ]
     });
 
     // Load Tasks
@@ -72,19 +139,19 @@ module.exports = function(grunt) {
         function () {
             var done;
 
-            if (lrsRes.endpoint.indexOf("sandbox") === -1) {
-                grunt.warn("Not a sandbox");
+            if (cfg.lrs.endpoint.indexOf("sandbox") === -1) {
+                grunt.fail.warn("Not a sandbox");
             }
 
             done = this.async();
 
             request(
                 {
-                    url: lrsRes.endpoint + "extended?action=clear_sandbox",
+                    url: cfg.lrs.endpoint + "extended?action=clear_sandbox",
                     method: "GET",
                     headers: {
-                        "X-Experience-API-Version": lrsRes.version,
-                        "Authorization": lrsRes.authString
+                        "X-Experience-API-Version": cfg.lrs.version,
+                        "Authorization": cfg.lrs.authString
                     }
                 },
                 function (err) {
@@ -104,11 +171,11 @@ module.exports = function(grunt) {
             var done = this.async();
             request(
                 {
-                    url: lrsRes.endpoint + "statements?limit=1",
+                    url: cfg.lrs.endpoint + "statements?limit=1",
                     method: "GET",
                     headers: {
-                        "X-Experience-API-Version": lrsRes.version,
-                        "Authorization": lrsRes.authString
+                        "X-Experience-API-Version": cfg.lrs.version,
+                        "Authorization": cfg.lrs.authString
                     },
                 },
                 function (err, res) {

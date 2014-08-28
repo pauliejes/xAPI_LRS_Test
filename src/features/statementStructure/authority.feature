@@ -1,3 +1,7 @@
+# TODO: need to make sure this is a permissed account being tested
+#       otherwise no way to distinguish valid 403s vs. across the board 403s
+#       other than that the first two tests fail for non-permissed
+@Pending
 Feature: statement structure authority test
 
 Scenario:
@@ -52,18 +56,6 @@ Scenario:
         400  | typical | mboxAndType group                     | objectType                | notGroup
         400  | typical | allPropertiesMboxAgentMember group    | member 0 mbox             | conformancetest@tincanapi.com
         400  | typical | allPropertiesMboxAgentMember group    | member 0 mbox             | bad mbox
-
-@Pending
-Scenario:
-
-    Given a [type] saveStatement request
-    Given the statement authority is changed to a [object]
-    Given the statement authority [property] is set to [value]
-    When the request is made
-    Then the LRS responds with HTTP [HTTP]
-
-    Where:
-        HTTP | type    | object                                | property                  | value
         400  | typical | openidAndType agent                   | openid                    | bad openid
         400  | typical | accountAndType group                  | account homePage          | bad homePage
         400  | typical | mboxAndType agent                     | objectType                | agent
@@ -89,18 +81,6 @@ Scenario:
         400  | typical | accountAndType group               | account name
         400  | typical | accountAndType group               | account homePage
         400  | typical | allPropertiesMboxAgentMember group | objectType
-
-@Pending
-Scenario:
-
-    Given a [type] saveStatement request
-    Given the statement authority is changed to a [object]
-    Given the statement authority [property] is removed
-    When the request is made
-    Then the LRS responds with HTTP [HTTP]
-
-    Where:
-        HTTP | type    | object                             | property
         400  | typical | mboxAndType agent                  | mbox
         400  | typical | mboxSha1AndType agent              | mbox_sha1sum
         400  | typical | openidAndType agent                | openid

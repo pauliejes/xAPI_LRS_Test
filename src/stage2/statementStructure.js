@@ -1,11 +1,11 @@
-/* global features, scenarios, steps, after */
+/* global features, scenarios, steps, after, _suiteCfg */
 "use strict";
 
 var fs = require("fs"),
     Yadda = require("yadda"),
     libraries = require("../steps/consistent"),
-    statementDir = __dirname + "/../var/statements",
     stat = require("../utils/request").stat,
+    statementDir = __dirname + "/../var/statements",
     statementRe = /[-\w]+\.json$/,
     consistentThrough = new Date(require("../var/consistent.json")),
     isConsistent = function (fname) {
@@ -20,7 +20,7 @@ var fs = require("fs"),
     },
     runner;
 
-Yadda.plugins.mocha.AsyncStepLevelPlugin.init();
+Yadda.plugins.mocha.StepLevelPlugin.init();
 
 runner = new Yadda.Yadda(libraries);
 
@@ -48,10 +48,10 @@ features(
     function (feature) {
         scenarios(
             feature.scenarios,
-            function(scenario) {
+            function (scenario) {
                 steps(
                     scenario.steps,
-                    function(step, done) {
+                    function (step, done) {
                         runner.yadda(step, scenarioContext, done);
                     }
                 );
@@ -60,6 +60,10 @@ features(
     }
 );
 
-after(function () {
-    stat();
-});
+after(
+    function () {
+        if (_suiteCfg.diagnostics.requestCount) {
+            stat(_suiteCfg._logger);
+        }
+    }
+);

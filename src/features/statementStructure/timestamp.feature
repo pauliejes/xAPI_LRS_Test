@@ -1,51 +1,38 @@
 Feature: statement structure timestamp test
 
-Scenario:
-
-    Given a typical saveStatement request
-    Given the statement timestamp is changed to 2014-07-23T12:34:02-05:00
-    When the request is made
-    Then the request was successful
-
-Scenario:
+Scenario: Statement with good timestamp: [value]
 
     Given a [type] saveStatement request
-    Given the statement timestamp is changed to [object]
+    Given the statement timestamp is changed to [value]
     When the request is made
     Then the request was successful
 
     Where:
-        HTTP | type    | object
-        204  | typical | 2014-07-23T12:34:02Z
-        204  | typical | 2014-07-23T12:34:02+00
-        204  | typical | 2014-07-23T12:34:02.365-05:00
-        204  | typical | 2014-07-23T12:34:02.36578-5:00
+        type    | value
+        typical | 2014-07-23T12:34:02Z
+        typical | 2014-07-23T12:34:02+00
+        typical | 2014-07-23T12:34:02+05
+        typical | 2014-07-23T12:34:02-00
+        typical | 2014-07-23T12:34:02-05
+        typical | 2014-07-23T12:34:02-05:00
+        typical | 2014-07-23T12:34:02.365-05:00
+        typical | 2014-07-23T12:34:02.36578-05:00
 
-Scenario:
+Scenario: Statement with bad timestamp: [value]
 
     Given a [type] saveStatement request
-    Given the statement timestamp is changed to [object]
+    Given the statement timestamp is changed to [value]
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 
     Where:
-        HTTP | type    | object
+        HTTP | type    | value
         400  | typical | bad timestamp
+        400  | typical | 2014-07-23T12:34:02-5:00
+        400  | typical | 2014-07-23T12:34:02.365-5:00
+        400  | typical | 2014-07-23T12:34:02.36578-5:00
 
-@Pending
-Scenario:
-
-    Given a [type] saveStatement request
-    Given the statement timestamp is changed to [object]
-    When the request is made
-    Then the LRS responds with HTTP [HTTP]
-
-    Where:
-        HTTP | type    | object
-        400  | typical | 2014-07-23T12:34:02-00
-        400  | typical | 2214-07-23T12:34:02-05:00
-
-Scenario:
+Scenario: Statement with no timestamp
 
     Given a typical saveStatement request
     Given the statement timestamp is removed

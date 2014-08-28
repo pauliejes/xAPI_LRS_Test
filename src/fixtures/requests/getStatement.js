@@ -1,17 +1,16 @@
+/* global _suiteCfg */
 "use strict";
 var factory = require("../../utils/factory"),
-    lrsRes = require("../../utils/lrsResources"),
-    getStatementRequests;
+    lrs = _suiteCfg.lrs;
 
-require("../properties/statement");
-
-getStatementRequests = {
-    typical: function () {
-        return {
+factory.register(
+    "getStatement",
+    {
+        typical: {
             "resource": "statements",
             "headers": {
-                "X-Experience-API-Version": lrsRes.version,
-                "Authorization": lrsRes.authString
+                "X-Experience-API-Version": lrs.version,
+                "Authorization": lrs.authString
             },
             "method": "GET",
             "params": {
@@ -19,8 +18,6 @@ getStatementRequests = {
                 //       probably need a typicalWithId or something
                 "statementId": factory.make("typical statement").id
             }
-        };
+        }
     }
-};
-
-factory.register("getStatement", getStatementRequests);
+);

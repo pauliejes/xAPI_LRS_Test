@@ -1,3 +1,4 @@
+/* global _suiteCfg */
 "use strict";
 var selectn = require("selectn"),
     cache = {};
@@ -14,6 +15,6 @@ module.exports = {
         return JSON.parse(JSON.stringify(fixture));
     },
     dumpCache: function () {
-        console.log(cache);
+        _suiteCfg.logger(cache);
     }
 };

@@ -62,15 +62,3 @@ Scenario: should return HTTP [HTTP] when a [type] saveStatement request is sent 
         400  | minimal | Content-Type header   | bad content type
         405  | minimal | statementId parameter | cebba04a-158a-4e2e-8b6d-82bav2b9c07e
         405  | minimal | statementId parameter | bad statementId
-
-@pending
-Scenario: should return HTTP [HTTP] when a [type] saveStatement request is sent with the [property] set to [value]
-
-    Given a [type] saveStatement request
-    Given the [property] is set to [value]
-    When the request is made
-    Then the LRS responds with HTTP [HTTP]
-
-    Where:
-        HTTP | type    | property              | value
-        409  | typical | statementId parameter | ceccf04a-158a-4e1e-8b6d-81bab2b9c07e
