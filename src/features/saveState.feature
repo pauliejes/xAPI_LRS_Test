@@ -47,6 +47,14 @@ Scenario: Good save state: [type] request with [property] set to [value]
         204  | typical | content              | test content
         204  | typical | content              | a typical statement
 
+Scenario: Good save state: JSON request with unique stateId with method set to POST
+
+    Given a JSON saveState request
+    Given the stateId parameter is set to a unique URI
+    Given the method is set to POST
+    When the request is made
+    Then the LRS responds with HTTP 204
+
 Scenario: Bad save state: [type] request missing [property]
 
     Given a [type] saveState request
