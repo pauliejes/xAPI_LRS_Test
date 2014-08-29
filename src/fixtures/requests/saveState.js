@@ -11,6 +11,21 @@ factory.register(
             "headers": {
                 "X-Experience-API-Version": lrs.version,
                 "Authorization": lrs.authString,
+                "Content-Type": "application/octet-stream"
+            },
+            "method": "PUT",
+            "params": {
+                "stateId": "http://tincanapi.com/conformancetest/statedoc",
+                "activityId": factory.make("typical activity").id,
+                "agent": factory.make("typical agent")
+            },
+            "content": "some content"
+        },
+        JSON: {
+            "resource": "activities/state",
+            "headers": {
+                "X-Experience-API-Version": lrs.version,
+                "Authorization": lrs.authString,
                 "Content-Type": "application/json"
             },
             "method": "PUT",
@@ -26,7 +41,7 @@ factory.register(
             "headers": {
                 "X-Experience-API-Version": lrs.version,
                 "Authorization": lrs.authString,
-                "Content-Type": "application/json"
+                "Content-Type": "application/octet-stream"
             },
             "method": "PUT",
             "params": {
@@ -35,7 +50,7 @@ factory.register(
                 "agent": factory.make("typical agent"),
                 "registration": factory.make("good UUID")
             },
-            "content": factory.make("JSON content")
+            "content": "some content"
         }
     }
 );
