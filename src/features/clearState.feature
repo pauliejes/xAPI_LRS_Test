@@ -1,6 +1,6 @@
 Feature: clearState
 
-Scenario:
+Scenario: Good clear state: [type] request cluster
 
     Given a [type] clearState request cluster
     When the request is made on the primed LRS
@@ -11,15 +11,15 @@ Scenario:
         typical
         withRegistration
 
-Scenario:
+Scenario: Good clear state: [type] request cluster with a [modifier] agent parameter
 
     Given a [type] clearState request cluster
-    Given all requests' agent parameter is set to an [value] agent
+    Given all requests' agent parameter is set to an [modifier] agent
     When the request is made on the primed LRS
     Then the clearState response is verified
 
     Where:
-        type             | value
+        type             | modifier
         typical          | mboxAndType
         typical          | mboxSha1AndType
         typical          | openidAndType
@@ -37,7 +37,7 @@ Scenario:
         withRegistration | openidOnly
         withRegistration | accountOnly
 
-Scenario:
+Scenario: Bad clear state: [type] request missing [property]
 
     Given a [type] clearState request
     Given the [property] is removed
@@ -55,7 +55,7 @@ Scenario:
         400  | withRegistration | activityId parameter
         400  | withRegistration | agent parameter
 
-Scenario:
+Scenario: Bad clear state: [type] request with bad [property] '[value]'
 
     Given a [type] clearState request
     Given the [property] is set to [value]
@@ -72,7 +72,7 @@ Scenario:
         401  | typical | authority header | Basic TnsHNWplME1YZnc0VzdLTHRIWTo0aDdBb253Ml85WU53vSZLNlVZ
         400  | typical | agent parameter  | an empty agent
 
-Scenario:
+Scenario: Bad clear state: [type] request with [modifier] agent parameter with bad [property] '[value]'
 
     Given a [type] clearState request
     Given the agent parameter is set to a [modifier] agent
@@ -94,7 +94,7 @@ Scenario:
         400  | typical | openidOnly     | openid           | badURI
         400  | typical | accountOnly    | account homePage | badURI
 
-Scenario:
+Scenario: Bad clear state: [type] request with [modifier] agent parameter missing [property]
 
     Given a [type] clearState request
     Given the agent parameter is set to a [modifier] agent

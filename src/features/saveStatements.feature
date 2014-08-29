@@ -1,12 +1,16 @@
 Feature: saveStatements
 
-Scenario: should return HTTP 200 when a typical saveStatements request is made
+Scenario: Good save statements: [type] request
 
-    Given a typical saveStatements request
+    Given a [type] saveStatements request
     When the request is made
-    Then the LRS responds with HTTP 200
+    Then the LRS responds with HTTP [HTTP]
 
-Scenario: should return HTTP [HTTP] when a [type] saveStatement request is made with the [prop] set to [value]
+    Where:
+        HTTP | type
+        200  | typical
+
+Scenario: Bad save statements: [type] request with bad [property] '[value]'
 
     Given a [type] saveStatements request
     Given the [property] is set to [value]
@@ -14,11 +18,15 @@ Scenario: should return HTTP [HTTP] when a [type] saveStatement request is made 
     Then the LRS responds with HTTP [HTTP]
 
     Where:
-        HTTP | type    | property | value
-        400  | typical | method   | PUT
-        400  | typical | resource | statement
+        HTTP | type    | property              | value
+        400  | typical | method                | PUT
+        400  | typical | resource              | statement
+        401  | typical | authority header      | bad auth
+        400  | typical | version header        | 0.8.0
+        400  | typical | version header        | bad version
+        400  | typical | Content-Type header   | bad content type
 
-Scenario: should return HTTP [HTTP] when a [type] saveStatement request is sent without a(n) [property]
+Scenario: Bad save statements: [type] request missing [property]
 
     Given a [type] saveStatements request
     Given the [property] is deleted
@@ -30,19 +38,3 @@ Scenario: should return HTTP [HTTP] when a [type] saveStatement request is sent 
         400  | typical | version header
         401  | typical | authority header
         400  | typical | Content-Type header
-
-Scenario: should return HTTP [HTTP] when a [type] saveStatement request is sent with the [property] set to [value]
-
-    Given a [type] saveStatements request
-    Given the [property] is set to [value]
-    When the request is made
-    Then the LRS responds with HTTP [HTTP]
-
-    Where:
-        HTTP | type    | property              | value
-        200  | typical | content 1             | a typical statement
-        200  | typical | content 0             | a minimal statement
-        401  | typical | authority header      | bad auth
-        400  | typical | version header        | 0.8.0
-        400  | typical | version header        | bad version
-        400  | typical | Content-Type header   | bad content type

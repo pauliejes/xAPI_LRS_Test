@@ -1,6 +1,6 @@
 Feature: saveStatement
 
-Scenario: should return HTTP [HTTP] when a [type] saveStatement request is made
+Scenario: Good save statement: [type] request
 
     Given a [type] saveStatement request
     When the request is made
@@ -11,7 +11,7 @@ Scenario: should return HTTP [HTTP] when a [type] saveStatement request is made
         200  | minimal
         204  | typical
 
-Scenario: should return HTTP [HTTP] when a [type] saveStatement request is made with the [property] set to [value]
+Scenario: Bad save statement: [type] request with [property] set to '[value]'
 
     Given a [type] saveStatement request
     Given the [property] is set to [value]
@@ -25,7 +25,7 @@ Scenario: should return HTTP [HTTP] when a [type] saveStatement request is made 
         400  | minimal | method   | PUT
         400  | minimal | resource | statement
 
-Scenario: should return HTTP [HTTP] when a [type] saveStatement request is sent without a(n) [property]
+Scenario: Bad save statement: [type] request missing [property]
 
     Given a [type] saveStatement request
     Given the [property] is deleted
@@ -42,7 +42,7 @@ Scenario: should return HTTP [HTTP] when a [type] saveStatement request is sent 
         401  | minimal | authority header
         400  | minimal | Content-Type header
 
-Scenario: should return HTTP [HTTP] when a [type] saveStatement request is sent with the [property] set to [value]
+Scenario: Bad save statement: [type] request with bad [property] '[value]'
 
     Given a [type] saveStatement request
     Given the [property] is set to [value]

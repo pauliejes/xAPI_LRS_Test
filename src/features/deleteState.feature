@@ -1,6 +1,6 @@
 Feature: deleteState
 
-Scenario:
+Scenario: Good delete state: [type] request cluster
 
     Given a [type] deleteState request cluster
     When the request is made on the primed LRS
@@ -10,7 +10,7 @@ Scenario:
         type
         typical
 
-Scenario:
+Scenario: Good delete state: [type] request cluster with [property] set to [value]
 
     Given a [type] deleteState request cluster
     Given all requests' [property] are set to [value]
@@ -40,7 +40,7 @@ Scenario:
         withRegistration | agent parameter      | an openidOnly agent
         withRegistration | agent parameter      | an accountOnly agent
 
-Scenario:
+Scenario: Bad delete state: [type] request missing [property]
 
     Given a [type] deleteState request
     Given the [property] is removed
@@ -58,7 +58,7 @@ Scenario:
         400  | withRegistration | activityId parameter
         400  | withRegistration | agent parameter
 
-Scenario:
+Scenario: Bad delete state: [type] request with  bad [property] '[value]'
 
     Given a [type] deleteState request
     Given the [property] is set to [value]
@@ -75,7 +75,7 @@ Scenario:
         401  | typical | authority header | Basic TnsHNWplME1YZnc0VzdLTHRIWTo0aDdBb253Ml85WU53vSZLNlVZ
         400  | typical | agent parameter  | an empty agent
 
-Scenario:
+Scenario: Bad delete state: [type] request with [modifier] agent parameter with bad [property] '[value]'
 
     Given a [type] deleteState request
     Given the agent parameter is set to a [modifier] agent
@@ -97,8 +97,7 @@ Scenario:
         400  | typical | openidOnly     | openid           | badURI
         400  | typical | accountOnly    | account homePage | badURI
 
-
-Scenario:
+Scenario: Bad delete state: [type] request with [modifier] agent parameter missing [property]
 
     Given a [type] deleteState request
     Given the agent parameter is set to a [modifier] agent
