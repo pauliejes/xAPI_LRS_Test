@@ -56,7 +56,18 @@ function runFeatureFile (file) {
 
             feature.scenarios.forEach(
                 function (scenario) {
-                    scenario.stepHash = crypto.createHash("md5").update(JSON.stringify(scenario.steps), "utf8").digest("hex");
+                    var hashable = [];
+                    scenario.steps.forEach(
+                        function (step) {
+                            if (/^Given log/i.test(step)) {
+                                return;
+                            }
+
+                            hashable.push(step);
+                        }
+                    );
+
+                    scenario.stepHash = crypto.createHash("md5").update(JSON.stringify(hashable), "utf8").digest("hex");
 
                     if (_suiteCfg.diagnostics.stepHash) {
                         scenario.title += " (" + scenario.stepHash + ")";
