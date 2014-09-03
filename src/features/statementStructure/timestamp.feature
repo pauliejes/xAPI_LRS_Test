@@ -1,6 +1,6 @@
 Feature: statement structure timestamp test
 
-Scenario: Statement with good timestamp: [value]
+Scenario: Good timestamp: [value]
 
     Given a [type] saveStatement request
     Given the statement timestamp is changed to [value]
@@ -18,7 +18,7 @@ Scenario: Statement with good timestamp: [value]
         typical | 2014-07-23T12:34:02.365-05:00
         typical | 2014-07-23T12:34:02.36578-05:00
 
-Scenario: Statement with bad timestamp: [value]
+Scenario: Bad timestamp: [value]
 
     Given a [type] saveStatement request
     Given the statement timestamp is changed to [value]
@@ -32,7 +32,7 @@ Scenario: Statement with bad timestamp: [value]
         400  | typical | 2014-07-23T12:34:02.365-5:00
         400  | typical | 2014-07-23T12:34:02.36578-5:00
 
-Scenario: Statement with no timestamp
+Scenario: Good timestamp: no timestamp
 
     Given a typical saveStatement request
     Given the statement timestamp is removed

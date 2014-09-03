@@ -1,6 +1,6 @@
 Feature: statement structure object group test
 
-Scenario:
+Scenario: Good object group: [object]
 
     Given a [type] saveStatement request
     Given the statement object is changed to a [object]
@@ -14,7 +14,7 @@ Scenario:
         typical | openidAndType group
         typical | accountAndType group
 
-Scenario:
+Scenario: Bad object group: [object] with bad [property] [value]
 
     Given a [type] saveStatement request
     Given the statement object is changed to a [object]
@@ -35,7 +35,7 @@ Scenario:
         400  | typical | allPropertiesOpenidAgentMember group  | member 0 openid           | bad openid
         400  | typical | allPropertiesAccountAgentMember group | member 0 account homePage | bad homePage
 
-Scenario:
+Scenario: Bad object group: [object] missing [property]
 
     Given a [type] saveStatement request
     Given the statement object is changed to a [object]

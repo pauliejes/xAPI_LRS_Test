@@ -1,6 +1,6 @@
 Feature: statement structure object agent test
 
-Scenario:
+Scenario: Good object agent: [object]
 
     Given a [type] saveStatement request
     Given the statement object is changed to a [object]
@@ -14,7 +14,7 @@ Scenario:
         typical | openidAndType agent
         typical | accountAndType agent
 
-Scenario:
+Scenario: Bad object agent: [object] with bad [property] [value]
 
     Given a [type] saveStatement request
     Given the statement object is changed to a [object]
@@ -31,7 +31,7 @@ Scenario:
         400  | typical | mboxAndType agent                     | objectType                | agent
         400  | typical | accountAndType agent                  | account homePage          | bad homePage
 
-Scenario:
+Scenario: Bad object agent: [object] missing [property]
 
     Given a [type] saveStatement request
     Given the statement object is changed to a [object]

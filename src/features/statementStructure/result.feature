@@ -1,6 +1,6 @@
 Feature: statement structure result test
 
-Scenario:
+Scenario: Good result: [modifier] result
 
     Given a [type] saveStatement request
     Given the statement result is changed to a [modifier] result
@@ -38,7 +38,7 @@ Scenario:
         typical | successCompletionResponseAndDuration
         typical | allProperties
 
-Scenario:
+Scenario: Bad result: [object] with bad [property] [value]
 
     Given a [type] saveStatement request
     Given the statement result is changed to a [object]
@@ -53,8 +53,7 @@ Scenario:
         400  | typical | allProperties result  | duration   | not ISO 8601 formatted
         400  | typical | scoreOnly result      | score      | not a score object
 
-Scenario:
-
+Scenario: Good result: [object] missing [property]
     Given a [type] saveStatement request
     Given the statement result is changed to a [object] result
     Given the statement result [property] is removed

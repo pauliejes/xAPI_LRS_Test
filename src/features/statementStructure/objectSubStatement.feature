@@ -1,14 +1,14 @@
 Feature: statement structure object substatement test
 
-Scenario:
+Scenario: Good object subStatement: [modifier] subStatement
 
     Given a [type] saveStatement request
-    Given the statement object is changed to a [value] subStatement
+    Given the statement object is changed to a [modifier] subStatement
     When the request is made
     Then the request was successful
 
     Where:
-        type    | value
+        type    | modifier
         typical | mboxOnlyAgentActor
         typical | mboxSha1OnlyAgentActor
         typical | openidOnlyAgentActor
@@ -35,16 +35,16 @@ Scenario:
         typical | typicalStatementRefObject
         typical | allProperties
 
-Scenario:
+Scenario: Bad object subStatement: [modifier] subStatement with bad [property] [value]
 
     Given a [type] saveStatement request
-    Given the statement object is changed to a [kind] subStatement
+    Given the statement object is changed to a [modifier] subStatement
     Given the statement object [property] is set to [value]
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 
     Where:
-        HTTP | type    | kind                                       | property                   | value
+        HTTP | type    | modifier                                   | property                   | value
         400  | typical | allProperties                              | objectType                 | notSubStatement
         400  | typical | allProperties                              | objectType                 | subStatement
         400  | typical | mboxOnlyAgentActor                         | actor mbox                 | test@tincan.edu
@@ -68,16 +68,16 @@ Scenario:
         400  | typical | typicalStatementRefObject                  | object objectType          | notStatementRef
         400  | typical | typicalStatementRefObject                  | object id                  | bad id
 
-Scenario:
+Scenario: Bad object subStatement: [modifier] subStatement missing [property]
 
     Given a [type] saveStatement request
-    Given the statement object is changed to a [kind] subStatement
+    Given the statement object is changed to a [modifier] subStatement
     Given the statement object [property] is removed
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 
     Where:
-        HTTP | type    | kind                        | property
+        HTTP | type    | modifier                    | property
         400  | typical | mboxAndTypeAgentActor       | actor mbox
         400  | typical | mboxSha1AndTypeAgentActor   | actor mbox_sha1sum
         400  | typical | openidAndTypeAgentActor     | actor openid

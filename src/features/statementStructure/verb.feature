@@ -1,6 +1,6 @@
 Feature: statement structure verb test
 
-Scenario:
+Scenario: Good verb: [modifier] verb
 
     Given a [type] saveStatement request
     Given the statement verb is changed to a [modifier] verb
@@ -12,7 +12,7 @@ Scenario:
         typical | idOnly
         typical | idAndDisplay
 
-Scenario:
+Scenario: Bad verb: [object] with bad [property] [value]
 
     Given a [type] saveStatement request
     Given the statement verb is changed to a [object]
@@ -26,7 +26,7 @@ Scenario:
         400  | typical | idAndDisplay verb | display  | bad display
         400  | typical | idAndDisplay verb | id       | bad id
 
-Scenario:
+Scenario: Bad verb: [object] missing [property]
 
     Given a [type] saveStatement request
     Given the statement verb is changed to a [object]
@@ -39,7 +39,7 @@ Scenario:
         400  | typical | idAndDisplay verb | id
         400  | typical | idOnly verb       | id
 
-Scenario:
+Scenario: Good verb: [object] missing [property]
 
     Given a [type] saveStatement request
     Given the statement verb is changed to a [object]

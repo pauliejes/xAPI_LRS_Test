@@ -1,6 +1,6 @@
 Feature: statement structure actor test
 
-Scenario:
+Scenario: Good actor: [object]
 
     Given a [type] saveStatement request
     Given the statement actor is changed to a [object]
@@ -22,7 +22,7 @@ Scenario:
         typical | openidAndType group
         typical | accountAndType group
 
-Scenario:
+Scenario: Bad actor: [object] with bad [property] [value]
 
     Given a [type] saveStatement request
     Given the statement actor is changed to a [object]
@@ -50,7 +50,7 @@ Scenario:
         400  | typical | allPropertiesAccountAgentMember group | member 0 account homePage | bad homePage
         400  | typical | openidOnly agent                      | openid                    | bad URI
 
-Scenario:
+Scenario: Bad actor: [object] missing [property]
 
     Given a [type] saveStatement request
     Given the statement actor is changed to a [object]
@@ -78,7 +78,7 @@ Scenario:
         400  | typical | accountAndType group               | account homePage
         400  | typical | allPropertiesMboxAgentMember group | objectType
 
-Scenario:
+Scenario: Good actor: [object] missing [property]
 
     Given a [type] saveStatement request
     Given the statement actor is changed to a [object]

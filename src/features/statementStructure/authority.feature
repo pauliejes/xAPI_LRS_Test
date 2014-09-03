@@ -4,7 +4,7 @@
 @Pending
 Feature: statement structure authority test
 
-Scenario:
+Scenario: Good authority: [object]
 
     Given a [type] saveStatement request
     Given the statement authority is changed to a [object]
@@ -16,7 +16,7 @@ Scenario:
         typical | consumerOnly authority
         typical | consumerAndUser authority
 
-Scenario:
+Scenario: Bad authority: [object]
 
     Given a [type] saveStatement request
     Given the statement authority is changed to a [object]
@@ -38,7 +38,7 @@ Scenario:
         typical | openidAndType agent
         typical | accountAndType agent
 
-Scenario:
+Scenario: Bad authority: [object] with bad [property] [value]
 
     Given a [type] saveStatement request
     Given the statement authority is changed to a [object]
@@ -65,7 +65,7 @@ Scenario:
         400  | typical | allPropertiesOpenidAgentMember group  | member 0 openid           | bad openid
         400  | typical | allPropertiesAccountAgentMember group | member 0 account homePage | bad homePage
 
-Scenario:
+Scenario: Bad authority: [object] missing [property]
 
     Given a [type] saveStatement request
     Given the statement authority is changed to a [object]

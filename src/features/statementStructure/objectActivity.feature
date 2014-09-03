@@ -1,6 +1,6 @@
 Feature: statement structure object activity test
 
-Scenario:
+Scenario: Good object activity: [modifier] activity
 
     Given a [type] saveStatement request
     Given the statement object is changed to a [modifier] activity
@@ -14,7 +14,7 @@ Scenario:
         typical | idAndDefinition
         typical | allProperties
 
-Scenario:
+Scenario: Bad object activity: [modifier] activity with bad [property] [value]
 
     Given a [type] saveStatement request
     Given the statement object is changed to a [modifier] activity
@@ -28,7 +28,7 @@ Scenario:
         400  | typical | allProperties | objectType | notActivity
         400  | typical | allProperties | objectType | activity
 
-Scenario:
+Scenario: Bad object activity: [modifier] activity missing [property]
 
     Given a [type] saveStatement request
     Given the statement object is changed to a [modifier] activity
@@ -40,7 +40,7 @@ Scenario:
         HTTP | type    | modifier      | property
         400  | typical | allProperties | id
 
-Scenario:
+Scenario: Good object activity: [modifier] activity missing [property]
 
     Given a [type] saveStatement request
     Given the statement object is changed to a [modifier] activity

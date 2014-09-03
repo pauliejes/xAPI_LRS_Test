@@ -1,6 +1,6 @@
 Feature: statement structure statementRef test
 
-Scenario:
+Scenario: Good object statementRef: [object]
 
     Given a [type] saveStatement request
     Given the statement object is changed to a [object]
@@ -11,7 +11,7 @@ Scenario:
         type    | object
         typical | allProperties statementRef
 
-Scenario:
+Scenario: Bad object statementRef: [object] with bad [property] [value]
 
     Given a [type] saveStatement request
     Given the statement object is changed to a [object]
@@ -25,7 +25,7 @@ Scenario:
         400  | typical | allProperties statementRef            | id                        | bad id
         400  | typical | allProperties statementRef            | objectType                | statementRef
 
-Scenario:
+Scenario: Bad object statementRef: [object] missing [property]
 
     Given a [type] saveStatement request
     Given the statement object is changed to a [object]
