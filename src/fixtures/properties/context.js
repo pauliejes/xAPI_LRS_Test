@@ -5,12 +5,16 @@ require("./agent");
 require("./group");
 require("./contextActivities");
 require("./statementRef");
+require("./extensions");
 
 factory.register(
     "context",
     {
         "empty": {},
         "typical": {},
+        "typicalAgentInstructor": {
+            "instructor": factory.make("typical agent")
+        },
         "mboxAndTypeAgentInstructor": {
             "instructor": factory.make("mboxAndType agent"),
         },
@@ -23,6 +27,27 @@ factory.register(
         "accountAndTypeAgentInstructor": {
             "instructor": factory.make("accountAndType agent"),
         },
+        "typicalGroupTeam": {
+            "team": factory.make("typical group")
+        },
+        "statementOnly": {
+            "statement": factory.make("typical statementRef")
+        },
+        "extensionsOnly": {
+            "extensions": factory.make("typical extensions")
+        },
+        "emptyExtensionsOnly": {
+            "extensions": factory.make("empty extensions")
+        },
+        "emptyContextActivities": {
+            "contextActivities": factory.make("empty contextActivities")
+        },
+        "emptyContextActivitiesAllPropertiesEmpty": {
+            "contextActivities": factory.make("allPropertiesEmpty contextActivities")
+        },
+        "contextActivitiesAllPropertiesOnly": {
+            "contextActivities": factory.make("allProperties contextActivities"),
+        },
         "allProperties": {
             "registration": "16fd2706-8baf-433b-82eb-8c7fada847da",
             "instructor": factory.make("typical agent"),
@@ -30,11 +55,9 @@ factory.register(
             "contextActivities": factory.make("allProperties contextActivities"),
             "revision": "test",
             "platform": "test",
-            // TODO: ?
-            //"language": "en-US",
-            "statement": factory.make("typical statementRef")
-            // TODO: ?
-            //"extensions":
+            "language": "en-US",
+            "statement": factory.make("typical statementRef"),
+            "extensions": factory.make("typical extensions")
         }
     }
 );

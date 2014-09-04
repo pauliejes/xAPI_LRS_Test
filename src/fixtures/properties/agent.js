@@ -20,7 +20,7 @@ factory.register(
             "objectType": "Agent"
         },
         "openidAndType": {
-            "openid": "brian.openid.tincanapi.com",
+            "openid": "openid.tincanapi.com",
             "objectType": "Agent"
         },
         "accountAndType": {
@@ -34,7 +34,7 @@ factory.register(
             "mbox_sha1sum": "test"
         },
         "openidOnly": {
-            "openid": "brian.openid.tincanapi.com"
+            "openid": "openid.tincanapi.com"
         },
         "accountOnly": {
             "account": factory.make("typical agentAccount")

@@ -19,5 +19,6 @@ factory.register(
             );
         },
         string: "some string of content",
+        emptyString: ""
     }
 );

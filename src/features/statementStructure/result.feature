@@ -9,19 +9,23 @@ Scenario: Good result: [modifier] result
 
     Where:
         type    | modifier
+        typical | empty
         typical | typical
         typical | scoreOnly
+        typical | emptyScoreOnly
         typical | successOnly
         typical | completionOnly
         typical | responseOnly
         typical | durationOnly
+        typical | extensionsOnly
+        typical | emptyExtensionsOnly
         typical | scoreAndSuccess
-#       typical | scoreAndResponse
+        typical | scoreAndResponse
         typical | scoreAndDuration
         typical | successAndCompletion
-#       typical | successAndResponse
+        typical | successAndResponse
         typical | successAndDuration
-#       typical | completionAndResponse
+        typical | completionAndResponse
         typical | completionAndDuration
         typical | responseAndDuration
         typical | scoreSuccessAndCompletion
@@ -38,20 +42,32 @@ Scenario: Good result: [modifier] result
         typical | successCompletionResponseAndDuration
         typical | allProperties
 
+Scenario: Good duration format test ([explanation]): [value]
+
+    Given a typical saveStatement request
+    Given the statement result is changed to a durationOnly result
+    Given the statement result duration is changed to [value]
+    When the request is made
+    Then the request was successful
+
+    Where:
+        value        | explanation
+        PT0H0M0.000S | decimal
+
 Scenario: Bad result: [object] with bad [property] [value]
 
     Given a [type] saveStatement request
-    Given the statement result is changed to a [object]
+    Given the statement result is changed to a [object] result
     Given the statement result [property] is changed to [value]
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 
     Where:
-        HTTP | type    | object                | property   | value
-        400  | typical | successOnly result    | success    | not a boolean
-        400  | typical | completionOnly result | completion | not a boolean
-        400  | typical | allProperties result  | duration   | not ISO 8601 formatted
-        400  | typical | scoreOnly result      | score      | not a score object
+        HTTP | type    | object         | property   | value
+        400  | typical | successOnly    | success    | not a boolean
+        400  | typical | completionOnly | completion | not a boolean
+        400  | typical | allProperties  | duration   | not ISO 8601 formatted
+        400  | typical | scoreOnly      | score      | not a score object
 
 Scenario: Good result: [object] missing [property]
     Given a [type] saveStatement request

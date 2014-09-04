@@ -2,6 +2,7 @@
 var factory = require("../../utils/factory");
 
 require("./interactionComponent");
+require("./extensions");
 
 factory.register(
     "activityDefinition",
@@ -19,46 +20,16 @@ factory.register(
             }
         },
         "typeOnly": {
-            "type": "test"
+            "type": "http://id.tincanapi.com/activitytype/unit-test"
         },
         "moreInfoOnly": {
-            "moreInfo": "test"
-        },
-        "interactionTypeOnly": {
-           "interactionType": "test"
-        },
-        "correctResponsesPatternOnly": {
-            "correctResponsesPattern": []
-        },
-        "choicesOnly": {
-            "choices": [
-                factory.make("typical interactionComponent")
-            ]
-        },
-        "scaleOnly": {
-            "scale": [
-                factory.make("typical interactionComponent")
-            ]
-        },
-        "sourceOnly": {
-            "source": [
-                factory.make("typical interactionComponent")
-            ]
-        },
-        "targetOnly": {
-            "target": [
-                factory.make("typical interactionComponent")
-            ]
-        },
-        "stepsOnly": {
-            "steps": [
-                factory.make("typical interactionComponent")
-            ]
+            "moreInfo": "https://github.com/adlnet/xAPI_LRS_Test"
         },
         "extensionsOnly": {
-            "extensions": {
-                "test": "extension"
-            }
+            "extensions": factory.make("multiplePairs extensions")
+        },
+        "emptyExtensionsOnly": {
+            "extensions": factory.make("empty extensions"),
         },
         "allProperties": {
             "name": {
@@ -67,28 +38,63 @@ factory.register(
             "description": {
                 "en-US": "test"
             },
-            "type": "test",
-            "moreInfo": "test",
-            "interactionType": "test",
-            "correctResponsesPattern": [],
+            "type": "http://id.tincanapi.com/activitytype/unit-test",
+            "moreInfo": "https://github.com/adlnet/xAPI_LRS_Test",
+            "extensions": factory.make("typical extensions")
+        },
+
+        //
+        // need individual interaction type definitions, we can't
+        // use allProperties because not all types use all component lists
+        //
+        "trueFalse": {
+           "interactionType": "true-false"
+        },
+        "fillIn": {
+           "interactionType": "fill-in"
+        },
+        "numeric": {
+           "interactionType": "numeric"
+        },
+        "other": {
+           "interactionType": "other"
+        },
+        "otherWithCorrectResponsesPattern": {
+            "interactionType": "other",
+            "correctResponsesPattern": ["test"]
+        },
+        "choice": {
+            "interactionType": "choice",
             "choices": [
                 factory.make("typical interactionComponent")
-            ],
+            ]
+        },
+        "sequencing": {
+            "interactionType": "sequencing",
+            "choices": [
+                factory.make("typical interactionComponent")
+            ]
+        },
+        "likert": {
+            "interactionType": "likert",
             "scale": [
                 factory.make("typical interactionComponent")
-            ],
+            ]
+        },
+        "matching": {
+            "interactionType": "matching",
             "source": [
                 factory.make("typical interactionComponent")
             ],
             "target": [
                 factory.make("typical interactionComponent")
-            ],
+            ]
+        },
+        "performance": {
+            "interactionType": "performance",
             "steps": [
                 factory.make("typical interactionComponent")
-            ],
-            "extensions": {
-                "test": "extension"
-            }
+            ]
         }
     }
 );

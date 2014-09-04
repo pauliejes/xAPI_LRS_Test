@@ -28,6 +28,12 @@ factory.register(
                 factory.make("typical activity")
             ],
         },
+        "allPropertiesEmpty": {
+            "category": [],
+            "parent": [],
+            "grouping": [],
+            "other": []
+        },
         "allProperties": {
             "category": [
                 factory.make("typical activity")

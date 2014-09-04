@@ -16,17 +16,20 @@ Scenario: Good object activity: [modifier] activity
 
 Scenario: Bad object activity: [modifier] activity with bad [property] [value]
 
-    Given a [type] saveStatement request
+    Given a typical saveStatement request
     Given the statement object is changed to a [modifier] activity
     Given the statement object [property] is changed to [value]
     When the request is made
-    Then the LRS responds with HTTP [HTTP]
+    Then the LRS responds with HTTP 400
 
     Where:
-        HTTP | type    | modifier      | property   | value
-        400  | typical | allProperties | id         | bad id
-        400  | typical | allProperties | objectType | notActivity
-        400  | typical | allProperties | objectType | activity
+        modifier      | property                   | value
+        allProperties | id                         | bad id
+        allProperties | objectType                 | notActivity
+        allProperties | objectType                 | activity
+        allProperties | definition type            | bad IRI
+        allProperties | definition interactionType | bad interaction
+        allProperties | definition moreInfo        | bad IRL
 
 Scenario: Bad object activity: [modifier] activity missing [property]
 
@@ -40,14 +43,29 @@ Scenario: Bad object activity: [modifier] activity missing [property]
         HTTP | type    | modifier      | property
         400  | typical | allProperties | id
 
-Scenario: Good object activity: [modifier] activity missing [property]
+Scenario: Good activity definition permutation: [value] definition
 
-    Given a [type] saveStatement request
-    Given the statement object is changed to a [modifier] activity
-    Given the statement object [property] is removed
+    Given an activity saveStatement request
+    Given the statement object definition is set to a [value] activityDefinition
     When the request is made
     Then the request was successful
 
     Where:
-        type    | modifier      | property
-        typical | allProperties | objectType
+        value
+        nameOnly
+        descriptionOnly
+        typeOnly
+        moreInfoOnly
+        extensionsOnly
+        emptyExtensionsOnly
+        allProperties
+        trueFalse
+        fillIn
+        numeric
+        other
+        otherWithCorrectResponsesPattern
+        choice
+        sequencing
+        likert
+        matching
+        performance

@@ -2,6 +2,7 @@
 var factory = require("../../utils/factory");
 
 require("./agent");
+require("./activity");
 require("./verb");
 require("./result");
 require("./context");
@@ -14,85 +15,85 @@ factory.register(
             "objectType": "SubStatement",
             "actor": factory.make("typical agent"),
             "verb": factory.make("typical verb"),
-            "object": factory.make("typical agent"),
+            "object": factory.make("typical activity"),
         },
         "mboxOnlyAgentActor": {
             "objectType": "SubStatement",
             "actor": factory.make("mboxOnly agent"),
             "verb": factory.make("typical verb"),
-            "object": factory.make("typical agent"),
+            "object": factory.make("typical activity"),
         },
         "mboxSha1OnlyAgentActor": {
             "objectType": "SubStatement",
             "actor": factory.make("mboxSha1Only agent"),
             "verb": factory.make("typical verb"),
-            "object": factory.make("typical agent"),
+            "object": factory.make("typical activity"),
         },
         "openidOnlyAgentActor": {
             "objectType": "SubStatement",
             "actor": factory.make("openidOnly agent"),
             "verb": factory.make("typical verb"),
-            "object": factory.make("typical agent"),
+            "object": factory.make("typical activity"),
         },
         "accountOnlyAgentActor": {
             "objectType": "SubStatement",
             "actor": factory.make("accountOnly agent"),
             "verb": factory.make("typical verb"),
-            "object": factory.make("typical agent"),
+            "object": factory.make("typical activity"),
         },
         "mboxAndTypeAgentActor": {
             "objectType": "SubStatement",
             "actor": factory.make("mboxAndType agent"),
             "verb": factory.make("typical verb"),
-            "object": factory.make("typical agent"),
+            "object": factory.make("typical activity"),
         },
         "mboxSha1AndTypeAgentActor": {
             "objectType": "SubStatement",
             "actor": factory.make("mboxSha1AndType agent"),
             "verb": factory.make("typical verb"),
-            "object": factory.make("typical agent"),
+            "object": factory.make("typical activity"),
         },
         "openidAndTypeAgentActor": {
             "objectType": "SubStatement",
             "actor": factory.make("openidAndType agent"),
             "verb": factory.make("typical verb"),
-            "object": factory.make("typical agent"),
+            "object": factory.make("typical activity"),
         },
         "accountAndTypeAgentActor": {
             "objectType": "SubStatement",
             "actor": factory.make("accountAndType agent"),
             "verb": factory.make("typical verb"),
-            "object": factory.make("typical agent"),
+            "object": factory.make("typical activity"),
         },
         "mboxAndTypeGroupActor": {
             "objectType": "SubStatement",
             "actor": factory.make("mboxAndType group"),
             "verb": factory.make("typical verb"),
-            "object": factory.make("typical agent"),
+            "object": factory.make("typical activity"),
         },
         "mboxSha1AndTypeGroupActor": {
             "objectType": "SubStatement",
             "actor": factory.make("mboxSha1AndType group"),
             "verb": factory.make("typical verb"),
-            "object": factory.make("typical agent"),
+            "object": factory.make("typical activity"),
         },
         "openidAndTypeGroupActor": {
             "objectType": "SubStatement",
             "actor": factory.make("openidAndType group"),
             "verb": factory.make("typical verb"),
-            "object": factory.make("typical agent"),
+            "object": factory.make("typical activity"),
         },
         "accountAndTypeGroupActor": {
             "objectType": "SubStatement",
             "actor": factory.make("accountAndType group"),
             "verb": factory.make("typical verb"),
-            "object": factory.make("typical agent"),
+            "object": factory.make("typical activity"),
         },
         "idOnlyVerb": {
             "objectType": "SubStatement",
             "actor": factory.make("typical agent"),
             "verb": factory.make("idOnly verb"),
-            "object": factory.make("typical agent"),
+            "object": factory.make("typical activity"),
         },
         "mboxOnlyAgentObject": {
             "objectType": "SubStatement",
@@ -188,7 +189,7 @@ factory.register(
             "objectType": "SubStatement",
             "actor": factory.make("typical agent"),
             "verb": factory.make("typical verb"),
-            "object": factory.make("typical agent"),
+            "object": factory.make("typical activity"),
             "result": factory.make("typical result"),
             "context": factory.make("typical context")
         }

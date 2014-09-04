@@ -11,6 +11,9 @@ factory.register(
         "scoreOnly": {
             "score": factory.make("typical score")
         },
+        "emptyScoreOnly": {
+            "score": factory.make("empty score")
+        },
         "successOnly": {
             "success": true
         },
@@ -23,6 +26,12 @@ factory.register(
         "durationOnly": {
             "duration": "PT2H"
         },
+        "extensionsOnly": {
+            "extensions": factory.make("multiplePairs extensions"),
+        },
+        "emptyExtensionsOnly": {
+            "extensions": factory.make("empty extensions"),
+        },
         "scoreAndSuccess": {
             "score": factory.make("typical score"),
             "success": true
@@ -33,7 +42,7 @@ factory.register(
         },
         "scoreAndResponse": {
             "score": factory.make("typical score"),
-            "reponse": "test"
+            "response": "test"
         },
         "scoreAndDuration": {
             "score": factory.make("typical score"),
@@ -45,7 +54,7 @@ factory.register(
         },
         "successAndResponse": {
             "success": true,
-            "reponse": "test"
+            "response": "test"
         },
         "successAndDuration": {
             "success": true,
@@ -53,7 +62,7 @@ factory.register(
         },
         "completionAndResponse": {
             "completion": true,
-            "reponse": "test"
+            "response": "test"
         },
         "completionAndDuration": {
             "completion": true,
@@ -136,9 +145,8 @@ factory.register(
             "success": true,
             "completion": true,
             "response": "test",
-            "duration": "PT2H"
-            // TODO: ?
-            //"extensions":
+            "duration": "PT2H",
+            "extensions": factory.make("typical extensions")
         }
     }
 );
