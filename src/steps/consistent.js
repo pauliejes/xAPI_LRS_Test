@@ -157,10 +157,6 @@ assertStatementMatch = function (actual, expected) {
     }
     delete actual.timestamp;
 
-    if (actual.object.objectType === "SubStatement") {
-        delete actual.object.version;
-    }
-
     assert.deepEqual(actual, expected, "retrieved statement matches saved statement");
 };
 
