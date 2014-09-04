@@ -47,20 +47,20 @@ Scenario: Bad object subStatement: [modifier] subStatement with bad [property] [
         HTTP | type    | modifier                                   | property                   | value
         400  | typical | allProperties                              | objectType                 | notSubStatement
         400  | typical | allProperties                              | objectType                 | subStatement
-        400  | typical | mboxOnlyAgentActor                         | actor mbox                 | test@tincan.edu
+        400  | typical | mboxOnlyAgentActor                         | actor mbox                 | conformancetest@tincanapi.com
         400  | typical | mboxOnlyAgentActor                         | actor mbox                 | badMbox
         400  | typical | openidOnlyAgentActor                       | actor openid               | bad openid
         400  | typical | accountOnlyAgentActor                      | actor account homePage     | bad homePage
         400  | typical | mboxAndTypeAgentActor                      | actor objectType           | notAgent
         400  | typical | mboxAndTypeAgentActor                      | actor objectType           | agent
         400  | typical | typical                                    | verb id                    | bad id
-        400  | typical | mboxOnlyAgentObject                        | object mbox                | test@tincan.edu
+        400  | typical | mboxOnlyAgentObject                        | object mbox                | conformancetest@tincanapi.com
         400  | typical | mboxOnlyAgentObject                        | object mbox                | badMbox
         400  | typical | openidOnlyAgentObject                      | object openid              | bad openid
         400  | typical | accountOnlyAgentObject                     | object account homePage    | bad homePage
         400  | typical | mboxAndTypeAgentObject                     | object objectType          | notAgent
         400  | typical | mboxAndTypeAgentObject                     | objectType                 | agent
-        400  | typical | allPropertiesTypicalAgentMemberGroupObject | object member 0 mbox       | test@tincan.edu
+        400  | typical | allPropertiesTypicalAgentMemberGroupObject | object member 0 mbox       | conformancetest@tincanapi.com
         400  | typical | allPropertiesTypicalAgentMemberGroupObject | object member 0 mbox       | bad mbox
         400  | typical | allPropertiesTypicalAgentMemberGroupObject | object member 0 objectType | notAgent
         400  | typical | allPropertiesTypicalAgentMemberGroupObject | object member 0 objectType | agent

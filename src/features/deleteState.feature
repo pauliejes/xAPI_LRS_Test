@@ -85,11 +85,11 @@ Scenario: Bad delete state: [type] request with [modifier] agent parameter with 
 
     Where:
         HTTP | type    | modifier       | property         | value
-        400  | typical | mboxAndType    | mbox             | test@tincan.edu
+        400  | typical | mboxAndType    | mbox             | conformancetest@tincanapi.com
         400  | typical | mboxAndType    | mbox             | bad mbox
         400  | typical | mboxAndType    | objectType       | notAgent
         400  | typical | mboxAndType    | objectType       | Activity
-        400  | typical | mboxOnly       | mbox             | test@tincan.edu
+        400  | typical | mboxOnly       | mbox             | conformancetest@tincanapi.com
         400  | typical | mboxOnly       | mbox             | bad mbox
         400  | typical | mboxAndType    | objectType       | agent
         400  | typical | openidAndType  | openid           | badURI
