@@ -24,6 +24,9 @@ var Yadda = require("yadda"),
     // since features may be found as part of a directory and
     // on their own, but we only ever want to run them once
     cache = {},
+
+    // an object of all hashes seen during this test run
+    hashes = {},
     markPending = {};
 
 Yadda.plugins.mocha.StepLevelPlugin.init();
@@ -68,6 +71,7 @@ function runFeatureFile (file) {
                     );
 
                     scenario.stepHash = crypto.createHash("md5").update(JSON.stringify(hashable), "utf8").digest("hex");
+                    hashes[scenario.stepHash] = false;
 
                     if (_suiteCfg.diagnostics.stepHash) {
                         scenario.title += " (" + scenario.stepHash + ")";
@@ -160,8 +164,32 @@ files.forEach(
 
 after(
     function () {
+        var stalePending = {};
+
         if (_suiteCfg.diagnostics.requestCount) {
             stat(_suiteCfg._logger);
+        }
+
+        //
+        // if they didn't provide a featureSpec via the command line
+        // then we can assume that the featureSpec via the config is
+        // intended to match the pending, or that there was no featureSpec
+        // in the config and therefore they are running them all which
+        // means that we can check the pending list for any hashes that
+        // don't still exist in the test suite and indicate they can be
+        // removed
+        //
+        if (! _suiteCfg.stage1._featureSpecFromCLI && _suiteCfg.stage1.stalePending) {
+            Object.keys(markPending).forEach(
+                function (hash) {
+                    if (typeof hashes[hash] === "undefined") {
+                        stalePending[hash] = markPending[hash];
+                    }
+                }
+            );
+            _suiteCfg._logger("Stale Pending Hashes");
+            _suiteCfg._logger(stalePending);
+            _suiteCfg._logger("---------------");
         }
     }
 );

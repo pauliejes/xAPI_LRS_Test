@@ -100,9 +100,16 @@ module.exports = function(grunt) {
 
                         _suiteCfg.stage1 = _suiteCfg.stage1 || {};
                         _suiteCfg.stage1.featureSpec = _suiteCfg.stage1.featureSpec || "features";
+                        _suiteCfg.stage1._featureSpecFromCLI = _suiteCfg.stage1._featureSpecFromCLI || false;
                         _suiteCfg.stage1.pending = _suiteCfg.stage1.pending || {};
+                        _suiteCfg.stage1.stalePending = _suiteCfg.stage1.stalePending || false;
+
+                        if (! _suiteCfg.stage1.stalePending && grunt.option("diagnostics")) {
+                            _suiteCfg.stage1.stalePending = true;
+                        }
 
                         if (grunt.option("feature") || grunt.option("features")) {
+                            _suiteCfg.stage1._featureSpecFromCLI = true;
                             _suiteCfg.stage1.featureSpec = grunt.option("feature") || grunt.option("features");
                         }
                     }

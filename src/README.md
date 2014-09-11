@@ -75,6 +75,8 @@ The repository is setup to ignore files matching `config*.json`.
         }
         ```
 
+* `stalePending` takes a boolean and when true turns on output of a list of "stale" hashes in the pending list but only when the command line 'feature[s]' flag is not used
+
 ### Stage 2 Configuration
 
 None available at this time.
