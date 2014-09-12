@@ -1,5 +1,8 @@
 "use strict";
-var factory = require("../../utils/factory");
+var factory = require("../../utils/factory"),
+    MBOX = "mailto:conformancetest-group@tincanapi.com",
+    MBOX_SHA1SUM = "4e271041e78101311fb37284ef1a1d35c3f1db35",
+    OPENID = "group.openid.tincanapi.com";
 
 require("./agent");
 
@@ -9,18 +12,18 @@ factory.register(
         "empty": {},
         "typical": {
             "objectType": "Group",
-            "mbox": "mailto:conformancetest@tincanapi.com"
+            "mbox": MBOX
         },
         "mboxAndType": {
-            "mbox": "mailto:conformancetest@tincanapi.com",
+            "mbox": MBOX,
             "objectType": "Group"
         },
         "mboxSha1AndType": {
-            "mbox_sha1sum": "test",
+            "mbox_sha1sum": MBOX_SHA1SUM,
             "objectType": "Group"
         },
         "openidAndType": {
-            "openid": "alice.openid.example.org",
+            "openid": OPENID,
             "objectType": "Group"
         },
         "accountAndType": {
@@ -29,17 +32,17 @@ factory.register(
         },
         "mboxTypeAndName": {
             "objectType": "Group",
-            "mbox": "mailto:conformancetest@tincanapi.com",
+            "mbox": MBOX,
             "name": "test group"
         },
         "mboxSha1TypeAndName": {
             "objectType": "Group",
-            "mbox_sha1sum": "test",
+            "mbox_sha1sum": MBOX_SHA1SUM,
             "name": "test group"
         },
         "openidTypeAndName": {
             "objectType": "Group",
-            "openid": "alice.openid.example.org",
+            "openid": OPENID,
             "name": "test group"
         },
         "accountTypeAndName": {
@@ -49,18 +52,18 @@ factory.register(
         },
         "mboxTypeAndMember": {
             "objectType": "Group",
-            "mbox": "mailto:conformancetest@tincanapi.com",
+            "mbox": MBOX,
             "member": [factory.make("typical agent")],
         },
         "mboxSha1TypeAndMember": {
             "objectType": "Group",
             "member": [factory.make("typical agent")],
-            "mbox_sha1sum": "test",
+            "mbox_sha1sum": MBOX_SHA1SUM
         },
         "openidTypeAndMember": {
             "objectType": "Group",
             "member": [factory.make("typical agent")],
-            "openid": "alice.openid.example.org",
+            "openid": OPENID
         },
         "accountTypeAndMember": {
             "objectType": "Group",
@@ -69,37 +72,37 @@ factory.register(
         },
         "allPropertiesTypicalAgentMember": {
             "objectType": "Group",
-            "mbox": "mailto:conformancetest@tincanapi.com",
+            "mbox": MBOX,
             "name": "test group",
             "member": [factory.make("typical agent")]
         },
         "allPropertiesMboxAgentMember": {
             "objectType": "Group",
-            "mbox": "mailto:conformancetest@tincanapi.com",
+            "mbox": MBOX,
             "name": "test group",
             "member": [factory.make("mboxOnly agent")]
         },
         "allPropertiesMboxSha1AgentMember": {
             "objectType": "Group",
-            "mbox": "mailto:conformancetest@tincanapi.com",
+            "mbox": MBOX,
             "name": "test group",
             "member": [factory.make("mboxSha1Only agent")]
         },
         "allPropertiesOpenidAgentMember": {
             "objectType": "Group",
-            "mbox": "mailto:conformancetest@tincanapi.com",
+            "mbox": MBOX,
             "name": "test group",
             "member": [factory.make("openidOnly agent")]
         },
         "allPropertiesAccountAgentMember": {
             "objectType": "Group",
-            "mbox": "mailto:conformancetest@tincanapi.com",
+            "mbox": MBOX,
             "name": "test group",
             "member": [factory.make("accountOnly agent")]
         },
         "allPropertiesTwoTypicalAgentsMember": {
             "objectType": "Group",
-            "mbox": "mailto:conformancetest@tincanapi.com",
+            "mbox": MBOX,
             "name": "test group",
             "member": [factory.make("typical agent"), factory.make("typical agent")]
         }

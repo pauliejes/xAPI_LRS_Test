@@ -1,5 +1,8 @@
 "use strict";
-var factory = require("../../utils/factory");
+var factory = require("../../utils/factory"),
+    MBOX = "mailto:conformancetest@tincanapi.com",
+    MBOX_SHA1SUM = "db77b9104b531ecbb0b967f6942549d0ba80fda1",
+    OPENID = "openid.tincanapi.com";
 
 require("./agentAccount");
 
@@ -8,19 +11,19 @@ factory.register(
     {
         "empty": {},
         "typical": {
-            "mbox": "mailto:conformancetest@tincanapi.com",
+            "mbox": MBOX,
             "objectType": "Agent"
         },
         "mboxAndType": {
-            "mbox": "mailto:conformancetest@tincanapi.com",
+            "mbox": MBOX,
             "objectType": "Agent"
         },
         "mboxSha1AndType": {
-            "mbox_sha1sum": "test",
+            "mbox_sha1sum": MBOX_SHA1SUM,
             "objectType": "Agent"
         },
         "openidAndType": {
-            "openid": "openid.tincanapi.com",
+            "openid": OPENID,
             "objectType": "Agent"
         },
         "accountAndType": {
@@ -28,13 +31,13 @@ factory.register(
             "objectType": "Agent"
         },
         "mboxOnly": {
-            "mbox": "mailto:conformancetest@tincanapi.com"
+            "mbox": MBOX
         },
         "mboxSha1Only": {
-            "mbox_sha1sum": "test"
+            "mbox_sha1sum": MBOX_SHA1SUM
         },
         "openidOnly": {
-            "openid": "openid.tincanapi.com"
+            "openid": OPENID
         },
         "accountOnly": {
             "account": factory.make("typical agentAccount")

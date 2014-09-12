@@ -1,5 +1,6 @@
 "use strict";
-var factory = require("../../utils/factory");
+var factory = require("../../utils/factory"),
+    HOMEPAGE = "https://tincanapi.com";
 
 factory.register(
     "agentAccount",
@@ -7,15 +8,15 @@ factory.register(
         "empty": {},
         "typical": {
             "name": "test",
-            "homePage": "tincanapi.com"
+            "homePage": HOMEPAGE
         },
         "consumer": {
-            "homePage": "http://tincanapi.com/xAPI/OAuth/Token",
+            "homePage": HOMEPAGE + "/OAuth/Token",
             "name": "oauth_consumer_x75db"
         },
         "allProperties": {
             "name": "test",
-            "homePage": "tincanapi.com"
+            "homePage": HOMEPAGE
         }
     }
 );
