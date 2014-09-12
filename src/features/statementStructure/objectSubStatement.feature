@@ -88,7 +88,6 @@ Scenario: Bad object subStatement: [modifier] subStatement missing [property]
         400  | typical | mboxSha1OnlyAgentActor      | actor mbox_sha1sum
         400  | typical | openidOnlyAgentActor        | actor openid
         400  | typical | accountOnlyAgentActor       | actor account
-        400  | typical | mboxAndTypeGroupActor       | actor objectType
         400  | typical | mboxAndTypeGroupActor       | actor mbox
         400  | typical | mboxSha1AndTypeGroupActor   | actor mbox_sha1sum
         400  | typical | openidAndTypeGroupActor     | actor openid
