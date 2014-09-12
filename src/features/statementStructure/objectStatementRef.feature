@@ -11,11 +11,11 @@ Scenario: Good object statementRef: [object]
         type    | object
         typical | allProperties statementRef
 
-Scenario: Bad object statementRef: [object] with bad [property] [value]
+Scenario: Bad object statementRef: [object] with bad [property] '[value]'
 
     Given a [type] saveStatement request
     Given the statement object is changed to a [object]
-    Given the statement object [property] is changed to [value]
+    Given the statement object [property] is changed to '[value]'
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 

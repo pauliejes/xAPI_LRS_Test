@@ -22,11 +22,11 @@ Scenario: Good actor: [object]
         typical | openidAndType group
         typical | accountAndType group
 
-Scenario: Bad actor: [object] with bad [property] [value]
+Scenario: Bad actor: [object] with bad [property] '[value]'
 
     Given a [type] saveStatement request
     Given the statement actor is changed to a [object]
-    Given the statement actor [property] is changed to [value]
+    Given the statement actor [property] is changed to '[value]'
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 

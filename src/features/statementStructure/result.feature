@@ -46,7 +46,7 @@ Scenario: Good duration format test ([explanation]): [value]
 
     Given a typical saveStatement request
     Given the statement result is changed to a durationOnly result
-    Given the statement result duration is changed to [value]
+    Given the statement result duration is changed to '[value]'
     When the request is made
     Then the request was successful
 
@@ -54,11 +54,11 @@ Scenario: Good duration format test ([explanation]): [value]
         value        | explanation
         PT0H0M0.000S | decimal
 
-Scenario: Bad result: [object] with bad [property] [value]
+Scenario: Bad result: [object] with bad [property] '[value]'
 
     Given a [type] saveStatement request
     Given the statement result is changed to a [object] result
-    Given the statement result [property] is changed to [value]
+    Given the statement result [property] is changed to '[value]'
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 

@@ -12,11 +12,11 @@ Scenario: Good verb: [modifier] verb
         typical | idOnly
         typical | idAndDisplay
 
-Scenario: Bad verb: [object] with bad [property] [value]
+Scenario: Bad verb: [object] with bad [property] '[value]'
 
     Given a [type] saveStatement request
     Given the statement verb is changed to a [object]
-    Given the statement verb [property] is changed to [value]
+    Given the statement verb [property] is changed to '[value]'
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 

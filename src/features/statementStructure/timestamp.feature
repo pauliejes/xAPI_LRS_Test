@@ -1,9 +1,9 @@
 Feature: statement structure timestamp test
 
-Scenario: Good timestamp: [value]
+Scenario: Good timestamp: '[value]'
 
     Given a [type] saveStatement request
-    Given the statement timestamp is changed to [value]
+    Given the statement timestamp is changed to '[value]'
     When the request is made
     Then the request was successful
 
@@ -18,10 +18,10 @@ Scenario: Good timestamp: [value]
         typical | 2014-07-23T12:34:02.365-05:00
         typical | 2014-07-23T12:34:02.36578-05:00
 
-Scenario: Bad timestamp: [value]
+Scenario: Bad timestamp: '[value]'
 
     Given a [type] saveStatement request
-    Given the statement timestamp is changed to [value]
+    Given the statement timestamp is changed to '[value]'
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 

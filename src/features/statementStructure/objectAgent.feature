@@ -14,11 +14,11 @@ Scenario: Good object agent: [object]
         typical | openidAndType agent
         typical | accountAndType agent
 
-Scenario: Bad object agent: [object] with bad [property] [value]
+Scenario: Bad object agent: [object] with bad [property] '[value]'
 
     Given a [type] saveStatement request
     Given the statement object is changed to a [object]
-    Given the statement object [property] is changed to [value]
+    Given the statement object [property] is changed to '[value]'
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 

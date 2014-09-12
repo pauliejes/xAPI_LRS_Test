@@ -14,11 +14,11 @@ Scenario: Good object activity: [modifier] activity
         typical | idAndDefinition
         typical | allProperties
 
-Scenario: Bad object activity: [modifier] activity with bad [property] [value]
+Scenario: Bad object activity: [modifier] activity with bad [property] '[value]'
 
     Given a typical saveStatement request
     Given the statement object is changed to a [modifier] activity
-    Given the statement object [property] is changed to [value]
+    Given the statement object [property] is changed to '[value]'
     When the request is made
     Then the LRS responds with HTTP 400
 
@@ -43,15 +43,15 @@ Scenario: Bad object activity: [modifier] activity missing [property]
         HTTP | type    | modifier      | property
         400  | typical | allProperties | id
 
-Scenario: Good activity definition permutation: [value] definition
+Scenario: Good activity definition permutation: [modifier] definition
 
     Given an activity saveStatement request
-    Given the statement object definition is set to a [value] activityDefinition
+    Given the statement object definition is set to a [modifier] activityDefinition
     When the request is made
     Then the request was successful
 
     Where:
-        value
+        modifier
         nameOnly
         descriptionOnly
         typeOnly

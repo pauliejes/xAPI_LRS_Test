@@ -55,10 +55,21 @@ Scenario: Bad clear state: [type] request missing [property]
         400  | withRegistration | activityId parameter
         400  | withRegistration | agent parameter
 
-Scenario: Bad clear state: [type] request with bad [property] '[value]'
+Scenario: Bad clear state: [type] request with bad [property] [value]
 
     Given a [type] clearState request
     Given the [property] is set to [value]
+    When the request is made
+    Then the LRS responds with HTTP [HTTP]
+
+    Where:
+        HTTP | type    | property         | value
+        400  | typical | agent parameter  | an empty agent
+
+Scenario: Bad clear state: [type] request with bad [property] '[value]'
+
+    Given a [type] clearState request
+    Given the [property] is set to '[value]'
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 
@@ -70,13 +81,12 @@ Scenario: Bad clear state: [type] request with bad [property] '[value]'
         400  | typical | version header   | 3.8.0
         400  | typical | authority header | Basic badAuth
         401  | typical | authority header | Basic TnsHNWplME1YZnc0VzdLTHRIWTo0aDdBb253Ml85WU53vSZLNlVZ
-        400  | typical | agent parameter  | an empty agent
 
 Scenario: Bad clear state: [type] request with [modifier] agent parameter with bad [property] '[value]'
 
     Given a [type] clearState request
     Given the agent parameter is set to a [modifier] agent
-    Given the params agent [property] is set to [value]
+    Given the params agent [property] is set to '[value]'
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 
@@ -89,10 +99,10 @@ Scenario: Bad clear state: [type] request with [modifier] agent parameter with b
         400  | typical | mboxOnly       | mbox             | conformancetest@tincanapi.com
         400  | typical | mboxOnly       | mbox             | bad mbox
         400  | typical | mboxAndType    | objectType       | agent
-        400  | typical | openidAndType  | openid           | badURI
-        400  | typical | accountAndType | account homePage | badURI
-        400  | typical | openidOnly     | openid           | badURI
-        400  | typical | accountOnly    | account homePage | badURI
+        400  | typical | openidAndType  | openid           | bad URI
+        400  | typical | accountAndType | account homePage | bad URI
+        400  | typical | openidOnly     | openid           | bad URI
+        400  | typical | accountOnly    | account homePage | bad URI
 
 Scenario: Bad clear state: [type] request with [modifier] agent parameter missing [property]
 

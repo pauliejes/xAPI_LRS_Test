@@ -12,10 +12,10 @@ Scenario: Good about: [type] request
         200  | typical
         200  | minimal
 
-Scenario: Bad about: [type] request with bad [property] '[value]'
+Scenario: Good about: [type] request with bad [property] '[value]'
 
     Given a [type] about request
-    Given the [property] is set to [value]
+    Given the [property] is set to '[value]'
     When the request is made
     Then the LRS responds with HTTP [HTTP]
     Then the response is a valid about response
@@ -29,7 +29,7 @@ Scenario: Bad about: [type] request with bad [property] '[value]'
 Scenario: Bad about: [type] request with bad [property] '[value]'
 
     Given a [type] about request
-    Given the [property] is set to [value]
+    Given the [property] is set to '[value]'
     When the request is made
     Then the LRS responds with HTTP [HTTP]
     Then the response is a valid about response

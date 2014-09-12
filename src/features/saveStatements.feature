@@ -13,7 +13,7 @@ Scenario: Good save statements: [type] request
 Scenario: Bad save statements: [type] request with bad [property] '[value]'
 
     Given a [type] saveStatements request
-    Given the [property] is set to [value]
+    Given the [property] is set to '[value]'
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 

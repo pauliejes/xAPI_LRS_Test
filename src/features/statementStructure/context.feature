@@ -31,19 +31,30 @@ Scenario: Bad context: [modifier] context with bad [property] [value]
 
     Where:
         HTTP | type    | modifier                           | property                                | value
-        400  | typical | empty                              | registration                            | bad id
         400  | typical | empty                              | instructor                              | an empty agent
+        400  | typical | empty                              | team                                    | an empty group
+        400  | typical | empty                              | language                                | an emptyString content
+        400  | typical | empty                              | statement                               | an empty statementRef
+
+Scenario: Bad context: [modifier] context with bad [property] '[value]'
+
+    Given a [type] saveStatement request
+    Given the statement context is changed to a [modifier] context
+    Given the statement context [property] is changed to '[value]'
+    When the request is made
+    Then the LRS responds with HTTP [HTTP]
+
+    Where:
+        HTTP | type    | modifier                           | property                                | value
+        400  | typical | empty                              | registration                            | bad id
         400  | typical | empty                              | instructor                              | notAnAgent
         400  | typical | mboxAndTypeAgentInstructor         | instructor mbox                         | conformancetest@tincanapi.com
         400  | typical | mboxAndTypeAgentInstructor         | instructor mbox                         | bad mbox
         400  | typical | mboxAndTypeAgentInstructor         | instructor objectType                   | notAgent
-        400  | typical | empty                              | team                                    | an empty group
         400  | typical | typicalGroupTeam                   | team objectType                         | notAGroup
         400  | typical | typicalGroupTeam                   | team mbox                               | conformancetest@tincanapi.com
         400  | typical | typicalGroupTeam                   | team mbox                               | bad mbox
-        400  | typical | empty                              | language                                | an emptyString content
         400  | typical | empty                              | language                                | bad language
-        400  | typical | empty                              | statement                               | an empty statementRef
         400  | typical | statementOnly                      | statement id                            | bad id
         400  | typical | statementOnly                      | statement objectType                    | notStatementRef
         400  | typical | statementOnly                      | statement objectType                    | statementRef

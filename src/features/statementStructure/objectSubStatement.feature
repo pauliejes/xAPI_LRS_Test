@@ -35,11 +35,11 @@ Scenario: Good object subStatement: [modifier] subStatement
         typical | typicalStatementRefObject
         typical | allProperties
 
-Scenario: Bad object subStatement: [modifier] subStatement with bad [property] [value]
+Scenario: Bad object subStatement: [modifier] subStatement with bad [property] '[value]'
 
     Given a [type] saveStatement request
     Given the statement object is changed to a [modifier] subStatement
-    Given the statement object [property] is set to [value]
+    Given the statement object [property] is set to '[value]'
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 

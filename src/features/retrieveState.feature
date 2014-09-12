@@ -20,8 +20,6 @@ Scenario: Good retrieve state: [type] request cluster with [property] set to [va
 
     Where:
         type             | property             | value
-        typical          | stateId parameter    | test state id
-        typical          | activityId parameter | test activity id
         typical          | agent parameter      | an mboxAndType agent
         typical          | agent parameter      | an mboxSha1AndType agent
         typical          | agent parameter      | an openidAndType agent
@@ -30,8 +28,6 @@ Scenario: Good retrieve state: [type] request cluster with [property] set to [va
         typical          | agent parameter      | an mboxSha1Only agent
         typical          | agent parameter      | an openidOnly agent
         typical          | agent parameter      | an accountOnly agent
-        withRegistration | stateId parameter    | test state id
-        withRegistration | activityId parameter | test activity id
         withRegistration | agent parameter      | an mboxAndType agent
         withRegistration | agent parameter      | an mboxSha1AndType agent
         withRegistration | agent parameter      | an openidAndType agent
@@ -40,6 +36,21 @@ Scenario: Good retrieve state: [type] request cluster with [property] set to [va
         withRegistration | agent parameter      | an mboxSha1Only agent
         withRegistration | agent parameter      | an openidOnly agent
         withRegistration | agent parameter      | an accountOnly agent
+
+
+Scenario: Good retrieve state: [type] request cluster with [property] set to '[value]'
+
+    Given a [type] retrieveState request cluster
+    Given all requests' [property] are set to '[value]'
+    When the request is made on the primed LRS
+    Then the retrieveState response is verified
+
+    Where:
+        type             | property             | value
+        typical          | stateId parameter    | 'test state id'
+        typical          | activityId parameter | 'test activity id'
+        withRegistration | stateId parameter    | 'test state id'
+        withRegistration | activityId parameter | 'test activity id'
 
 Scenario: Bad retrieve state: [type] request missing [property]
 
@@ -59,10 +70,21 @@ Scenario: Bad retrieve state: [type] request missing [property]
         400  | withRegistration | activityId parameter
         400  | withRegistration | agent parameter
 
-Scenario: Bad retrieve state: [type] request with bad [property] '[value]'
+Scenario: Bad retrieve state: [type] request with bad [property] [value]
 
     Given a [type] retrieveState request
     Given the [property] is set to [value]
+    When the request is made
+    Then the LRS responds with HTTP [HTTP]
+
+    Where:
+        HTTP | type    | property         | value
+        400  | typical | agent parameter  | an empty agent
+
+Scenario: Bad retrieve state: [type] request with bad [property] '[value]'
+
+    Given a [type] retrieveState request
+    Given the [property] is set to '[value]'
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 
@@ -74,13 +96,12 @@ Scenario: Bad retrieve state: [type] request with bad [property] '[value]'
         400  | typical | version header   | 3.8.0
         400  | typical | authority header | Basic badAuth
         401  | typical | authority header | Basic TnsHNWplME1YZnc0VzdLTHRIWTo0aDdBb253Ml85WU53vSZLNlVZ
-        400  | typical | agent parameter  | an empty agent
 
 Scenario: Bad retrieve state: [type] request with [modifier] agent parameter with bad [property] '[value]'
 
     Given a [type] retrieveState request
     Given the agent parameter is set to a [modifier] agent
-    Given the params agent [property] is set to [value]
+    Given the params agent [property] is set to '[value]'
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 
@@ -93,10 +114,10 @@ Scenario: Bad retrieve state: [type] request with [modifier] agent parameter wit
         400  | typical | mboxOnly       | mbox             | conformancetest@tincanapi.com
         400  | typical | mboxOnly       | mbox             | bad mbox
         400  | typical | mboxAndType    | objectType       | agent
-        400  | typical | openidAndType  | openid           | badURI
-        400  | typical | accountAndType | account homePage | badURI
-        400  | typical | openidOnly     | openid           | badURI
-        400  | typical | accountOnly    | account homePage | badURI
+        400  | typical | openidAndType  | openid           | bad URI
+        400  | typical | accountAndType | account homePage | bad URI
+        400  | typical | openidOnly     | openid           | bad URI
+        400  | typical | accountOnly    | account homePage | bad URI
 
 Scenario: Bad retrieve state: [type] request with [modifier] agent parameter missing [property]
 

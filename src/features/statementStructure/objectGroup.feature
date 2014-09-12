@@ -14,11 +14,11 @@ Scenario: Good object group: [object]
         typical | openidAndType group
         typical | accountAndType group
 
-Scenario: Bad object group: [object] with bad [property] [value]
+Scenario: Bad object group: [object] with bad [property] '[value]'
 
     Given a [type] saveStatement request
     Given the statement object is changed to a [object]
-    Given the statement object [property] is changed to [value]
+    Given the statement object [property] is changed to '[value]'
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 

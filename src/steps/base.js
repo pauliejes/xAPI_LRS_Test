@@ -27,18 +27,20 @@ convertName = function (name) {
 };
 
 setObj = function (obj, subObj, value) {
-    var splitValue = value.split(" ");
-    if (value === "deleted" || value === "removed") {
+    if (value.indexOf("'") === 0 && value.lastIndexOf("'") === value.length - 1) {
+        obj[subObj] = value.substring(1, value.length - 1);
+    }
+    else if (value === "deleted" || value === "removed") {
         delete obj[subObj];
     }
     else if (value === "undefined") {
         obj[subObj] = undefined;
     }
-    else if (["a", "an", "a(n)"].indexOf(splitValue[0]) > -1) {
-        obj[subObj] = factory.make(splitValue.splice(1).join(" "));
+    else if(value.indexOf("a") === 0 || value.indexOf("an") === 0 || value.indexOf("a(n)") === 0) {
+        obj[subObj] = factory.make(value.split(" ").splice(1).join(" "));
     }
     else {
-        obj[subObj] = value;
+        obj[subObj] = factory.make(value);
     }
 };
 
