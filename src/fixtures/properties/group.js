@@ -2,7 +2,7 @@
 var factory = require("../../utils/factory"),
     MBOX = "mailto:conformancetest-group@tincanapi.com",
     MBOX_SHA1SUM = "4e271041e78101311fb37284ef1a1d35c3f1db35",
-    OPENID = "group.openid.tincanapi.com";
+    OPENID = "http://group.openid.tincanapi.com";
 
 require("./agent");
 
