@@ -187,9 +187,11 @@ after(
                     }
                 }
             );
-            _suiteCfg._logger("Stale Pending Hashes");
-            _suiteCfg._logger(stalePending);
-            _suiteCfg._logger("---------------");
+            if (Object.keys(stalePending).length > 0) {
+                _suiteCfg._logger("Stale Pending Hashes");
+                _suiteCfg._logger(stalePending);
+                _suiteCfg._logger("---------------");
+            }
         }
     }
 );
