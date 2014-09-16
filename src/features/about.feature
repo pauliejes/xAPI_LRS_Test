@@ -32,7 +32,6 @@ Scenario: Bad about: [type] request with bad [property] '[value]'
     Given the [property] is set to '[value]'
     When the request is made
     Then the LRS responds with HTTP [HTTP]
-    Then the response is a valid about response
 
     Where:
         HTTP | type    | property         | value
@@ -42,7 +41,7 @@ Scenario: Bad about: [type] request with bad [property] '[value]'
         405  | typical | method           | DELETE
         405  | minimal | method           | PUT
 
-Scenario: Bad about: [type] request missing [property]
+Scenario: Good about: [type] request missing [property]
 
     Given a [type] about request
     Given the [property] is deleted
