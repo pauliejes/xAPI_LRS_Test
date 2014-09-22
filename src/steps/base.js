@@ -6,6 +6,7 @@ var assertions = require("../utils/assertions"),
     English = require("yadda").localisation.English,
     fs = require("fs"),
     path = require("path"),
+    util = require("util"),
     async = require("async"),
     factory = require("../utils/factory"),
     selectn = require("selectn"),
@@ -61,12 +62,17 @@ setAll = function (res, path, subObj, value) {
 library = English.library();
 
 library.given(
-    "[Ll]og",
-    function (next) {
+    "([Ll]og|[Ii]nspect)",
+    function (method, next) {
         var logFunc = _suiteCfg._logger;
 
         logFunc("-------------------------------");
-        logFunc(this);
+        if (method.toLowerCase() === "inspect") {
+            logFunc(util.inspect(this, { depth: null }));
+        }
+        else {
+            logFunc(this);
+        }
         logFunc("-------------------------------");
 
         next();
@@ -74,11 +80,12 @@ library.given(
 );
 
 library.given(
-    "[Ll]og $object",
-    function (object, next) {
+    "([Ll]og|[Ii]nspect) $object",
+    function (method, object, next) {
         var logFunc = _suiteCfg._logger,
             splitObj = object.split(" "),
-            type = false;
+            type = false,
+            toLog;
 
         if (["typeof", "typeOf"].indexOf(splitObj[0]) > -1) {
             type = true;
@@ -87,16 +94,23 @@ library.given(
         if (["main", "primers", "verify"].indexOf(splitObj[0]) === -1) {
             splitObj.unshift("main");
         }
-        logFunc("-------------------------------");
-        logFunc(object + ": ");
         if (type) {
-            logFunc(typeof (selectn(splitObj.join("."), this.scenarioResource)));
+            toLog = typeof (selectn(splitObj.join("."), this.scenarioResource));
         }
         else if (object === "scenarioResource") {
-            logFunc(this.scenarioResource);
+            toLog = this.scenarioResource;
         }
         else {
-            logFunc(selectn(splitObj.join("."), this.scenarioResource));
+            toLog = selectn(splitObj.join("."), this.scenarioResource);
+        }
+
+        logFunc("-------------------------------");
+        logFunc(object + ": ");
+        if (method.toLowerCase() === "inspect") {
+            logFunc(util.inspect(toLog, { depth: null }));
+        }
+        else {
+            logFunc(toLog);
         }
         logFunc("-------------------------------");
         next();
