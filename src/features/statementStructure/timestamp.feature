@@ -12,7 +12,6 @@ Scenario: Good timestamp: '[value]'
         typical | 2014-07-23T12:34:02Z
         typical | 2014-07-23T12:34:02+00
         typical | 2014-07-23T12:34:02+05
-        typical | 2014-07-23T12:34:02-00
         typical | 2014-07-23T12:34:02-05
         typical | 2014-07-23T12:34:02-05:00
         typical | 2014-07-23T12:34:02.365-05:00
@@ -28,6 +27,7 @@ Scenario: Bad timestamp: '[value]'
     Where:
         HTTP | type    | value
         400  | typical | bad timestamp
+        400  | typical | 2014-07-23T12:34:02-00
         400  | typical | 2014-07-23T12:34:02-5:00
         400  | typical | 2014-07-23T12:34:02.365-5:00
         400  | typical | 2014-07-23T12:34:02.36578-5:00
