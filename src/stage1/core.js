@@ -4,7 +4,7 @@
 var Yadda = require("yadda"),
     Glob = require("glob").Glob,
     crypto = require("crypto"),
-    libraries = require("../steps"),
+    libraries = [ require("../steps/base.js"), require("../steps/verify.js") ],
     stat = require("../utils/request").stat,
     interpreterContext = {},
     runner = new Yadda.Yadda(libraries, interpreterContext),
@@ -28,6 +28,8 @@ var Yadda = require("yadda"),
     // an object of all hashes seen during this test run
     hashes = {},
     markPending = {};
+
+require("../fixtures");
 
 Yadda.plugins.mocha.StepLevelPlugin.init();
 
