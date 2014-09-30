@@ -43,7 +43,6 @@ Scenario: Good save state: [type] request with [property] set to [value]
         204  | typical | agent parameter      | an accountOnly agent
         204  | typical | content              | a typical statement
 
-
 Scenario: Good save state: [type] request with [property] set to '[value]'
 
     Given a [type] saveState request
@@ -53,18 +52,10 @@ Scenario: Good save state: [type] request with [property] set to '[value]'
 
     Where:
         HTTP | type    | property             | value
-        204  | typical | Content-Type header  | 'test content type'
-        204  | typical | stateId parameter    | 'test state id'
-        204  | typical | activityId parameter | 'test activity id'
-        204  | typical | content              | 'test content'
-
-Scenario: Good save state: JSON request with unique stateId with method set to POST
-
-    Given a JSON saveState request
-    Given the stateId parameter is set to a unique URI
-    Given the method is set to 'POST'
-    When the request is made
-    Then the LRS responds with HTTP 204
+        204  | typical | Content-Type header  | test content type
+        204  | typical | stateId parameter    | test state id
+        204  | typical | content              | test content
+        204  | JSON    | method               | POST
 
 Scenario: Bad save state: [type] request missing [property]
 
@@ -108,6 +99,7 @@ Scenario: Bad save state: [type] request with bad [property] '[value]'
         400  | typical | authority header     | Basic badAuth
         401  | typical | authority header     | Basic TnsHNWplME1YZnc0VzdLTHRIWTo0aDdBb253Ml85WU53vSZLNlVZ
         400  | typical | method               | POST
+        400  | typical | activityId parameter | not a URI
 
 Scenario: Bad save state: [type] request with [modifier] agent parameter with bad [property] '[value]'
 
