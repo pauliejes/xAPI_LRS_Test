@@ -218,7 +218,9 @@ library.given([
 library.when(
     "(?:[Tt]he) (?:[Rr]equest) is (?:made|sent)",
     function (next) {
-        makeRequest(this.scenarioResource.main, next);
+        this.scenarioResource.main.endpoint = _suiteCfg.lrs.endpoint;
+
+        makeRequest(this.scenarioResource.main, next, this);
     }
 );
 
@@ -226,23 +228,30 @@ library.when(
     "(?:[Tt]he) request is made on the primed LRS",
     function (next) {
         var reqArr = [];
-        this.scenarioResource.primers.forEach(function (req) {
-            reqArr.push(
-                function (callback) {
-                    makeRequest(
-                        req,
-                        function (err, res) {
-                            assertions.statusCodes(res.statusCode, [200, 204]);
-                            callback(err, res);
-                        }
-                    );
-                }
-            );
-        });
+        this.scenarioResource.primers.forEach(
+            function (req) {
+                reqArr.push(
+                    function (callback) {
+                        req.endpoint = _suiteCfg.lrs.endpoint;
+
+                        makeRequest(
+                            req,
+                            function (err, res) {
+                                assertions.statusCodes(res.statusCode, [200, 204]);
+                                callback(err, res);
+                            },
+                            this
+                        );
+                    }.bind(this)
+                );
+            }.bind(this)
+        );
         async[this.scenarioResource.series ? "series" : "parallel"](
             reqArr,
             function (err) {
-                err ? next(err) : makeRequest(this.scenarioResource.main, next);
+                this.scenarioResource.main.endpoint = _suiteCfg.lrs.endpoint;
+
+                err ? next(err) : makeRequest(this.scenarioResource.main, next, this);
             }.bind(this)
         );
     }

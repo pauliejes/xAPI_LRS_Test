@@ -1,7 +1,3 @@
-var fs = require("fs"),
-    path = require("path"),
-    request = require("request");
-
 module.exports = function(grunt) {
     //
     // turn off strict because of how we are using the 'require' to
@@ -131,78 +127,15 @@ module.exports = function(grunt) {
         clean: [
             "var/statements/*.json",
             "var/consistent.json"
-        ]
+        ],
+
+        suite: cfg
     });
 
-    // Load Tasks
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-mocha-test");
-
-    // Define tasks
-    grunt.registerTask(
-        "clearSandbox",
-        "Cleans up statements sent to a sandbox during testing",
-        function () {
-            var done;
-
-            if (cfg.lrs.endpoint.indexOf("sandbox") === -1) {
-                grunt.fail.warn("Not a sandbox");
-            }
-
-            done = this.async();
-
-            request(
-                {
-                    url: cfg.lrs.endpoint + "extended?action=clear_sandbox",
-                    method: "GET",
-                    headers: {
-                        "X-Experience-API-Version": cfg.lrs.version,
-                        "Authorization": cfg.lrs.authString
-                    }
-                },
-                function (err) {
-                    if (err) {
-                        grunt.fail.warn(err);
-                    }
-                    done(err);
-                }
-            );
-        }
-    );
-
-    grunt.registerTask(
-        "updateConsistent",
-        "Updates the ./var/consistency.json file",
-        function () {
-            var done = this.async();
-            request(
-                {
-                    url: cfg.lrs.endpoint + "statements?limit=1",
-                    method: "GET",
-                    headers: {
-                        "X-Experience-API-Version": cfg.lrs.version,
-                        "Authorization": cfg.lrs.authString
-                    },
-                },
-                function (err, res) {
-                    if (err) {
-                        grunt.fail.warn(err);
-                    }
-                    fs.writeFile(
-                        path.join(__dirname, "./var", "consistent.json"),
-                        JSON.stringify(res.headers["x-experience-api-consistent-through"]),
-                        function (err) {
-                            if (err) {
-                                grunt.fail.warn(err);
-                            }
-                            done();
-                        }
-                    );
-                }
-            );
-        }
-    );
+    grunt.loadTasks("tasks");
 
     grunt.registerTask("stage1", ["jshint", "mochaTest:stage1-core"]);
     grunt.registerTask("stage2", ["jshint", "updateConsistent", "mochaTest:stage2-statementStructure"]);

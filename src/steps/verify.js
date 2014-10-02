@@ -1,3 +1,4 @@
+/* global _suiteCfg */
 "use strict";
 
 var assert = require("assert"),
@@ -36,6 +37,8 @@ library.then(
     function (next) {
         assert.equal(this.scenarioResource.main.response.statusCode.toString(), "204");
 
+        this.scenarioResource.verify.endpoint = _suiteCfg.lrs.endpoint;
+
         makeRequest(
             this.scenarioResource.verify,
             function (err, res) {
@@ -45,7 +48,8 @@ library.then(
                 else {
                     next();
                 }
-            }
+            },
+            this
         );
     }
 );
@@ -54,6 +58,9 @@ library.then(
     "(?:[Tt]he) clearState response is verified",
     function (next) {
         assert.equal(this.scenarioResource.main.response.statusCode.toString(), "204");
+
+        this.scenarioResource.verify.endpoint = _suiteCfg.lrs.endpoint;
+
         makeRequest(
             this.scenarioResource.verify,
             function (err, res) {
@@ -66,7 +73,8 @@ library.then(
                 else {
                     next();
                 }
-            }
+            },
+            this
         );
     }
 );

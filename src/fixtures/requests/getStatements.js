@@ -13,9 +13,7 @@ factory.register(
                 "Authorization": lrs.authString
             },
             "method": "GET",
-            "params": {
-                "statementId": factory.make("typical statement").id
-            }
+            "params": {}
         }
     }
 );

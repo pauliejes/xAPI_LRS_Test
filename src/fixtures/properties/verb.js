@@ -5,6 +5,12 @@ factory.register(
     "verb",
     {
         "empty": {},
+        "voiding": {
+            "id": "http://adlnet.gov/expapi/verbs/voided",
+            "display": {
+                "en-US": "voided"
+            }
+        },
         "typical": {
             "id": "http://tincanapi.com/conformancetest/verbid",
             "display": {

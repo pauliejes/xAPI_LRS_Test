@@ -2,6 +2,8 @@
 
 The test suite is broken into two stages to allow for eventual consistency LRS implementations. These stages can be run independently and have some of their own configuration properties. Stage1 runs requests that either do not offer eventual consistency or that are used to store statements that will be checked once the LRS is consistent. Stage2 leverages files stored on the filesystem by the first stage to make requests to the LRS after determining whether it is consistent.
 
+Along with the tests themselves there are additional maintenance capabilities. Including the ability to "reset" the LRS, so that it has only voided statements and no test documents.  Additionally there is a "clean" capability which will remove all automatically generated files in the local directory.
+
 ## Dependencies
 
 This test suite requires Node.js, grunt, and access to an LRS.
@@ -92,6 +94,7 @@ The following are the most common commands:
     > grunt
     > grunt stage1
     > grunt stage2
+    > grunt reset
     > grunt clean
     > grunt clearSandbox
 

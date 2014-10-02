@@ -1,3 +1,4 @@
+/* global _suiteCfg */
 "use strict";
 
 var English = require("yadda").localisation.English,
@@ -181,14 +182,21 @@ library.when(
             return;
         }
 
-        this.scenarioResource.request = factory.make("typical getStatement");
-        this.scenarioResource.id = this.scenarioResource.request.params.statementId = result[1];
+        //
+        // the cleanup process at the end of all save statements should be voiding
+        // the statement so we need to retrieve the voided statement here
+        //
+        this.scenarioResource.request = factory.make("typical getVoidedStatement");
+        this.scenarioResource.id = this.scenarioResource.request.params.voidedStatementId = result[1];
+        this.scenarioResource.endpoint = _suiteCfg.lrs.endpoint;
 
         makeRequest(
             this.scenarioResource,
             function () {
                 if (this.scenarioResource.response.statusCode !== 200) {
-                    next("Unable to retrieve statement " + this.scenarioResource.id + ": " + this.scenarioResource.response.body + " (" + this.scenarioResource.response.statusCode + ")");
+                    next(
+                        new Error("Unable to retrieve statement " + this.scenarioResource.id + ": " + this.scenarioResource.response.body + " (" + this.scenarioResource.response.statusCode + ")")
+                    );
                     return;
                 }
 

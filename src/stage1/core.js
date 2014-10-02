@@ -4,8 +4,10 @@
 var Yadda = require("yadda"),
     Glob = require("glob").Glob,
     crypto = require("crypto"),
+    stringify = require("json-stable-stringify"),
     libraries = [ require("../steps/base.js"), require("../steps/verify.js") ],
-    stat = require("../utils/request").stat,
+    utilRequest = require("../utils/request"),
+    utilCleanup = require("../utils/cleanup"),
     interpreterContext = {},
     runner = new Yadda.Yadda(libraries, interpreterContext),
 
@@ -69,6 +71,7 @@ function runFeatureFile (file) {
                             }
 
                             hashable.push(step);
+                            scenario.lastStep = step;
                         }
                     );
 
@@ -89,23 +92,40 @@ function runFeatureFile (file) {
             scenarios(
                 feature.scenarios,
                 function (scenario) {
-                    var scenarioResource = {},
+                    var scenarioResource = {
+                            cleanUpRequests: []
+                        },
                         trace = [];
 
                     steps(
                         scenario.steps,
                         function (step, done) {
+                            var context = {
+                                featureResource: featureResource,
+                                scenarioResource: scenarioResource,
+                                trace: trace,
+                                hash: scenario.stepHash,
+                                isLast: (step === scenario.lastStep)
+                            };
+
                             trace.push(step);
 
                             runner.yadda(
                                 step,
-                                {
-                                    featureResource: featureResource,
-                                    scenarioResource: scenarioResource,
-                                    trace: trace,
-                                    hash: scenario.stepHash
-                                },
-                                done
+                                context,
+                                function (err, info) {
+                                    if (this.isLast && this.scenarioResource.cleanUpRequests.length > 0) {
+                                        utilRequest.makeRequestSeries(
+                                            this.scenarioResource.cleanUpRequests,
+                                            function () {
+                                                done(err, info);
+                                            }
+                                        );
+                                        return;
+                                    }
+
+                                    done(err, info);
+                                }.bind(context)
                             );
                         }
                     );
@@ -166,10 +186,29 @@ files.forEach(
 
 after(
     function () {
-        var stalePending = {};
+        var stalePending = {},
+            missingCleanupObj = utilCleanup.missing(),
+            missingCleanupKeys,
+            i,
+            len;
 
         if (_suiteCfg.diagnostics.requestCount) {
-            stat(_suiteCfg._logger);
+            utilRequest.stat(_suiteCfg._logger);
+        }
+
+        //
+        // to keep them unique internally the missing implementation
+        // is an object, but we store an array externally and to get
+        // the right formatted JSON output the array separate from
+        // the individual records
+        //
+        missingCleanupKeys = Object.keys(missingCleanupObj);
+        if (missingCleanupKeys.length > 0) {
+            _suiteCfg._logger("[");
+            for (i = 0, len = missingCleanupKeys.length; i < len; i += 1) {
+                _suiteCfg._logger(stringify(missingCleanupObj[missingCleanupKeys[i]]) + (i + 1 < len ? "," : ""));
+            }
+            _suiteCfg._logger("]");
         }
 
         //
