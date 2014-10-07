@@ -66,7 +66,7 @@ function runFeatureFile (file) {
                     var hashable = [];
                     scenario.steps.forEach(
                         function (step) {
-                            if (/^Given log/i.test(step)) {
+                            if (/^Given (?:log|inspect)/i.test(step)) {
                                 return;
                             }
 
