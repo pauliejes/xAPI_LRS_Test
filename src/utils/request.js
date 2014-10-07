@@ -182,6 +182,11 @@ module.exports = {
         logFunc("---------------");
     },
 
+    statReset: function () {
+        requestStat = {};
+        requestStatTotal = 0;
+    },
+
     makeRequest: makeRequest,
 
     makeRequestSeries: function (requests, callback) {

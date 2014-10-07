@@ -1,10 +1,10 @@
-/* global featureFile, scenarios, steps, after, _suiteCfg */
+/* global featureFile, after, _suiteCfg */
 "use strict";
 
 var Yadda = require("yadda"),
     Glob = require("glob").Glob,
-    crypto = require("crypto"),
     stringify = require("json-stable-stringify"),
+    helpers = require("./helpers"),
     libraries = [ require("../steps/base.js"), require("../steps/verify.js") ],
     utilRequest = require("../utils/request"),
     utilCleanup = require("../utils/cleanup"),
@@ -59,78 +59,7 @@ function runFeatureFile (file) {
     featureFile(
         file,
         function (feature) {
-            var featureResource = {};
-
-            feature.scenarios.forEach(
-                function (scenario) {
-                    var hashable = [];
-                    scenario.steps.forEach(
-                        function (step) {
-                            if (/^Given (?:log|inspect)/i.test(step)) {
-                                return;
-                            }
-
-                            hashable.push(step);
-                            scenario.lastStep = step;
-                        }
-                    );
-
-                    scenario.stepHash = crypto.createHash("md5").update(JSON.stringify(hashable), "utf8").digest("hex");
-                    hashes[scenario.stepHash] = false;
-
-                    if (_suiteCfg.diagnostics.stepHash) {
-                        scenario.title += " (" + scenario.stepHash + ")";
-                    }
-
-                    if (markPending[scenario.stepHash]) {
-                        scenario.title = "PENDING (" + markPending[scenario.stepHash] + "): " + scenario.title;
-                        scenario.annotations.pending = true;
-                    }
-                }
-            );
-
-            scenarios(
-                feature.scenarios,
-                function (scenario) {
-                    var scenarioResource = {
-                            cleanUpRequests: []
-                        },
-                        trace = [];
-
-                    steps(
-                        scenario.steps,
-                        function (step, done) {
-                            var context = {
-                                featureResource: featureResource,
-                                scenarioResource: scenarioResource,
-                                trace: trace,
-                                hash: scenario.stepHash,
-                                isLast: (step === scenario.lastStep)
-                            };
-
-                            trace.push(step);
-
-                            runner.yadda(
-                                step,
-                                context,
-                                function (err, info) {
-                                    if (this.isLast && this.scenarioResource.cleanUpRequests.length > 0) {
-                                        utilRequest.makeRequestSeries(
-                                            this.scenarioResource.cleanUpRequests,
-                                            function () {
-                                                done(err, info);
-                                            }
-                                        );
-                                        return;
-                                    }
-
-                                    done(err, info);
-                                }.bind(context)
-                            );
-                        }
-                    );
-                }
-            );
+            helpers.runFeature(runner, feature, { hashes: hashes, markPending: markPending });
         }
     );
 }
@@ -194,6 +123,7 @@ after(
 
         if (_suiteCfg.diagnostics.requestCount) {
             utilRequest.stat(_suiteCfg._logger);
+            utilRequest.statReset();
         }
 
         //

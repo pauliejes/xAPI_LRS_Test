@@ -9,6 +9,12 @@
         "requestCount": false,
         "stepHash": false
     },
+    "persistence": {
+        "statementStore": "./var/statements",
+        "statementRead": [],
+        "adhocValid": [],
+        "adhocInvalid": []
+    },
     "stage1": {
         "featureSpec": "features",
         "pending": {}

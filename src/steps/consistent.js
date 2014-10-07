@@ -105,12 +105,12 @@ correctObjectTypes = function (actual, expected) {
 //       a module that probably extends the core assertion
 //       library so that it can be required once in all the places
 //
-assertStatementMatch = function (actual, expected) {
+assertStatementMatch = function (actual, expected, context) {
     //
     // adjust statement for things the LRS must set
     //
     if (typeof expected.id === "undefined") {
-        expected.id = this.scenarioResource.id;
+        expected.id = context.scenarioResource.id;
     }
 
     expected.version = "1.0.0";
@@ -164,7 +164,7 @@ assertStatementMatch = function (actual, expected) {
 library.given(
     "a loadable statement with filename: $filename",
     function (filename, next) {
-        var loadable = __dirname + "/../var/statements/" + filename;
+        var loadable = filename;
 
         this.scenarioResource.filename = filename;
         this.scenarioResource.loadedData = require(loadable);
@@ -213,7 +213,7 @@ library.then(
         var expected = this.scenarioResource.loadedData.structure,
             actual = this.scenarioResource.statement;
 
-        assertStatementMatch(actual, expected);
+        assertStatementMatch(actual, expected, this);
         next();
     }
 );

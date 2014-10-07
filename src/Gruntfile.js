@@ -1,3 +1,20 @@
+var path = require("path"),
+    mkdirp = require("mkdirp"),
+    invalidPersistent = function (arr) {
+        /* jshint strict: false */
+        //"use strict";
+        return typeof arr === "undefined" || arr.length <= 0;
+    },
+    resolvePaths = function (arr) {
+        /* jshint strict: false */
+        //"use strict";
+        arr.forEach(
+            function (dir, n) {
+                arr[n] = path.resolve(dir);
+            }
+        );
+    };
+
 module.exports = function(grunt) {
     //
     // turn off strict because of how we are using the 'require' to
@@ -54,6 +71,42 @@ module.exports = function(grunt) {
     if (cfg.lrs.endpoint.slice(-1) !== "/") {
         cfg.lrs.endpoint += "/";
     }
+
+    //
+    // if we take this logic out of Gruntfile, will need to add a
+    // path.relative(".", "../to/Gruntfile") then add the statementStore path
+    // to the end of that. This is because the config and gruntfile are in the
+    // same location, and it makes more sense to let the user set the relative path
+    // from there rather than a subdirectory
+    //
+    if (invalidPersistent(cfg.persistence.statementStore)) {
+        cfg.persistence.statementStore = "./var/statementStore";
+    }
+    mkdirp.sync(cfg.persistence.statementStore);
+    cfg.persistence.statementStore = path.resolve(cfg.persistence.statementStore);
+
+    if (invalidPersistent(cfg.persistence.statementRead)) {
+        cfg.persistence.statementRead = [ cfg.persistence.statementStore ];
+    }
+    resolvePaths(cfg.persistence.statementRead);
+    if (cfg.persistence.statementRead.indexOf(cfg.persistence.statementStore) === -1) {
+        cfg.persistence.statementRead.push(cfg.persistence.statementStore);
+    }
+
+    //
+    // don't like how javascript handles undefined.forEach(...)
+    // so instead of leaving the case where there are no adhoc statements as
+    // adhoc(In)Valid is undefined and then checking whether its defined everytime
+    // we try to use it, force it to be at least an empty array
+    //
+    if (invalidPersistent(cfg.persistence.adhocValid)) {
+        cfg.persistence.adhocValid = [];
+    }
+    resolvePaths(cfg.persistence.adhocValid);
+    if (invalidPersistent(cfg.persistence.adhocInvalid)) {
+        cfg.persistence.adhocInvalid = [];
+    }
+    resolvePaths(cfg.persistence.adhocInvalid);
 
     [
         "reporter",
@@ -112,6 +165,26 @@ module.exports = function(grunt) {
                 },
                 src: ["stage1/core.js"]
             },
+            "stage1-adhocValid": {
+                options: {
+                    require: function () {
+                        /* global _suiteCfg */
+                        /* jshint -W020 */
+                        _suiteCfg = cfg;
+                    }
+                },
+                src: ["stage1/adhocValid.js"]
+            },
+            "stage1-adhocInvalid": {
+                options: {
+                    require: function () {
+                        /* global _suiteCfg */
+                        /* jshint -W020 */
+                        _suiteCfg = cfg;
+                    }
+                },
+                src: ["stage1/adhocInvalid.js"]
+            },
             "stage2-statementStructure": {
                 options: {
                     require: function () {
@@ -125,8 +198,9 @@ module.exports = function(grunt) {
         },
 
         clean: [
-            "var/statements/*.json",
-            "var/consistent.json"
+            cfg.persistence.statementStore + "/*.json",
+            cfg.persistence.statementStore + "/.consistent.json",
+            "var"
         ],
 
         suite: cfg
@@ -137,8 +211,19 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-mocha-test");
     grunt.loadTasks("tasks");
 
-    grunt.registerTask("stage1", ["jshint", "mochaTest:stage1-core"]);
+    grunt.registerTask("adhoc", ["jshint", "mochaTest:stage1-adhocValid", "mochaTest:stage1-adhocInvalid"]);
+    grunt.registerTask("stage1", ["jshint", "mochaTest:stage1-core", "mochaTest:stage1-adhocValid", "mochaTest:stage1-adhocInvalid"]);
     grunt.registerTask("stage2", ["jshint", "updateConsistent", "mochaTest:stage2-statementStructure"]);
 
-    grunt.registerTask("default", ["jshint", "mochaTest:stage1-core", "updateConsistent", "mochaTest:stage2-statementStructure"]);
+    grunt.registerTask(
+        "default",
+        [
+            "jshint",
+            "mochaTest:stage1-core",
+            "mochaTest:stage1-adhocValid",
+            "mochaTest:stage1-adhocInvalid",
+            "updateConsistent",
+            "mochaTest:stage2-statementStructure"
+        ]
+    );
 };

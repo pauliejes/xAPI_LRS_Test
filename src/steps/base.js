@@ -215,6 +215,14 @@ library.given([
     }
 );
 
+library.given(
+    "(?:[Tt]he) statement is read from file $fullPath",
+    function (fullPath, next) {
+        this.scenarioResource.main.request.content = require(fullPath);
+        next();
+    }
+);
+
 library.when(
     "(?:[Tt]he) (?:[Rr]equest) is (?:made|sent)",
     function (next) {
@@ -279,7 +287,7 @@ library.then(
             this.scenarioResource.main.request.content.id;
 
         fs.writeFile(
-            path.join(__dirname, "../var/statements", writeId + ".json"),
+            path.join(this.statementStore, writeId + ".json"),
             JSON.stringify(
                 {
                     stored: moment(),

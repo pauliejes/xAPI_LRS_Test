@@ -6,7 +6,7 @@ var fs = require("fs"),
 module.exports = function (grunt) {
     grunt.registerTask(
         "updateConsistent",
-        "Updates the ../var/consistency.json file",
+        "Updates the .consistency.json file",
         function () {
             var done = this.async(),
                 cfg = grunt.config("suite");
@@ -25,7 +25,7 @@ module.exports = function (grunt) {
                         grunt.fail.warn(err);
                     }
                     fs.writeFile(
-                        path.join(__dirname, "../var", "consistent.json"),
+                        path.join(cfg.persistence.statementStore, ".consistent.json"),
 
                         JSON.stringify(res.headers["x-experience-api-consistent-through"]),
 
