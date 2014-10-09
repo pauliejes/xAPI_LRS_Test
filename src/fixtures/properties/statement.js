@@ -6,6 +6,7 @@ require("./verb");
 require("./result");
 require("./score");
 require("./context");
+require("./attachment");
 
 factory.register(
     "statement",
@@ -14,7 +15,7 @@ factory.register(
         "minimal": {
             "actor": factory.make("typical agent"),
             "verb": factory.make("typical verb"),
-            "object": factory.make("typical activity"),
+            "object": factory.make("typical activity")
         },
         "typical": function () {
             return {
@@ -35,6 +36,14 @@ factory.register(
                 "verb": factory.make("voiding verb"),
                 "id": factory.make("unique UUID")
             };
+        },
+        "attachment": {
+            "actor": factory.make("typical agent"),
+            "verb": factory.make("typical verb"),
+            "object": factory.make("typical activity"),
+            "attachments": [
+                factory.make("text attachment").statementMetadata
+            ]
         }
     }
 );

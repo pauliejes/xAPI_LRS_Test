@@ -40,6 +40,7 @@ buildUrl = function (endpoint, resource, params) {
 // is included in the global store of expected clean up requests
 //
 checkCleanUp = function (cfg, context) {
+    /* jshint maxdepth: 4 */
     var request,
         ids;
 
@@ -58,8 +59,18 @@ checkCleanUp = function (cfg, context) {
             //
             // don't void voiding statements
             //
-            if (cfg.request.content.verb.id === VOIDED) {
-                return;
+            if (typeof cfg.request.content !== "undefined") {
+                if (cfg.request.content.verb.id === VOIDED) {
+                    return;
+                }
+            }
+            else if (typeof cfg.request.parts !== "undefined") {
+                if (cfg.request.parts[0]._body.verb.id === VOIDED) {
+                    return;
+                }
+            }
+            else {
+                throw new Error("Unrecognized statement request format");
             }
 
             request = factory.make("voiding saveStatement");
@@ -148,20 +159,47 @@ checkCleanUp = function (cfg, context) {
 };
 
 makeRequest = function (cfg, callback, context, opts) {
+    var requestCfg;
+
     opts = opts || {};
 
     if (! opts.skipCount) {
         updateStat(cfg);
     }
 
+    requestCfg = {
+        url: buildUrl(cfg.endpoint, cfg.request.resource, cfg.request.params),
+        method: cfg.request.method,
+        headers: cfg.request.headers
+    };
+    if (typeof cfg.request.content !== "undefined") {
+        requestCfg.body = typeof cfg.request.content === "object" ? JSON.stringify(cfg.request.content) : cfg.request.content;
+    }
+    else if (typeof cfg.request.parts !== "undefined") {
+        //
+        // the request library deletes the "body" property of each part in the multipart
+        // array's objects when building the request, so we need to store a copy for our
+        // own use, if request is patched to not do that, then we can get rid of the copy
+        //
+        // see: https://github.com/mikeal/request/issues/1133
+        //
+        cfg.request.parts.forEach(
+            function (v) {
+                v._body = v.body;
+            }
+        );
+
+        requestCfg.multipart = cfg.request.parts;
+
+        if (requestCfg.multipart.length > 0) {
+            if (typeof requestCfg.multipart[0].body === "object") {
+                requestCfg.multipart[0].body = JSON.stringify(requestCfg.multipart[0].body);
+            }
+        }
+    }
+
     request(
-        {
-            url: buildUrl(cfg.endpoint, cfg.request.resource, cfg.request.params),
-            method: cfg.request.method,
-            headers: cfg.request.headers,
-            //TODO: body must be a string or buffer.  Use content-type header and typeof content to decide conversion.
-            body: typeof cfg.request.content === "object" ? JSON.stringify(cfg.request.content) : cfg.request.content,
-        },
+        requestCfg,
         function (err, res) {
             cfg.response = res;
 

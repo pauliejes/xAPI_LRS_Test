@@ -10,6 +10,7 @@ Scenario: Good save statement: [type] request
         HTTP | type
         200  | minimal
         204  | typical
+        204  | attachment
 
 Scenario: Bad save statement: [type] request with [property] set to '[value]'
 
@@ -19,12 +20,13 @@ Scenario: Bad save statement: [type] request with [property] set to '[value]'
     Then the LRS responds with HTTP [HTTP]
 
     Where:
-        HTTP | type    | property | value
-        405  | typical | method   | POST
-        400  | typical | resource | statement
-        400  | minimal | method   | PUT
-        400  | minimal | resource | statement
-        400  | minimal | content  | null
+        HTTP | type       | property            | value
+        405  | typical    | method              | POST
+        400  | typical    | resource            | statement
+        400  | minimal    | method              | PUT
+        400  | minimal    | resource            | statement
+        400  | minimal    | content             | null
+        400  | attachment | Content-Type header | application/json
 
 Scenario: Bad save statement: [type] request missing [property]
 

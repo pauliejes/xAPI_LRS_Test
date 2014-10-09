@@ -3,6 +3,39 @@
 var factory = require("../../utils/factory"),
     lrs = _suiteCfg.lrs;
 
+require("../properties/attachment");
+require("../properties/statement");
+
+function buildWithAttachment (statement, attachment) {
+    statement.attachments = [
+        attachment.statementMetadata
+    ];
+
+    return {
+        "resource": "statements",
+        "headers": {
+            "X-Experience-API-Version": lrs.version,
+            "Authorization": lrs.authString,
+            "Content-Type": "multipart/mixed"
+        },
+        "method": "PUT",
+        "params": {
+            "statementId": statement.id
+        },
+        "parts": [
+            {
+                "Content-Type": "application/json",
+                body: statement
+            },
+            {
+                "Content-Type": attachment.statementMetadata.contentType,
+                "X-Experience-API-Hash": attachment.statementMetadata.sha2,
+                body: attachment.content
+            }
+        ]
+    };
+}
+
 factory.register(
     "saveStatement",
     {
@@ -70,6 +103,20 @@ factory.register(
                 },
                 "content": obj
             };
+        },
+        attachment: function () {
+            return buildWithAttachment(factory.make("typical statement"), factory.make("text attachment"));
+        },
+        attachmentJSON: function () {
+            return buildWithAttachment(factory.make("typical statement"), factory.make("JSON attachment"));
+        },
+        attachmentFileUrlOnly: function () {
+            var request = factory.make("typical saveStatement"),
+                attachment = factory.make("fileUrlOnly attachment");
+
+            request.content.attachments = [ attachment.statementMetadata ];
+
+            return request;
         }
     }
 );

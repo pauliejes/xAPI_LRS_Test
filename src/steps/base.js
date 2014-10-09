@@ -200,6 +200,9 @@ library.given([
         if (path[0] === "statement" || path[0] === "document") {
             path[0] = "content";
         }
+        else if (path[0] === "attachment") {
+            path[0] = "parts";
+        }
 
         path.unshift("request");
         subObj = path.splice(-1,1);
@@ -278,13 +281,26 @@ library.then(
 library.then(
     "(?:[Tt]he) request (?:is|was) successful",
     function (next) {
-        var status = this.scenarioResource.main.response.statusCode,
+        var main = this.scenarioResource.main,
+            status = main.response.statusCode,
             writeId;
 
         assertions.statusCodes(status, [200, 204]);
-        writeId = status === 200 ?
-            JSON.parse(this.scenarioResource.main.response.body)[0] :
-            this.scenarioResource.main.request.content.id;
+
+        if (status === 200) {
+            writeId = JSON.parse(main.response.body)[0];
+        }
+        else {
+            if (typeof main.request.content !== "undefined") {
+                writeId = main.request.content.id;
+            }
+            else if (typeof main.request.parts !== "undefined") {
+                writeId = main.request.parts[0]._body.id;
+            }
+            else {
+                throw new Error("Unrecognized statement request format");
+            }
+        }
 
         fs.writeFile(
             path.join(this.statementStore, writeId + ".json"),
@@ -293,7 +309,7 @@ library.then(
                     stored: moment(),
                     hash: this.hash,
                     trace: this.trace,
-                    structure: this.scenarioResource.main.request.content
+                    structure: (typeof main.request.content !== "undefined" ? main.request.content : main.request.parts[0]._body)
                 }
             ),
             function (err) {

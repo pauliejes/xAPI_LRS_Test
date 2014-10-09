@@ -19,6 +19,9 @@ factory.register(
             );
         },
         string: "some string of content",
-        emptyString: ""
+        emptyString: "",
+        languageMap: {
+            "en-US": "Test Language Map"
+        }
     }
 );
