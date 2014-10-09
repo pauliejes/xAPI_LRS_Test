@@ -24,6 +24,7 @@ Scenario: Bad save statement: [type] request with [property] set to '[value]'
         400  | typical | resource | statement
         400  | minimal | method   | PUT
         400  | minimal | resource | statement
+        400  | minimal | content  | null
 
 Scenario: Bad save statement: [type] request missing [property]
 
