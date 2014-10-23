@@ -46,9 +46,7 @@ Scenario: Good delete state: [type] request cluster with [property] set to '[val
     Where:
         type             | property             | value
         typical          | stateId parameter    | test state id
-        typical          | activityId parameter | test activity id
         withRegistration | stateId parameter    | test state id
-        withRegistration | activityId parameter | test activity id
 
 Scenario: Bad delete state: [type] request missing [property]
 
@@ -68,7 +66,7 @@ Scenario: Bad delete state: [type] request missing [property]
         400  | withRegistration | activityId parameter
         400  | withRegistration | agent parameter
 
-Scenario: Bad delete state: [type] request with  bad [property] [value]
+Scenario: Bad delete state: [type] request with bad [property] [value]
 
     Given a [type] deleteState request
     Given the [property] is set to [value]
@@ -79,7 +77,7 @@ Scenario: Bad delete state: [type] request with  bad [property] [value]
         HTTP | type    | property         | value
         400  | typical | agent parameter  | an empty agent
 
-Scenario: Bad delete state: [type] request with  bad [property] '[value]'
+Scenario: Bad delete state: [type] request with bad [property] '[value]'
 
     Given a [type] deleteState request
     Given the [property] is set to '[value]'
@@ -87,13 +85,15 @@ Scenario: Bad delete state: [type] request with  bad [property] '[value]'
     Then the LRS responds with HTTP [HTTP]
 
     Where:
-        HTTP | type    | property         | value
-        400  | typical | resource         | activity/state
-        400  | typical | resource         | activities/states
-        400  | typical | version header   | bad version
-        400  | typical | version header   | 3.8.0
-        400  | typical | authority header | Basic badAuth
-        401  | typical | authority header | Basic TnsHNWplME1YZnc0VzdLTHRIWTo0aDdBb253Ml85WU53vSZLNlVZ
+        HTTP | type             | property             | value
+        400  | typical          | resource             | activity/state
+        400  | typical          | resource             | activities/states
+        400  | typical          | version header       | bad version
+        400  | typical          | version header       | 3.8.0
+        400  | typical          | authority header     | Basic badAuth
+        401  | typical          | authority header     | Basic TnsHNWplME1YZnc0VzdLTHRIWTo0aDdBb253Ml85WU53vSZLNlVZ
+        400  | typical          | activityId parameter | test activity id
+        400  | withRegistration | activityId parameter | test activity id
 
 Scenario: Bad delete state: [type] request with [modifier] agent parameter with bad [property] '[value]'
 
