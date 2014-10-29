@@ -13,6 +13,12 @@ var path = require("path"),
                 arr[n] = path.resolve(dir);
             }
         );
+    },
+    commonMochaTestRequire = function () {
+        /* global _suiteCfg */
+        /* jshint strict: false */
+        /* jshint -W020 */
+        _suiteCfg = this;
     };
 
 module.exports = function(grunt) {
@@ -167,31 +173,19 @@ module.exports = function(grunt) {
             },
             "stage1-adhocValid": {
                 options: {
-                    require: function () {
-                        /* global _suiteCfg */
-                        /* jshint -W020 */
-                        _suiteCfg = cfg;
-                    }
+                    require: commonMochaTestRequire.bind(cfg)
                 },
                 src: ["stage1/adhocValid.js"]
             },
             "stage1-adhocInvalid": {
                 options: {
-                    require: function () {
-                        /* global _suiteCfg */
-                        /* jshint -W020 */
-                        _suiteCfg = cfg;
-                    }
+                    require: commonMochaTestRequire.bind(cfg)
                 },
                 src: ["stage1/adhocInvalid.js"]
             },
             "stage2-statementStructure": {
                 options: {
-                    require: function () {
-                        /* global _suiteCfg */
-                        /* jshint -W020 */
-                        _suiteCfg = cfg;
-                    }
+                    require: commonMochaTestRequire.bind(cfg)
                 },
                 src: ["stage2/statementStructure.js"]
             }
