@@ -1,30 +1,44 @@
 "use strict";
-var factory = require("../../utils/factory");
+var factory = require("../../utils/factory"),
+    fixtures = require("../loader");
 
-factory.register(
-    "retrieveStateCluster",
-    {
-        typical: function () {
-            return {
-                primers: [
-                    factory.make("typical saveState")
-                ],
-                main: factory.make("typical retrieveState")
-            };
-        },
-        withRegistration: function () {
-            var uuid = factory.make("good UUID"),
-                obj = {
-                    primers: [
-                        factory.make("typical saveState")
-                    ],
-                    main: factory.make("typical retrieveState")
-                };
+module.exports = {
+    init: function (cfg) {
+        fixtures.load(
+            [
+                "requests/saveState",
+                "requests/retrieveState",
+                "properties/UUID"
+            ],
+            cfg
+        );
 
-            obj.primers[0].params.registration = uuid;
-            obj.main.params.registration = uuid;
+        factory.register(
+            "retrieveStateCluster",
+            {
+                typical: function () {
+                    return {
+                        primers: [
+                            factory.make("typical saveState")
+                        ],
+                        main: factory.make("typical retrieveState")
+                    };
+                },
+                withRegistration: function () {
+                    var uuid = factory.make("good UUID"),
+                        obj = {
+                            primers: [
+                                factory.make("typical saveState")
+                            ],
+                            main: factory.make("typical retrieveState")
+                        };
 
-            return obj;
-        }
+                    obj.primers[0].params.registration = uuid;
+                    obj.main.params.registration = uuid;
+
+                    return obj;
+                }
+            }
+        );
     }
-);
+};

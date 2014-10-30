@@ -1,46 +1,59 @@
 "use strict";
-var factory = require("../../utils/factory");
+var factory = require("../../utils/factory"),
+    fixtures = require("../loader");
 
-factory.register(
-    "retrieveStateIdsCluster",
-    {
-        typical: function () {
-            var obj = {
-                    primers: {
-                        order: "parallel",
-                        list: [
-                            factory.make("typical saveState"),
-                            factory.make("typical saveState"),
-                            factory.make("typical saveState")
-                        ]
-                    },
-                    main: factory.make("typical retrieveStateIds")
-                };
+module.exports = {
+    init: function (cfg) {
+        fixtures.load(
+            [
+                "requests/saveState",
+                "requests/retrieveStateIds"
+            ],
+            cfg
+        );
 
-            obj.primers.list[0].params.stateId += "/zero";
-            obj.primers.list[1].params.stateId += "/one";
-            obj.primers.list[2].params.stateId += "/two";
+        factory.register(
+            "retrieveStateIdsCluster",
+            {
+                typical: function () {
+                    var obj = {
+                            primers: {
+                                order: "parallel",
+                                list: [
+                                    factory.make("typical saveState"),
+                                    factory.make("typical saveState"),
+                                    factory.make("typical saveState")
+                                ]
+                            },
+                            main: factory.make("typical retrieveStateIds")
+                        };
 
-            return obj;
-        },
-        withRegistration: function () {
-            var obj = {
-                    primers: {
-                        order: "parallel",
-                        list: [
-                            factory.make("withRegistration saveState"),
-                            factory.make("withRegistration saveState"),
-                            factory.make("withRegistration saveState")
-                        ]
-                    },
-                    main: factory.make("withRegistration retrieveStateIds")
-                };
+                    obj.primers.list[0].params.stateId += "/zero";
+                    obj.primers.list[1].params.stateId += "/one";
+                    obj.primers.list[2].params.stateId += "/two";
 
-            obj.primers.list[0].params.stateId += "/zero";
-            obj.primers.list[1].params.stateId += "/one";
-            obj.primers.list[2].params.stateId += "/two";
+                    return obj;
+                },
+                withRegistration: function () {
+                    var obj = {
+                            primers: {
+                                order: "parallel",
+                                list: [
+                                    factory.make("withRegistration saveState"),
+                                    factory.make("withRegistration saveState"),
+                                    factory.make("withRegistration saveState")
+                                ]
+                            },
+                            main: factory.make("withRegistration retrieveStateIds")
+                        };
 
-            return obj;
-        }
+                    obj.primers.list[0].params.stateId += "/zero";
+                    obj.primers.list[1].params.stateId += "/one";
+                    obj.primers.list[2].params.stateId += "/two";
+
+                    return obj;
+                }
+            }
+        );
     }
-);
+};

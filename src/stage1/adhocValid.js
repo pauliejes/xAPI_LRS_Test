@@ -5,6 +5,7 @@ var Yadda = require("yadda"),
     fs = require("fs"),
     utilRequest = require("../utils/request"),
     helpers = require("./helpers"),
+    fixtures = require("../fixtures/loader"),
     libraries = [ require("../steps/base"), require("../steps/verify") ],
     runner = new Yadda.Yadda(libraries, {}),
     feature = {
@@ -12,7 +13,12 @@ var Yadda = require("yadda"),
         scenarios: []
     };
 
-require("../fixtures");
+fixtures.load(
+    [
+        "requests/saveStatement"
+    ],
+    _suiteCfg
+);
 
 Yadda.plugins.mocha.StepLevelPlugin.init();
 

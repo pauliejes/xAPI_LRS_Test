@@ -1,22 +1,26 @@
-/* global _suiteCfg */
 "use strict";
-var factory = require("../../utils/factory"),
-    lrs = _suiteCfg.lrs;
+var factory = require("../../utils/factory");
 
-factory.register(
-    "about",
-    {
-        typical: {
-            "resource": "about",
-            "headers": {
-                "X-Experience-API-Version": lrs.version,
-                "Authorization": lrs.authString
-            },
-            "method": "GET"
-        },
-        minimal: {
-            "resource": "about",
-            "method": "GET"
-        }
+module.exports = {
+    init: function (cfg) {
+        var lrs = cfg.lrs;
+
+        factory.register(
+            "about",
+            {
+                typical: {
+                    "resource": "about",
+                    "headers": {
+                        "X-Experience-API-Version": lrs.version,
+                        "Authorization": lrs.authString
+                    },
+                    "method": "GET"
+                },
+                minimal: {
+                    "resource": "about",
+                    "method": "GET"
+                }
+            }
+        );
     }
-);
+};

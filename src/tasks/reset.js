@@ -2,8 +2,8 @@
 
 var url = require("url"),
     async = require("async"),
-    utilRequest = require("../utils/request.js"),
-    utilCleanup = require("../utils/cleanup.js"),
+    utilRequest = require("../utils/request"),
+    utilCleanup = require("../utils/cleanup"),
     VOIDED = "http://adlnet.gov/expapi/verbs/voided";
 
 function clearDocuments (cfg, callback) {

@@ -131,21 +131,21 @@ library.given(
     "(?:[Aa] |[Aa]n )$object request cluster",
     function (object, next) {
         var cluster = factory.make(object + "Cluster"),
-            i,
             populate = function (targetArray) {
-                var arr = [];
-                for(i = 0; i < targetArray.length; i += 1) {
+                var i, arr = [];
+                for (i = 0; i < targetArray.length; i += 1) {
                     arr[i] = {
                         request: targetArray[i]
                     };
                 }
                 return arr;
-            }
-        ;
+            };
 
-        //Cluster.primers can be an array of requests or an object with two possible properties:
-        //order (which can be "series" or "parallel", defaults to "series") and list (which is
-        //an array of priming requests).
+        //
+        // Cluster.primers can be an array of requests or an object with two possible properties:
+        // order (which can be "series" or "parallel", defaults to "series") and list (which is
+        // an array of priming requests).
+        //
         if (cluster.primers) {
             if (cluster.primers.hasOwnProperty("list")) {
                 if (cluster.primers.order && cluster.primers.order === "parallel") {

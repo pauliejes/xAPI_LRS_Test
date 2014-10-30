@@ -8,6 +8,10 @@ module.exports = {
     },
     make: function (fixturepath) {
         var fixture = selectn(fixturepath.split(" ").reverse().join("."), cache);
+        if (typeof fixture === "undefined") {
+            throw new Error("Undefined fixture: " + fixturepath);
+        }
+
         if (typeof fixture === "function") {
             return fixture();
         }

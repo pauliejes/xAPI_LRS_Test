@@ -14,8 +14,6 @@ var English = require("yadda").localisation.English,
     correctObjectTypes,
     assertStatementMatch;
 
-require("../fixtures");
-
 //
 // it is acceptable for an LRS to insert 'objectType' properties
 // in objects upon return, so we need to munge the compared objects
@@ -202,7 +200,8 @@ library.when(
 
                 this.scenarioResource.statement = JSON.parse(this.scenarioResource.response.body);
                 next();
-            }.bind(this)
+            }.bind(this),
+            this
         );
     }
 );

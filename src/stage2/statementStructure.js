@@ -4,8 +4,9 @@
 var fs = require("fs"),
     path = require("path"),
     Yadda = require("yadda"),
-    utilRequest = require("../utils/request"),
+    fixtures = require("../fixtures/loader"),
     libraries = require("../steps/consistent"),
+    utilRequest = require("../utils/request"),
     statementRe = /^[-\w]+\.json$/,
     consistentThrough = new Date(require(_suiteCfg.persistence.statementStore + "/.consistent.json")),
     isConsistent = function (fname, dir) {
@@ -16,6 +17,13 @@ var fs = require("fs"),
         scenarios: []
     },
     runner;
+
+fixtures.load(
+    [
+        "requests/getVoidedStatement",
+    ],
+    _suiteCfg
+);
 
 Yadda.plugins.mocha.StepLevelPlugin.init();
 

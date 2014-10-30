@@ -5,7 +5,8 @@ var Yadda = require("yadda"),
     Glob = require("glob").Glob,
     stringify = require("json-stable-stringify"),
     helpers = require("./helpers"),
-    libraries = [ require("../steps/base.js"), require("../steps/verify.js") ],
+    fixtures = require("../fixtures/loader"),
+    libraries = [ require("../steps/base"), require("../steps/verify") ],
     utilRequest = require("../utils/request"),
     utilCleanup = require("../utils/cleanup"),
     interpreterContext = {},
@@ -31,7 +32,19 @@ var Yadda = require("yadda"),
     hashes = {},
     markPending = {};
 
-require("../fixtures");
+fixtures.load(
+    [
+        "requests/about",
+        "requests/saveStatement",
+        "requests/saveStatements",
+        "clusters/clearState",
+        "clusters/deleteState",
+        "clusters/retrieveState",
+        "clusters/retrieveStateIds",
+        "properties/subStatement"
+    ],
+    _suiteCfg
+);
 
 Yadda.plugins.mocha.StepLevelPlugin.init();
 

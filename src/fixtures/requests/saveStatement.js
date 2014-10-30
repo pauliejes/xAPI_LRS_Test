@@ -1,12 +1,8 @@
-/* global _suiteCfg */
 "use strict";
 var factory = require("../../utils/factory"),
-    lrs = _suiteCfg.lrs;
+    fixtures = require("../loader");
 
-require("../properties/attachment");
-require("../properties/statement");
-
-function buildWithAttachment (statement, attachment) {
+function buildWithAttachment (statement, attachment, lrs) {
     statement.attachments = [
         attachment.statementMetadata
     ];
@@ -36,87 +32,101 @@ function buildWithAttachment (statement, attachment) {
     };
 }
 
-factory.register(
-    "saveStatement",
-    {
-        minimal: {
-            "resource": "statements",
-            "headers": {
-                "X-Experience-API-Version": lrs.version,
-                "Authorization": lrs.authString,
-                "Content-Type": "application/json"
-            },
-            "method": "POST",
-            "params": {},
-            "content": factory.make("minimal statement")
-        },
-        typical: function () {
-            var obj = factory.make("typical statement");
+module.exports = {
+    init: function (cfg) {
+        var lrs = cfg.lrs;
 
-            return {
-                "resource": "statements",
-                "headers": {
-                    "X-Experience-API-Version": lrs.version,
-                    "Authorization": lrs.authString,
-                    "Content-Type": "application/json"
+        fixtures.load(
+            [
+                "properties/attachment",
+                "properties/statement"
+            ],
+            cfg
+        );
+
+        factory.register(
+            "saveStatement",
+            {
+                minimal: {
+                    "resource": "statements",
+                    "headers": {
+                        "X-Experience-API-Version": lrs.version,
+                        "Authorization": lrs.authString,
+                        "Content-Type": "application/json"
+                    },
+                    "method": "POST",
+                    "params": {},
+                    "content": factory.make("minimal statement")
                 },
-                "method": "PUT",
-                "params": {
-                    "statementId": obj.id
+                typical: function () {
+                    var obj = factory.make("typical statement");
+
+                    return {
+                        "resource": "statements",
+                        "headers": {
+                            "X-Experience-API-Version": lrs.version,
+                            "Authorization": lrs.authString,
+                            "Content-Type": "application/json"
+                        },
+                        "method": "PUT",
+                        "params": {
+                            "statementId": obj.id
+                        },
+                        "content": obj
+                    };
                 },
-                "content": obj
-            };
-        },
 
-        //
-        // when using this fixture you *must* add the "object" of the statement,
-        // and set the id from that object in the `params.statementId` property
-        //
-        voiding: function () {
-            var obj = factory.make("voiding statement");
+                //
+                // when using this fixture you *must* add the "object" of the statement,
+                // and set the id from that object in the `params.statementId` property
+                //
+                voiding: function () {
+                    var obj = factory.make("voiding statement");
 
-            return {
-                "resource": "statements",
-                "headers": {
-                    "X-Experience-API-Version": lrs.version,
-                    "Authorization": lrs.authString,
-                    "Content-Type": "application/json"
+                    return {
+                        "resource": "statements",
+                        "headers": {
+                            "X-Experience-API-Version": lrs.version,
+                            "Authorization": lrs.authString,
+                            "Content-Type": "application/json"
+                        },
+                        "method": "PUT",
+                        "params": {},
+                        "content": obj
+                    };
                 },
-                "method": "PUT",
-                "params": {},
-                "content": obj
-            };
-        },
-        activity: function () {
-            var obj = factory.make("typical statement");
+                activity: function () {
+                    var obj = factory.make("typical statement");
 
-            return {
-                "resource": "statements",
-                "headers": {
-                    "X-Experience-API-Version": lrs.version,
-                    "Authorization": lrs.authString,
-                    "Content-Type": "application/json"
+                    return {
+                        "resource": "statements",
+                        "headers": {
+                            "X-Experience-API-Version": lrs.version,
+                            "Authorization": lrs.authString,
+                            "Content-Type": "application/json"
+                        },
+                        "method": "PUT",
+                        "params": {
+                            "statementId": obj.id
+                        },
+                        "content": obj
+                    };
                 },
-                "method": "PUT",
-                "params": {
-                    "statementId": obj.id
+                attachment: function () {
+                    return buildWithAttachment(factory.make("typical statement"), factory.make("text attachment"), lrs);
                 },
-                "content": obj
-            };
-        },
-        attachment: function () {
-            return buildWithAttachment(factory.make("typical statement"), factory.make("text attachment"));
-        },
-        attachmentJSON: function () {
-            return buildWithAttachment(factory.make("typical statement"), factory.make("JSON attachment"));
-        },
-        attachmentFileUrlOnly: function () {
-            var request = factory.make("typical saveStatement"),
-                attachment = factory.make("fileUrlOnly attachment");
+                attachmentJSON: function () {
+                    return buildWithAttachment(factory.make("typical statement"), factory.make("JSON attachment"), lrs);
+                },
+                attachmentFileUrlOnly: function () {
+                    var request = factory.make("typical saveStatement"),
+                        attachment = factory.make("fileUrlOnly attachment");
 
-            request.content.attachments = [ attachment.statementMetadata ];
+                    request.content.attachments = [ attachment.statementMetadata ];
 
-            return request;
-        }
+                    return request;
+                }
+            }
+        );
     }
-);
+};
