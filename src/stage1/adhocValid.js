@@ -52,7 +52,7 @@ if (feature.scenarios.length > 0) {
     features(
         [ feature ],
         function (feature) {
-            helpers.runFeature(runner, feature);
+            helpers.runFeature(runner, feature, _suiteCfg);
         }
     );
 }

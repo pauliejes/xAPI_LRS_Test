@@ -1,4 +1,3 @@
-/* global _suiteCfg */
 "use strict";
 
 var assertions = require("../utils/assertions"),
@@ -64,7 +63,7 @@ library = English.library();
 library.given(
     "([Ll]og|[Ii]nspect)",
     function (method, next) {
-        var logFunc = _suiteCfg._logger;
+        var logFunc = this.logger;
 
         logFunc("-------------------------------");
         if (method.toLowerCase() === "inspect") {
@@ -82,7 +81,7 @@ library.given(
 library.given(
     "([Ll]og|[Ii]nspect) $object",
     function (method, object, next) {
-        var logFunc = _suiteCfg._logger,
+        var logFunc = this.logger,
             splitObj = object.split(" "),
             type = false,
             toLog;
@@ -229,7 +228,7 @@ library.given(
 library.when(
     "(?:[Tt]he) (?:[Rr]equest) is (?:made|sent)",
     function (next) {
-        this.scenarioResource.main.endpoint = _suiteCfg.lrs.endpoint;
+        this.scenarioResource.main.endpoint = this.scenarioResource.endpoint;
 
         makeRequest(this.scenarioResource.main, next, this);
     }
@@ -243,11 +242,15 @@ library.when(
             function (req) {
                 reqArr.push(
                     function (callback) {
-                        req.endpoint = _suiteCfg.lrs.endpoint;
+                        req.endpoint = this.scenarioResource.endpoint;
 
                         makeRequest(
                             req,
                             function (err, res) {
+                                if (err) {
+                                    callback(new Error ("Request failed: " + err));
+                                    return;
+                                }
                                 assertions.statusCodes(res.statusCode, [200, 204]);
                                 callback(err, res);
                             },
@@ -260,7 +263,7 @@ library.when(
         async[this.scenarioResource.series ? "series" : "parallel"](
             reqArr,
             function (err) {
-                this.scenarioResource.main.endpoint = _suiteCfg.lrs.endpoint;
+                this.scenarioResource.main.endpoint = this.scenarioResource.endpoint;
 
                 err ? next(err) : makeRequest(this.scenarioResource.main, next, this);
             }.bind(this)
@@ -314,7 +317,7 @@ library.then(
             ),
             function (err) {
                 if (err) {
-                    _suiteCfg.logger(err);
+                    this.logger(err);
                 }
                 next();
             }

@@ -58,7 +58,9 @@ features(
         scenarios(
             feature.scenarios,
             function (scenario) {
-                var scenarioResource = {};
+                var scenarioResource = {
+                    endpoint: _suiteCfg.lrs.endpoint
+                };
                 steps(
                     scenario.steps,
                     function (step, done) {

@@ -1,4 +1,3 @@
-/* global _suiteCfg */
 "use strict";
 
 var assert = require("assert"),
@@ -37,17 +36,20 @@ library.then(
     function (next) {
         assert.equal(this.scenarioResource.main.response.statusCode.toString(), "204");
 
-        this.scenarioResource.verify.endpoint = _suiteCfg.lrs.endpoint;
+        this.scenarioResource.verify.endpoint = this.scenarioResource.endpoint;
 
         makeRequest(
             this.scenarioResource.verify,
             function (err, res) {
+                if (err) {
+                    next(new Error("Request failed: " + err));
+                    return;
+                }
                 if (res.statusCode.toString() !== "404") {
                     next(new Error("The verify request did not return the expected status (404), instead returned: " + res.status));
+                    return;
                 }
-                else {
-                    next();
-                }
+                next();
             },
             this
         );
@@ -59,20 +61,24 @@ library.then(
     function (next) {
         assert.equal(this.scenarioResource.main.response.statusCode.toString(), "204");
 
-        this.scenarioResource.verify.endpoint = _suiteCfg.lrs.endpoint;
+        this.scenarioResource.verify.endpoint = this.scenarioResource.endpoint;
 
         makeRequest(
             this.scenarioResource.verify,
             function (err, res) {
+                if (err) {
+                    next(new Error("Request failed: " + err));
+                    return;
+                }
                 if (res.statusCode.toString() !== "200") {
                     next(new Error("The verify request did not return the expected status (200), instead returned: " + res.status));
+                    return;
                 }
                 else if (res.body !== "[]") {
                     next(new Error("The verify request did not return the expected empty array body, instead returned: " + res.body));
+                    return;
                 }
-                else {
-                    next();
-                }
+                next();
             },
             this
         );

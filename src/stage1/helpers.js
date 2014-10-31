@@ -1,11 +1,11 @@
-/* global _suiteCfg, scenarios, steps */
+/* global scenarios, steps */
 "use strict";
 
 var crypto = require("crypto"),
     utilRequest = require("../utils/request");
 
 module.exports = {
-    runFeature: function (runner, feature, cfg) {
+    runFeature: function (runner, feature, suiteCfg, cfg) {
         var featureResource = {};
 
         cfg = cfg || { hashes: {}, markPending: {} };
@@ -27,7 +27,7 @@ module.exports = {
                 scenario.stepHash = crypto.createHash("md5").update(JSON.stringify(hashable), "utf8").digest("hex");
                 cfg.hashes[scenario.stepHash] = false;
 
-                if (_suiteCfg.diagnostics.stepHash) {
+                if (suiteCfg.diagnostics.stepHash) {
                     scenario.title += " (" + scenario.stepHash + ")";
                 }
 
@@ -42,6 +42,7 @@ module.exports = {
             feature.scenarios,
             function (scenario) {
                 var scenarioResource = {
+                        endpoint: suiteCfg.lrs.endpoint,
                         cleanUpRequests: []
                     },
                     trace = [];
@@ -55,7 +56,8 @@ module.exports = {
                             trace: trace,
                             hash: scenario.stepHash,
                             isLast: (step === scenario.lastStep),
-                            statementStore: _suiteCfg.persistence.statementStore
+                            statementStore: suiteCfg.persistence.statementStore,
+                            logger: suiteCfg._logger
                         };
 
                         trace.push(step);

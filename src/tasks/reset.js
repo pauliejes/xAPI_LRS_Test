@@ -69,7 +69,7 @@ function voidAllStatements (cfg, callback) {
                         sr;
 
                     if (err) {
-                        callback(err);
+                        callback(new Error("Request failed: " + err));
                         return;
                     }
 
@@ -125,7 +125,7 @@ function voidAllStatements (cfg, callback) {
                                 },
                                 function (err, res) {
                                     if (err) {
-                                        callback(err);
+                                        callback(new Error("Request failed: " + err));
                                         return;
                                     }
 

@@ -72,7 +72,7 @@ function runFeatureFile (file) {
     featureFile(
         file,
         function (feature) {
-            helpers.runFeature(runner, feature, { hashes: hashes, markPending: markPending });
+            helpers.runFeature(runner, feature, _suiteCfg, { hashes: hashes, markPending: markPending });
         }
     );
 }
