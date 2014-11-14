@@ -9,18 +9,16 @@ module.exports = {
         fixtures.load(
             [
                 "properties/activity",
-                "properties/agent",
-                "properties/content",
-                "properties/UUID"
+                "properties/content"
             ],
             cfg
         );
 
         factory.register(
-            "saveState",
+            "saveActivityProfile",
             {
                 typical: {
-                    "resource": "activities/state",
+                    "resource": "activities/profile",
                     "headers": {
                         "X-Experience-API-Version": lrs.version,
                         "Authorization": lrs.authString,
@@ -28,14 +26,13 @@ module.exports = {
                     },
                     "method": "PUT",
                     "params": {
-                        "stateId": "http://tincanapi.com/conformancetest/statedoc",
                         "activityId": factory.make("typical activity").id,
-                        "agent": factory.make("typical agent")
+                        "profileId": "Activity profileId"
                     },
                     "content": "some content"
                 },
                 JSON: {
-                    "resource": "activities/state",
+                    "resource": "activities/profile",
                     "headers": {
                         "X-Experience-API-Version": lrs.version,
                         "Authorization": lrs.authString,
@@ -43,30 +40,13 @@ module.exports = {
                     },
                     "method": "PUT",
                     "params": {
-                        "stateId": "http://tincanapi.com/conformancetest/statedoc",
                         "activityId": factory.make("typical activity").id,
-                        "agent": factory.make("typical agent")
+                        "profileId": "Activity profileId"
                     },
                     "content": factory.make("JSON content")
                 },
-                withRegistration: {
-                    "resource": "activities/state",
-                    "headers": {
-                        "X-Experience-API-Version": lrs.version,
-                        "Authorization": lrs.authString,
-                        "Content-Type": "application/octet-stream"
-                    },
-                    "method": "PUT",
-                    "params": {
-                        "stateId": "http://tincanapi.com/conformancetest/statedoc",
-                        "activityId": factory.make("typical activity").id,
-                        "agent": factory.make("typical agent"),
-                        "registration": factory.make("good UUID")
-                    },
-                    "content": "some content"
-                },
                 ifNoneMatch: function () {
-                    var obj = factory.make("typical saveState");
+                    var obj = factory.make("typical saveActivityProfile");
 
                     obj.headers["If-None-Match"] = "*";
                     return obj;

@@ -1,4 +1,4 @@
-Feature: retrieveStateIds
+Feature: Retrieve state id's
 
 Scenario: Good retrieve state ids: [type] request cluster
 
@@ -55,16 +55,17 @@ Scenario: Bad retrieve state ids: [type] request missing [property]
         400  | withRegistration | activityId parameter
         400  | withRegistration | agent parameter
 
-Scenario: Bad retrieve state ids: [type] request with bad [property] [value]
+Scenario: Bad retrieve state ids: [type] request with bad agent parameter an empty agent
 
     Given a [type] retrieveStateIds request
-    Given the [property] is set to [value]
+    Given the agent parameter is set to an empty agent
     When the request is made
-    Then the LRS responds with HTTP [HTTP]
+    Then the LRS responds with HTTP 400
 
     Where:
-        HTTP | type    | property         | value
-        400  | typical | agent parameter  | an empty agent
+        type
+        typical
+        withRegistration
 
 Scenario: Bad retrieve state ids: [type] request with bad [property] '[value]'
 
@@ -74,48 +75,51 @@ Scenario: Bad retrieve state ids: [type] request with bad [property] '[value]'
     Then the LRS responds with HTTP [HTTP]
 
     Where:
-        HTTP | type    | property         | value
-        400  | typical | resource         | activity/state
-        400  | typical | resource         | activities/states
-        400  | typical | version header   | bad version
-        400  | typical | version header   | 3.8.0
-        400  | typical | authority header | Basic badAuth
-        401  | typical | authority header | Basic TnsHNWplME1YZnc0VzdLTHRIWTo0aDdBb253Ml85WU53vSZLNlVZ
+        HTTP | type             | property               | value
+        400  | typical          | resource               | activity/state
+        400  | typical          | resource               | activities/states
+        400  | typical          | version header         | bad version
+        400  | typical          | version header         | 3.8.0
+        400  | typical          | authority header       | Basic badAuth
+        401  | typical          | authority header       | Basic TnsHNWplME1YZnc0VzdLTHRIWTo0aDdBb253Ml85WU53vSZLNlVZ
+        400  | typical          | activityId parameter   | bad URI
+        400  | withRegistration | activityId parameter   | bad URI
+        400  | withRegistration | registration parameter | bad UUID
 
-Scenario: Bad retrieve state ids: [type] request with [modifier] agent parameter with bad [property] '[value]'
+Scenario: Bad retrieve state ids: typical request with [modifier] agent parameter with bad [property] '[value]'
 
-    Given a [type] retrieveStateIds request
+    Given a typical retrieveStateIds request
     Given the agent parameter is set to a [modifier] agent
     Given the params agent [property] is set to '[value]'
     When the request is made
-    Then the LRS responds with HTTP [HTTP]
+    Then the LRS responds with HTTP 400
 
     Where:
-        HTTP | type    | modifier       | property         | value
-        400  | typical | mboxAndType    | mbox             | conformancetest@tincanapi.com
-        400  | typical | mboxAndType    | mbox             | bad mbox
-        400  | typical | mboxAndType    | objectType       | notAgent
-        400  | typical | mboxAndType    | objectType       | Activity
-        400  | typical | mboxOnly       | mbox             | conformancetest@tincanapi.com
-        400  | typical | mboxOnly       | mbox             | bad mbox
-        400  | typical | mboxAndType    | objectType       | agent
-        400  | typical | openidAndType  | openid           | bad URI
-        400  | typical | accountAndType | account homePage | bad URI
-        400  | typical | openidOnly     | openid           | bad URI
-        400  | typical | accountOnly    | account homePage | bad URI
+        modifier       | property         | value
+        mboxAndType    | mbox             | conformancetest@tincanapi.com
+        mboxAndType    | mbox             | bad mbox
+        mboxAndType    | objectType       | notAgent
+        mboxAndType    | objectType       | Activity
+        mboxOnly       | mbox             | conformancetest@tincanapi.com
+        mboxOnly       | mbox             | bad mbox
+        mboxAndType    | objectType       | agent
+        openidAndType  | openid           | bad URI
+        accountAndType | account homePage | bad URI
+        openidOnly     | openid           | bad URI
+        accountOnly    | account homePage | bad URI
 
-Scenario: Bad retrieve state ids: [type] request with [modifier] agent parameter missing [property]
+Scenario: Bad retrieve state ids: typical request with [modifier] agent parameter missing [property]
 
-    Given a [type] retrieveStateIds request
+    Given a typical retrieveStateIds request
     Given the agent parameter is set to a [modifier] agent
     Given the params agent [property] is removed
     When the request is made
-    Then the LRS responds with HTTP [HTTP]
+    Then the LRS responds with HTTP 400
 
     Where:
-        HTTP | type    | modifier       | property
-        400  | typical | accountAndType | account homePage
-        400  | typical | accountAndType | account name
-        400  | typical | accountOnly    | account homePage
-        400  | typical | accountOnly    | account name
-        400  | typical | mboxAndType    | mbox
+        modifier       | property
+        accountAndType | account homePage
+        accountAndType | account name
+        accountOnly    | account homePage
+        accountOnly    | account name
+        mboxAndType    | mbox

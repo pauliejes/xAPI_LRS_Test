@@ -1,7 +1,5 @@
 "use strict";
-var formats = require("./formats"),
-    iso8601DateTime = new RegExp(formats.iso_date),
-    contentTypeCheck,
+var contentTypeCheck,
     versionCheck,
     responses
 ;
@@ -26,9 +24,6 @@ responses = {
     },
     saveStatement: function (res) {
         return contentTypeCheck(res, "json");
-    },
-    getStatement: function (res) {
-        return contentTypeCheck(res, "json") && iso8601DateTime.test(res.headers["x-experience-api-consistent-through"]);
     }
 };
 

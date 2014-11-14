@@ -7,7 +7,7 @@ var assert = require("assert"),
 
 library = English.library();
 library.then(
-    "(?:[Tt]he) retrieveState response is verified",
+    "(?:[Tt]he) (?:retrieveState|retrieveActivityProfile|retrieveAgentProfile) response is verified",
     function (next) {
         var main = this.scenarioResource.main,
             primer = this.scenarioResource.primers[0];
@@ -32,7 +32,7 @@ library.then(
 );
 
 library.then(
-    "(?:[Tt]he) deleteState response is verified",
+    "(?:[Tt]he) (?:deleteState|deleteActivityProfile|deleteAgentProfile) response is verified",
     function (next) {
         assert.equal(this.scenarioResource.main.response.statusCode.toString(), "204");
 
@@ -86,18 +86,42 @@ library.then(
 );
 
 library.then(
-    "(?:[Tt]he) retrieveStateIds response is verified",
-    function (next) {
-        var body = JSON.parse(this.scenarioResource.main.response.body, "utf8");
+    "(?:[Tt]he) (retrieveStateIds|retrieveActivityProfileIds|retrieveAgentProfileIds) response is verified",
+    function (reqType, next) {
+        var body = JSON.parse(this.scenarioResource.main.response.body, "utf8"),
+            idType = (reqType === "retrieveStateIds") ? "stateId" : "profileId";
 
         assert.equal(this.scenarioResource.primers.length, body.length);
 
         this.scenarioResource.primers.forEach(
             function (primer) {
-                assert.ok(body.indexOf(primer.request.params.stateId) !== -1);
+                assert.ok(body.indexOf(primer.request.params[idType]) !== -1);
             }
         );
         next();
+    }
+);
+
+library.then([
+    "(?:[Tt]he) (?:stateMerging|agentProfileMerging|activityProfileMerging) response is verified",
+    "(?:[Tt]he) (?:stateConcurrency|agentProfileConcurrency|activityProfileConcurrency) response is verified"
+    ],
+    function (next) {
+        this.scenarioResource.verify.endpoint = this.scenarioResource.endpoint;
+
+        makeRequest(
+            this.scenarioResource.verify,
+            function (err, res) {
+                if (res.statusCode.toString() !== "200") {
+                    next(new Error("The verify request did not return the expected status (200), instead returned: " + res.statusCode));
+                }
+                else {
+                    this.scenarioResource.validate(res);
+                    next();
+                }
+            }.bind(this),
+            this
+        );
     }
 );
 

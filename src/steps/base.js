@@ -1,6 +1,7 @@
 "use strict";
 
 var assertions = require("../utils/assertions"),
+    assert = require("assert"),
     makeRequest = require("../utils/request").makeRequest,
     English = require("yadda").localisation.English,
     fs = require("fs"),
@@ -169,6 +170,9 @@ library.given(
                 request: cluster.verify
             };
         }
+        if (cluster.validate) {
+            this.scenarioResource.validate = cluster.validate;
+        }
         next();
     }
 );
@@ -329,6 +333,49 @@ library.then(
     "(?:[Tt]he) response is a (?:correct|valid) $type response",
     function (type, next) {
         assertions.responseStructure(this.scenarioResource.main.response, type);
+        next();
+    }
+);
+
+library.then(
+"(?:[Tt]he) $object (is equal to|is not equal to|starts with) $string",
+    function (object, equal, string, next) {
+        var splitObj = object.split(" "),
+            type = false;
+
+        if (string.indexOf("'") === 0 && string.lastIndexOf("'") === string.length - 1) {
+            string = string.substring(1, string.length - 1);
+        }
+
+        if (["typeof", "typeOf"].indexOf(splitObj[0]) > -1) {
+            type = true;
+            splitObj = splitObj.splice(1);
+        }
+
+        if (["main", "primers", "verify"].indexOf(splitObj[0]) === -1) {
+            splitObj.unshift("main");
+        }
+
+        if (type) {
+            if(equal === "is equal to") {
+                assert.equal(typeof (selectn(splitObj.join("."), this.scenarioResource)), string);
+            }
+            else if (equal === "is not equal to") {
+                assert.notEqual(typeof (selectn(splitObj.join("."), this.scenarioResource)), string);
+            } else {
+                assert.equal((typeof (selectn(splitObj.join("."), this.scenarioResource))).indexOf(string), 0);
+            }
+        }
+        else {
+            if (equal === "is equal to") {
+                assert.equal(selectn(splitObj.join("."), this.scenarioResource), string);
+            }
+            else if (equal === "is not equal to") {
+                assert.notEqual(selectn(splitObj.join("."), this.scenarioResource), string);
+            } else {
+                assert.equal((selectn(splitObj.join("."), this.scenarioResource)).indexOf(string), 0);
+            }
+        }
         next();
     }
 );

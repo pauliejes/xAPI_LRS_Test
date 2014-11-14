@@ -135,9 +135,8 @@ checkCleanUp = function (cfg, context) {
             "agents/profile",
             "activities/profile",
             "activities/state"
-        ].indexOf(cfg.request.resource) > 1
+        ].indexOf(cfg.request.resource) > -1
     ) {
-
         request = {
             method: "DELETE",
             resource: cfg.request.resource,
