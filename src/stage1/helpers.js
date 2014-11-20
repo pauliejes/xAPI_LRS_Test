@@ -62,23 +62,43 @@ module.exports = {
 
                         trace.push(step);
 
-                        runner.yadda(
-                            step,
-                            context,
-                            function (err, info) {
-                                if (this.isLast && this.scenarioResource.cleanUpRequests.length > 0) {
-                                    utilRequest.makeRequestSeries(
-                                        this.scenarioResource.cleanUpRequests,
-                                        function () {
-                                            done(err, info);
-                                        }
-                                    );
-                                    return;
-                                }
+                        //
+                        // failed assertions result in an exception which prevents the callback
+                        // from being executed, so catch them to still do our cleanup to prevent
+                        // false negatives in the test suite (though smaller risk of false positives)
+                        // then re-throw to see the test failure
+                        //
+                        try {
+                            runner.yadda(
+                                step,
+                                context,
+                                function (err, info) {
+                                    if (this.scenarioResource.cleanUpRequests.length > 0 && (this.isLast || err !== null)) {
+                                        utilRequest.makeRequestSeries(
+                                            this.scenarioResource.cleanUpRequests,
+                                            function () {
+                                                done(err, info);
+                                            }
+                                        );
+                                        return;
+                                    }
 
-                                done(err, info);
-                            }.bind(context)
-                        );
+                                    done(err, info);
+                                }.bind(context)
+                            );
+                        }
+                        catch (ex) {
+                            if (context.scenarioResource.cleanUpRequests.length > 0) {
+                                utilRequest.makeRequestSeries(
+                                    context.scenarioResource.cleanUpRequests,
+                                    function () {
+                                        throw ex;
+                                    }
+                                );
+                                return;
+                            }
+                            throw ex;
+                        }
                     }
                 );
             }
