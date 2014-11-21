@@ -103,6 +103,11 @@ module.exports = {
                     "steps": [
                         factory.make("typical interactionComponent")
                     ]
+                },
+                "forQuery": {
+                    "name": {
+                        "en-US": "for query"
+                    }
                 }
             }
         );

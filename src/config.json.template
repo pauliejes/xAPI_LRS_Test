@@ -14,10 +14,16 @@
         "statementRead": [],
         "adhocValid": [],
         "adhocInvalid": [],
-        "conflicts": "./var/conflicts"
+        "conflicts": "./var/conflicts",
+        "queries": "./var/queries"
     },
     "stage1": {
         "featureSpec": "features",
         "pending": {}
+    },
+    "stage2": {
+        "queries": {
+            "pending": {}
+        }
     }
 }

@@ -29,6 +29,15 @@ module.exports = {
                     "params": {
                         "voidedStatementId": null
                     }
+                },
+                "query": {
+                    "resource": "statements",
+                    "headers": {
+                        "X-Experience-API-Version": lrs.version,
+                        "Authorization": lrs.authString
+                    },
+                    "method": "GET",
+                    "params": {}
                 }
             }
         );

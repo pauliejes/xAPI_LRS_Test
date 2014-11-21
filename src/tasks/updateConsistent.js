@@ -22,8 +22,14 @@ module.exports = function (grunt) {
                 },
                 function (err, res) {
                     if (err) {
-                        grunt.fail.warn(err);
+                        done(new Error("Request failed: " + err));
+                        return;
                     }
+                    if (res.statusCode !== 200) {
+                        done(new Error("Unable to retrieve consistent header: " + res.body + " (" + res.statusCode + ")"));
+                        return;
+                    }
+
                     fs.writeFile(
                         path.join(cfg.persistence.statementStore, ".consistent.json"),
 
@@ -31,7 +37,8 @@ module.exports = function (grunt) {
 
                         function (err) {
                             if (err) {
-                                grunt.fail.warn(err);
+                                done(new Error("Failed to write consistent file: " + err));
+                                return;
                             }
                             done();
                         }

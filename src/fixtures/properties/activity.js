@@ -34,6 +34,10 @@ module.exports = {
                     "id": "http://tincanapi.com/conformancetest/activityid",
                     "objectType": "Activity",
                     "definition": factory.make("typical activityDefinition")
+                },
+                forQuery: {
+                    "id": "http://tincanapi.com/conformancetest/activityid/forQuery",
+                    "definition": factory.make("forQuery activityDefinition")
                 }
             }
         );

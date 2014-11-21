@@ -27,6 +27,12 @@ module.exports = {
                     "display": {
                         "en-US": "test"
                     }
+                },
+                "forQuery": {
+                    "id": "http://tincanapi.com/conformancetest/verbid/forQuery",
+                    "display": {
+                        "en-US": "for query"
+                    }
                 }
             }
         );

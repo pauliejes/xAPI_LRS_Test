@@ -20,6 +20,10 @@ module.exports = {
                 "allProperties": {
                     "name": "test",
                     "homePage": HOMEPAGE
+                },
+                "forQuery": {
+                    "name": "forQuery",
+                    "homePage": HOMEPAGE
                 }
             }
         );

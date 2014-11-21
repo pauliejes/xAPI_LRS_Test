@@ -86,7 +86,7 @@ module.exports = function(grunt) {
     // from there rather than a subdirectory
     //
     if (invalidPersistent(cfg.persistence.statementStore)) {
-        cfg.persistence.statementStore = "./var/statementStore";
+        cfg.persistence.statementStore = "./var/statements";
     }
     mkdirp.sync(cfg.persistence.statementStore);
     cfg.persistence.statementStore = path.resolve(cfg.persistence.statementStore);
@@ -119,6 +119,12 @@ module.exports = function(grunt) {
     }
     mkdirp.sync(cfg.persistence.conflicts);
     cfg.persistence.conflicts = path.resolve(cfg.persistence.conflicts);
+
+    if (invalidPersistent(cfg.persistence.queries)) {
+        cfg.persistence.queries = "./var/queries";
+    }
+    mkdirp.sync(cfg.persistence.queries);
+    cfg.persistence.queries = path.resolve(cfg.persistence.queries);
 
     [
         "reporter",
@@ -206,6 +212,20 @@ module.exports = function(grunt) {
                     require: commonMochaTestRequire.bind(cfg)
                 },
                 src: ["stages/two/conflict.js"]
+            },
+            "stage2-streamQueries": {
+                options: {
+                    require: function () {
+                        /* global _suiteCfg */
+                        /* jshint -W020 */
+                        _suiteCfg = cfg;
+
+                        _suiteCfg.stage2 = _suiteCfg.stage2 || {};
+                        _suiteCfg.stage2.queries = _suiteCfg.stage2.queries || {};
+                        _suiteCfg.stage2.queries.pending = _suiteCfg.stage2.queries.pending || {};
+                    }
+                },
+                src: ["stages/two/streamQueries.js"]
             }
         },
 
@@ -246,6 +266,16 @@ module.exports = function(grunt) {
     );
 
     grunt.registerTask(
+        "query",
+        [
+            "jshint",
+            "primeLRS:query",
+            "updateConsistent",
+            "mochaTest:stage2-streamQueries"
+        ]
+    );
+
+    grunt.registerTask(
         "stage1",
         [
             "jshint",
@@ -264,7 +294,8 @@ module.exports = function(grunt) {
             "updateConsistent",
             "mochaTest:stage2-statementStructure",
             "retrieveConflictStatements",
-            "mochaTest:stage2-conflict"
+            "mochaTest:stage2-conflict",
+            "mochaTest:stage2-streamQueries"
         ]
     );
 
@@ -280,7 +311,8 @@ module.exports = function(grunt) {
             "updateConsistent",
             "mochaTest:stage2-statementStructure",
             "retrieveConflictStatements",
-            "mochaTest:stage2-conflict"
+            "mochaTest:stage2-conflict",
+            "mochaTest:stage2-streamQueries"
         ]
     );
 };

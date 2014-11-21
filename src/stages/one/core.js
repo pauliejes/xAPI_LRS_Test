@@ -37,6 +37,7 @@ fixtures.load(
         "requests/about",
         "requests/saveStatement",
         "requests/saveStatements",
+        "requests/fetchStatements",
         "clusters/activityProfileConcurrency",
         "clusters/activityProfileMerging",
         "clusters/deleteActivityProfile",

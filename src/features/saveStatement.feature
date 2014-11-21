@@ -21,7 +21,7 @@ Scenario: Bad save statement: [type] request with [property] set to '[value]'
 
     Where:
         HTTP | type       | property            | value
-        405  | typical    | method              | POST
+        400  | typical    | method              | POST
         400  | typical    | resource            | statement
         400  | minimal    | method              | PUT
         400  | minimal    | resource            | statement
@@ -63,5 +63,5 @@ Scenario: Bad save statement: [type] request with bad [property] '[value]'
         400  | minimal | version header        | 0.8.0
         400  | minimal | version header        | bad version
         400  | minimal | Content-Type header   | bad content type
-        405  | minimal | statementId parameter | cebba04a-158a-4e2e-8b6d-82bav2b9c07e
-        405  | minimal | statementId parameter | bad statementId
+        400  | minimal | statementId parameter | cebba04a-158a-4e2e-8b6d-82bav2b9c07e
+        400  | minimal | statementId parameter | bad statementId

@@ -2,6 +2,7 @@ src/config.json
 src/config*.json
 src/var/statements/
 src/var/conflicts/
+src/var/queries/
 node_modules
 npm-debug.log
 .idea/
