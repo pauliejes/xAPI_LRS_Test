@@ -11,7 +11,9 @@ var English = require("yadda").localisation.English,
     objectTypeLocations,
     objectTypeLocationsMultiple,
     correctObjectTypes,
-    assertStatementMatch;
+    compareStatements,
+    assertStatementMatch,
+    assertStatementNoMatch;
 
 //
 // it is acceptable for an LRS to insert 'objectType' properties
@@ -102,7 +104,14 @@ correctObjectTypes = function (actual, expected) {
 //       a module that probably extends the core assertion
 //       library so that it can be required once in all the places
 //
-assertStatementMatch = function (actual, expected, context) {
+compareStatements = function (actual, expected, cfg, context) {
+    //
+    // default cfg to do standard statement matching
+    //
+    cfg = cfg || {};
+    cfg.assertion = cfg.assertion || "deepEqual";
+    cfg.meaningOnly = cfg.meaningOnly || false;
+
     //
     // adjust statement for things the LRS must set
     //
@@ -119,6 +128,12 @@ assertStatementMatch = function (actual, expected, context) {
     //
     delete actual.stored;
     delete actual.authority;
+
+    if (cfg.meaningOnly) {
+        delete expected.version;
+        delete expected.stored;
+        delete expected.authority;
+    }
 
     //
     // correct for mutable objectTypes
@@ -155,7 +170,17 @@ assertStatementMatch = function (actual, expected, context) {
     }
     delete actual.timestamp;
 
-    assert.deepEqual(actual, expected, "retrieved statement matches saved statement");
+    assert[cfg.assertion](actual, expected);
+};
+
+assertStatementMatch = function (actual, expected, cfg, context) {
+    cfg.assertion = "deepEqual";
+    return compareStatements(actual, expected, cfg, context);
+};
+
+assertStatementNoMatch = function (actual, expected, cfg, context) {
+    cfg.assertion = "notDeepEqual";
+    return compareStatements(actual, expected, cfg, context);
 };
 
 library.given(
@@ -183,7 +208,7 @@ library.when(
         // the cleanup process at the end of all save statements should be voiding
         // the statement so we need to retrieve the voided statement here
         //
-        this.scenarioResource.request = factory.make("typical getVoidedStatement");
+        this.scenarioResource.request = factory.make("getVoidedStatement fetchStatements");
         this.scenarioResource.id = this.scenarioResource.request.params.voidedStatementId = result[1];
 
         makeRequest(
@@ -214,7 +239,29 @@ library.then(
         var expected = this.scenarioResource.loadedData.structure,
             actual = this.scenarioResource.statement;
 
-        assertStatementMatch(actual, expected, this);
+        assertStatementMatch(actual, expected, { meaningOnly: false }, this);
+        next();
+    }
+);
+
+library.then(
+    "(?:[Tt]he) LRS structure was maintained",
+    function (next) {
+        var retrieved = this.featureResource.retrievedStructure,
+            compare = this.scenarioResource.compareStructure.structure;
+
+        assertStatementMatch(compare, retrieved, { meaningOnly: true }, this);
+        next();
+    }
+);
+
+library.then(
+    "(?:[Tt]he) LRS was not updated",
+    function (next) {
+        var retrieved = this.featureResource.retrievedStructure,
+            compare = this.scenarioResource.compareStructure;
+
+        assertStatementNoMatch(compare, retrieved, { meaningOnly: true }, this);
         next();
     }
 );

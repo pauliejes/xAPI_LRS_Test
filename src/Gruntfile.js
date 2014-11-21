@@ -114,6 +114,12 @@ module.exports = function(grunt) {
     }
     resolvePaths(cfg.persistence.adhocInvalid);
 
+    if (invalidPersistent(cfg.persistence.conflicts)) {
+        cfg.persistence.conflicts = "./var/conflicts";
+    }
+    mkdirp.sync(cfg.persistence.conflicts);
+    cfg.persistence.conflicts = path.resolve(cfg.persistence.conflicts);
+
     [
         "reporter",
         "bail",
@@ -169,31 +175,44 @@ module.exports = function(grunt) {
                         }
                     }
                 },
-                src: ["stage1/core.js"]
+                src: ["stages/one/core.js"]
+            },
+            "stage1-conflict": {
+                options: {
+                    require: commonMochaTestRequire.bind(cfg)
+                },
+                src: ["stages/one/conflict/conflict.js"]
             },
             "stage1-adhocValid": {
                 options: {
                     require: commonMochaTestRequire.bind(cfg)
                 },
-                src: ["stage1/adhocValid.js"]
+                src: ["stages/one/adhocValid.js"]
             },
             "stage1-adhocInvalid": {
                 options: {
                     require: commonMochaTestRequire.bind(cfg)
                 },
-                src: ["stage1/adhocInvalid.js"]
+                src: ["stages/one/adhocInvalid.js"]
             },
             "stage2-statementStructure": {
                 options: {
                     require: commonMochaTestRequire.bind(cfg)
                 },
-                src: ["stage2/statementStructure.js"]
+                src: ["stages/two/statementStructure.js"]
+            },
+            "stage2-conflict": {
+                options: {
+                    require: commonMochaTestRequire.bind(cfg)
+                },
+                src: ["stages/two/conflict.js"]
             }
         },
 
         clean: [
             cfg.persistence.statementStore + "/*.json",
             cfg.persistence.statementStore + "/.consistent.json",
+            cfg.persistence.conflicts,
             "var"
         ],
 
@@ -205,9 +224,49 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-mocha-test");
     grunt.loadTasks("tasks");
 
-    grunt.registerTask("adhoc", ["jshint", "mochaTest:stage1-adhocValid", "mochaTest:stage1-adhocInvalid"]);
-    grunt.registerTask("stage1", ["jshint", "mochaTest:stage1-core", "mochaTest:stage1-adhocValid", "mochaTest:stage1-adhocInvalid"]);
-    grunt.registerTask("stage2", ["jshint", "updateConsistent", "mochaTest:stage2-statementStructure"]);
+    grunt.registerTask(
+        "adhoc",
+        [
+            "jshint",
+            "mochaTest:stage1-adhocValid",
+            "mochaTest:stage1-adhocInvalid"
+        ]
+    );
+
+    grunt.registerTask(
+        "conflict",
+        [
+            "jshint",
+            "primeLRS:conflict",
+            "mochaTest:stage1-conflict",
+            "updateConsistent",
+            "retrieveConflictStatements",
+            "mochaTest:stage2-conflict"
+        ]
+    );
+
+    grunt.registerTask(
+        "stage1",
+        [
+            "jshint",
+            "mochaTest:stage1-core",
+            "mochaTest:stage1-adhocValid",
+            "mochaTest:stage1-adhocInvalid",
+            "primeLRS",
+            "mochaTest:stage1-conflict"
+        ]
+    );
+
+    grunt.registerTask(
+        "stage2",
+        [
+            "jshint",
+            "updateConsistent",
+            "mochaTest:stage2-statementStructure",
+            "retrieveConflictStatements",
+            "mochaTest:stage2-conflict"
+        ]
+    );
 
     grunt.registerTask(
         "default",
@@ -216,8 +275,12 @@ module.exports = function(grunt) {
             "mochaTest:stage1-core",
             "mochaTest:stage1-adhocValid",
             "mochaTest:stage1-adhocInvalid",
+            "primeLRS",
+            "mochaTest:stage1-conflict",
             "updateConsistent",
-            "mochaTest:stage2-statementStructure"
+            "mochaTest:stage2-statementStructure",
+            "retrieveConflictStatements",
+            "mochaTest:stage2-conflict"
         ]
     );
 };

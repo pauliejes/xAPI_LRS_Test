@@ -1,6 +1,7 @@
 "use strict";
 
 var assert = require("assert"),
+    assertions = require("../utils/assertions"),
     makeRequest = require("../utils/request").makeRequest,
     English = require("yadda").localisation.English,
     library;
@@ -12,7 +13,7 @@ library.then(
         var main = this.scenarioResource.main,
             primer = this.scenarioResource.primers[0];
 
-        assert.equal(main.response.statusCode.toString(), "200");
+        assertions.statusCodes(main.response.statusCode, 200);
 
         if (main.request.headers["Content-Type"]) {
             assert.equal(main.response.headers["content-type"], primer.request.headers["Content-Type"]);
@@ -34,7 +35,7 @@ library.then(
 library.then(
     "(?:[Tt]he) (?:deleteState|deleteActivityProfile|deleteAgentProfile) response is verified",
     function (next) {
-        assert.equal(this.scenarioResource.main.response.statusCode.toString(), "204");
+        assertions.statusCodes(this.scenarioResource.main.response.statusCode, 204);
 
         this.scenarioResource.verify.endpoint = this.scenarioResource.endpoint;
 
@@ -59,8 +60,7 @@ library.then(
 library.then(
     "(?:[Tt]he) clearState response is verified",
     function (next) {
-        assert.equal(this.scenarioResource.main.response.statusCode.toString(), "204");
-
+        assertions.statusCodes(this.scenarioResource.main.response.statusCode, 204);
         this.scenarioResource.verify.endpoint = this.scenarioResource.endpoint;
 
         makeRequest(

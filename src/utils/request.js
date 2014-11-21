@@ -44,6 +44,9 @@ checkCleanUp = function (cfg, context) {
     var request,
         ids;
 
+    context.scenarioResource = context.scenarioResource || {};
+    context.scenarioResource.cleanUpRequests = context.scenarioResource.cleanUpRequests || [];
+
     if (["PUT", "POST"].indexOf(cfg.request.method) === -1) {
         return;
     }

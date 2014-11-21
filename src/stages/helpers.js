@@ -5,10 +5,20 @@ var crypto = require("crypto"),
     utilRequest = require("../utils/request");
 
 module.exports = {
-    runFeature: function (runner, feature, suiteCfg, cfg) {
+    runFeature: function (runner, feature, suiteCfg, cfg, featureCtx) {
         var featureResource = {};
 
         cfg = cfg || { hashes: {}, markPending: {} };
+        if (typeof featureCtx !== "undefined") {
+            Object.keys(featureCtx).forEach(
+                function (prop) {
+                    /* do not overwrite */
+                    if (! featureResource.hasOwnProperty(prop)) {
+                        featureResource[prop] = featureCtx[prop];
+                    }
+                }
+            );
+        }
 
         feature.scenarios.forEach(
             function (scenario) {

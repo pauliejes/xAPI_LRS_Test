@@ -14,4 +14,3 @@ module.exports = {
         assert.ok(response(actual, type), "The response structure was not valid");
     }
 };
-

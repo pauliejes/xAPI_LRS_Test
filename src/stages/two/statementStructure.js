@@ -4,14 +4,11 @@
 var fs = require("fs"),
     path = require("path"),
     Yadda = require("yadda"),
-    fixtures = require("../fixtures/loader"),
-    libraries = require("../steps/consistent"),
-    utilRequest = require("../utils/request"),
+    stageHelpers = require("./helpers"),
+    fixtures = require("../../fixtures/loader"),
+    libraries = require("../../steps/consistent"),
+    utilRequest = require("../../utils/request"),
     statementRe = /^[-\w]+\.json$/,
-    consistentThrough = new Date(require(_suiteCfg.persistence.statementStore + "/.consistent.json")),
-    isConsistent = function (fname, dir) {
-        return new Date(require(path.relative(path.resolve(fname), path.resolve(dir)) + "/" + fname).stored) > consistentThrough;
-    },
     feature = {
         title: "Loadable statement matching",
         scenarios: []
@@ -20,7 +17,7 @@ var fs = require("fs"),
 
 fixtures.load(
     [
-        "requests/getVoidedStatement",
+        "requests/fetchStatements",
     ],
     _suiteCfg
 );
@@ -44,7 +41,9 @@ _suiteCfg.persistence.statementRead.forEach(
                             "When the statement is retrieved",
                             "Then the statement structure matches",
                         ],
-                        annotations: isConsistent(fname, dir) ? { pending: true } : {}
+                        annotations: stageHelpers.isConsistent(
+                            require(path.resolve(dir, fname)).stored
+                        ) ? {} : { pending: true }
                     }
                 );
             }

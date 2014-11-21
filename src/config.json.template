@@ -13,7 +13,8 @@
         "statementStore": "./var/statements",
         "statementRead": [],
         "adhocValid": [],
-        "adhocInvalid": []
+        "adhocInvalid": [],
+        "conflicts": "./var/conflicts"
     },
     "stage1": {
         "featureSpec": "features",
