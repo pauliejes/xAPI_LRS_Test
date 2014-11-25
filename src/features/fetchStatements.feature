@@ -45,39 +45,39 @@ Scenario: Bad fetch statements: request with bad [property] '[value]'
     Then the LRS responds with HTTP [HTTP]
 
     Where:
-        HTTP | property               | value
-        401  | authority header       | bad auth
-        400  | version header         | 0.8.0
-        400  | version header         | bad version
-        400  | agent parameter        | test agent
-        400  | verb parameter         | test verb id
-        400  | activity parameter     | test activity id
-        400  | registration parameter | test registration
-        400  | related_activities     | not a bool
-        400  | related_activities     | 1
-        400  | related_activities     | 0
-        400  | related_activities     | "true"
-        400  | related_activities     | "false"
-        400  | related_agents         | not a bool
-        400  | related_agents         | 1
-        400  | related_agents         | 0
-        400  | related_agents         | "true"
-        400  | related_agents         | "false"
-        400  | since parameter        | bad timestamp
-        400  | until parameter        | bad timestamp
-        400  | limit parameter        | not an integer
-        400  | limit parameter        | -1
-        400  | format parameter       | unrecognized
-        400  | attachments            | not a bool
-        400  | attachments            | 1
-        400  | attachments            | 0
-        400  | attachments            | "true"
-        400  | attachments            | "false"
-        400  | ascending              | not a bool
-        400  | ascending              | 1
-        400  | ascending              | 0
-        400  | ascending              | "true"
-        400  | ascending              | "false"
+        HTTP | property                     | value
+        401  | authority header             | bad auth
+        400  | version header               | 0.8.0
+        400  | version header               | bad version
+        400  | agent parameter              | test agent
+        400  | verb parameter               | test verb id
+        400  | activity parameter           | test activity id
+        400  | registration parameter       | test registration
+        400  | related_activities parameter | not a bool
+        400  | related_activities parameter | 1
+        400  | related_activities parameter | 0
+        400  | related_activities parameter | "true"
+        400  | related_activities parameter | "false"
+        400  | related_agents parameter     | not a bool
+        400  | related_agents parameter     | 1
+        400  | related_agents parameter     | 0
+        400  | related_agents parameter     | "true"
+        400  | related_agents parameter     | "false"
+        400  | since parameter              | bad timestamp
+        400  | until parameter              | bad timestamp
+        400  | limit parameter              | not an integer
+        400  | limit parameter              | -1
+        400  | format parameter             | unrecognized
+        400  | attachments parameter        | not a bool
+        400  | attachments parameter        | 1
+        400  | attachments parameter        | 0
+        400  | attachments parameter        | "true"
+        400  | attachments parameter        | "false"
+        400  | ascending parameter          | not a bool
+        400  | ascending parameter          | 1
+        400  | ascending parameter          | 0
+        400  | ascending parameter          | "true"
+        400  | ascending parameter          | "false"
 
 Scenario: Bad fetch statements: request with [modifier] agent with bad [property] '[value]'
 
