@@ -8,15 +8,15 @@ Scenario: Good retrieve activityProfile: typical request cluster
 
 Scenario: Bad retrieve activityProfile: [type] request missing [property]
 
-    Given a [type] retrieveActivityProfile request
+    Given a typical retrieveActivityProfile request
     Given the [property] is removed
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 
     Where:
-        HTTP | type    | property
-        401  | typical | authority header
-        400  | typical | activityId parameter
+        HTTP | property
+        401  | authority header
+        400  | activityId parameter
 
 # Pending because it will pass in 0.9 enabled LRSs, need to detect those and annotate accordingly
 @Pending

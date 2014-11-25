@@ -6,11 +6,16 @@ Scenario: Good activity profile concurrency: noneMatch request cluster (no primi
     When the request is made
     Then the activityProfileConcurrency response is verified
 
-Scenario: Good activity profile concurrency: correctMatch request cluster
+Scenario: Good activity profile concurrency: [type] request cluster
 
-    Given a correctMatch activityProfileConcurrency request cluster
+    Given a [type] activityProfileConcurrency request cluster
     When the request is made on the primed LRS
     Then the activityProfileConcurrency response is verified
+
+    Where:
+        type
+        correctMatch
+        correctMatchUpperCaseEtag
 
 Scenario: Bad activity profile concurrency: [type] request cluster
 

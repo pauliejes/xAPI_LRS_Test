@@ -22,6 +22,8 @@ module.exports = {
 
                 correctMatch: function () { return helper.concurrency.correctMatch("agentProfile"); },
 
+                correctMatchUpperCaseEtag: function () { return helper.concurrency.correctMatchUpperCaseEtag("agentProfile"); },
+
                 incorrectMatch: function () { return helper.concurrency.incorrectMatch("agentProfile"); },
 
                 ifMatchAndIfNoneMatch: function () { return helper.concurrency.ifMatchAndIfNoneMatch("agentProfile"); },

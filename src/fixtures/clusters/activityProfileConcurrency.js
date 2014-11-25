@@ -22,6 +22,8 @@ module.exports = {
 
                 correctMatch: function () { return helper.concurrency.correctMatch("activityProfile"); },
 
+                correctMatchUpperCaseEtag: function () { return helper.concurrency.correctMatchUpperCaseEtag("activityProfile"); },
+
                 incorrectMatch: function () { return helper.concurrency.incorrectMatch("activityProfile"); },
 
                 ifMatchAndIfNoneMatch: function () { return helper.concurrency.ifMatchAndIfNoneMatch("activityProfile"); },

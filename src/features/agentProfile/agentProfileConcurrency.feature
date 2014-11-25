@@ -6,11 +6,16 @@ Scenario: Good agent profile concurrency: noneMatch request cluster (no priming 
     When the request is made
     Then the agentProfileConcurrency response is verified
 
-Scenario: Good agent profile concurrency: correctMatch request cluster
+Scenario: Good agent profile concurrency: [type] request cluster
 
-    Given a correctMatch agentProfileConcurrency request cluster
+    Given a [type] agentProfileConcurrency request cluster
     When the request is made on the primed LRS
     Then the agentProfileConcurrency response is verified
+
+    Where:
+        type
+        correctMatch
+        correctMatchUpperCaseEtag
 
 Scenario: Bad agent profile concurrency: [type] request cluster
 

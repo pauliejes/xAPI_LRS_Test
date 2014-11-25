@@ -149,11 +149,11 @@ module.exports = {
                     main: factory.make("ifNoneMatch save" + doc),
                     verify: factory.make("typical retrieve" + doc),
                     validate: function (res) {
-                        assert.equal(JSON.parse(res.headers.etag), "E8A5EA8A123A6C2A6564EEE11A18515987E67180");
+                        assert.equal(JSON.parse(res.headers.etag).toLowerCase(), "65cbc681ec3569a393a39193fbef6796a4ac4dfe");
                     }
                 };
 
-            obj.main.content = "State concurrency test: noneMatch";
+            obj.main.content = "Document concurrency test: noneMatch";
 
             return obj;
         },
@@ -166,11 +166,11 @@ module.exports = {
                     main: factory.make("ifNoneMatch save" + doc),
                     verify: factory.make("typical retrieve" + doc),
                     validate: function (res) {
-                        assert.equal(JSON.parse(res.headers.etag), "1D38C5049FCD9751670D1C3A25CCDAF03FF539DE");
+                        assert.equal(JSON.parse(res.headers.etag).toLowerCase(), "17e274dd7111c26df6dbca86188da48aedd5889c");
                     }
                 };
 
-            obj.primers[0].content = "State concurrency test: incorrectNoneMatch";
+            obj.primers[0].content = "Document concurrency test: incorrectNoneMatch";
 
             obj.main.content = "State concurrency test: incorrectNoneMatch (updated)"; //Should not be the retrieved body
 
@@ -185,14 +185,34 @@ module.exports = {
                     main: factory.make("typical save" + doc),
                     verify: factory.make("typical retrieve" + doc),
                     validate: function (res) {
-                        assert.equal(JSON.parse(res.headers.etag), "7DF0C8281AEE431BF31E0BE1402821069BDB63A3");
+                        assert.equal(JSON.parse(res.headers.etag).toLowerCase(), "3b4cda1f65580c68cdd2172d90557935fd63d7ad");
                     }
                 };
 
-            obj.primers[0].content = "State concurrency test: correctMatch";
+            obj.primers[0].content = "Document concurrency test: correctMatch";
 
-            obj.main.headers["If-Match"] = "B7A124BF1D7A7C522C20861FCDD3F8FA2B5E0999";
-            obj.main.content = "State concurrency test: correctMatch (updated)";
+            obj.main.headers["If-Match"] = "e5fce8f9a08ed3d75cbe2ebc38574e1afd0bc13c";
+            obj.main.content = "Document concurrency test: correctMatch (updated)";
+
+            return obj;
+        },
+        correctMatchUpperCaseEtag: function (docType) {
+            var doc = fixType(docType),
+                obj = {
+                    primers: [
+                        factory.make("ifNoneMatch save" + doc)
+                    ],
+                    main: factory.make("typical save" + doc),
+                    verify: factory.make("typical retrieve" + doc),
+                    validate: function (res) {
+                        assert.equal(JSON.parse(res.headers.etag).toLowerCase(), "b9db46658e0212f675d6628bafa1fc3a5a786fb3");
+                    }
+                };
+
+            obj.primers[0].content = "Document concurrency test: correctMatchUpperCaseEtag";
+
+            obj.main.headers["If-Match"] = "B757C3E7F20C8456B7AB3B3C6D9ADB50B5236787";
+            obj.main.content = "Document concurrency test: correctMatchUpperCaseEtag (updated)";
 
             return obj;
         },
@@ -205,14 +225,14 @@ module.exports = {
                     main: factory.make("typical save" + doc),
                     verify: factory.make("typical retrieve" + doc),
                     validate: function (res) {
-                        assert.equal(JSON.parse(res.headers.etag), "2874D36A921964527A5D8E324156195E8D92D535");
+                        assert.equal(JSON.parse(res.headers.etag).toLowerCase(), "751471f1b96cec29d5aae5d6cdffac9913d1a757");
                     }
                 };
 
-            obj.primers[0].content = "State concurrency test: incorrectMatch";
+            obj.primers[0].content = "Document concurrency test: incorrectMatch";
 
-            obj.main.headers["If-Match"] = "B7A124BF1D7A7C522C20861FBADFA8FA2B5E0999"; //Intentionally incorrect hash
-            obj.main.content = "State concurrency test: correctMatch (updated)"; //Should not be the retrieved body
+            obj.main.headers["If-Match"] = "b7a124bf1d7a7c522c20861fbadfa8fa2b5e0999"; //Intentionally incorrect hash
+            obj.main.content = "Document concurrency test: incorrectMatch (updated)"; //Should not be the retrieved body
 
             return obj;
         },
@@ -225,15 +245,15 @@ module.exports = {
                     main: factory.make("typical save" + doc),
                     verify: factory.make("typical retrieve" + doc),
                     validate: function (res) {
-                        assert.equal(JSON.parse(res.headers.etag), "0882987B346371FFC65CA1174B498A2CD17702DD");
+                        assert.equal(JSON.parse(res.headers.etag).toLowerCase(), "30ca9efbe456c8de6f15d3df2c91b41156b2785a");
                     }
                 };
 
-            obj.primers[0].content = "State concurrency test: ifMatchAndIfNoneMatch";
+            obj.primers[0].content = "Document concurrency test: ifMatchAndIfNoneMatch";
 
-            obj.main.headers["If-Match"] = "0882987B346371FFC65CA1174B498A2CD17702DD";
+            obj.main.headers["If-Match"] = "30ca9efbe456c8de6f15d3df2c91b41156b2785a";
             obj.main.headers["If-None-Match"] = "*";
-            obj.main.content = "State concurrency test: ifMatchAndIfNoneMatch (updated)";
+            obj.main.content = "Document concurrency test: ifMatchAndIfNoneMatch (updated)";
 
             return obj;
         },
@@ -246,13 +266,13 @@ module.exports = {
                     main: factory.make("typical save" + doc),
                     verify: factory.make("typical retrieve" + doc),
                     validate: function (res) {
-                        assert.equal(JSON.parse(res.headers.etag), "53BEA471EFAE29B21CD1746E8F8C1FE1FDE708D8");
+                        assert.equal(JSON.parse(res.headers.etag).toLowerCase(), "dde22d9fdc3a89a9b6edcfcab2469990217e806c");
                     }
                 };
 
-            obj.primers[0].content = "State concurrency test: noMatchHeaders";
+            obj.primers[0].content = "Document concurrency test: noMatchHeaders";
 
-            obj.main.content = "State concurrency test: noMatchHeaders (updated)"; //Should not be the retrieved body
+            obj.main.content = "Document concurrency test: noMatchHeaders (updated)"; //Should not be the retrieved body
 
             return obj;
         }

@@ -27,19 +27,19 @@ Scenario: Bad retrieve activity profile ids: typical request missing version hea
     When the request is made
     Then the LRS responds with HTTP 400
 
-Scenario: Bad retrieve activity profile ids: [type] request with bad [property] '[value]'
+Scenario: Bad retrieve activity profile ids: typical request with bad [property] '[value]'
 
-    Given a [type] retrieveActivityProfileIds request
+    Given a typical retrieveActivityProfileIds request
     Given the [property] is set to '[value]'
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 
     Where:
-        HTTP | type    | property             | value
-        400  | typical | resource             | activity/state
-        400  | typical | resource             | activities/states
-        400  | typical | version header       | bad version
-        400  | typical | version header       | 3.8.0
-        400  | typical | authority header     | Basic badAuth
-        401  | typical | authority header     | Basic TnsHNWplME1YZnc0VzdLTHRIWTo0aDdBb253Ml85WU53vSZLNlVZ
-        400  | typical | activityId parameter | bad URI
+        HTTP | property             | value
+        400  | resource             | activity/state
+        400  | resource             | activities/states
+        400  | version header       | bad version
+        400  | version header       | 3.8.0
+        400  | authority header     | Basic badAuth
+        401  | authority header     | Basic TnsHNWplME1YZnc0VzdLTHRIWTo0aDdBb253Ml85WU53vSZLNlVZ
+        400  | activityId parameter | bad URI

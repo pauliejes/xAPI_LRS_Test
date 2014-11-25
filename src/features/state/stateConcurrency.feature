@@ -1,14 +1,10 @@
 Feature: State concurrency
 
-Scenario: Good state concurrency: [type] request cluster (no priming required)
+Scenario: Good state concurrency: noneMatch request cluster (no priming required)
 
-    Given a [type] stateConcurrency request cluster
+    Given a noneMatch stateConcurrency request cluster
     When the request is made
     Then the stateConcurrency response is verified
-
-    Where:
-        type
-        noneMatch
 
 Scenario: Good state concurrency: [type] request cluster
 
@@ -19,6 +15,7 @@ Scenario: Good state concurrency: [type] request cluster
     Where:
         type
         correctMatch
+        correctMatchUpperCaseEtag
         correctMatchWithRegistration
 
 Scenario: Bad state concurrency: [type] request cluster

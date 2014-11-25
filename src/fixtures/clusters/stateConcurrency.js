@@ -24,6 +24,8 @@ module.exports = {
 
                 correctMatch: function () { return helper.concurrency.correctMatch("state"); },
 
+                correctMatchUpperCaseEtag: function () { return helper.concurrency.correctMatchUpperCaseEtag("state"); },
+
                 incorrectMatch: function () { return helper.concurrency.incorrectMatch("state"); },
 
                 correctMatchWithRegistration: function () {
@@ -35,7 +37,7 @@ module.exports = {
                             main: factory.make("typical saveState"),
                             verify: factory.make("typical retrieveState"),
                             validate: function (res) {
-                                assert.equal(JSON.parse(res.headers.etag), "102B16CE866BBBB6CEA75CB663DCDCB0712100A3");
+                                assert.equal(JSON.parse(res.headers.etag).toLowerCase(), "102b16ce866bbbb6cea75cb663dcdcb0712100a3");
                             }
                         };
 
@@ -45,7 +47,7 @@ module.exports = {
 
                     obj.primers[0].content = "State concurrency test: correctMatchWithRegistration";
 
-                    obj.main.headers["If-Match"] = "B7A124BF1D7A7C522C20861FCDD3F8FA2B5E0999";
+                    obj.main.headers["If-Match"] = "b7a124bf1d7a7c522c20861fcdd3f8fa2b5e0999";
                     obj.main.content = "State concurrency test: correctMatchWithRegistration (updated)";
 
                     return obj;

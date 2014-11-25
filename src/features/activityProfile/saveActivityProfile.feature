@@ -37,17 +37,17 @@ Scenario: Good save activity profile: [type] request with [property] set to '[va
         typical | content             | test content
         JSON    | method              | POST
 
-Scenario: Bad save activity profile: [type] request missing [property]
+Scenario: Bad save activity profile: typical request missing [property]
 
-    Given a [type] saveActivityProfile request
+    Given a typical saveActivityProfile request
     Given the [property] is removed
     When the request is made
     Then the LRS responds with HTTP [HTTP]
 
     Where:
-        HTTP | type    | property
-        401  | typical | authority header
-        400  | typical | activityId parameter
+        HTTP | property
+        401  | authority header
+        400  | activityId parameter
 
 # Pending because it will pass in 0.9 enabled LRSs, need to detect those and annotate accordingly
 @Pending
