@@ -32,7 +32,7 @@ module.exports = function(grunt) {
     var cfgFile = __dirname + "/config.json",
         cfg,
         mochaTestOpts = {
-            reporter: "spec",
+            reporter: "progress",
             bail: false,
             timeout: 10000,
             slow: 1000

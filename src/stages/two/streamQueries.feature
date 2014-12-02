@@ -12,7 +12,7 @@
 ###
 Feature: Good queries
 
-Scenario: "since"/"until" parameter: from metdata
+Scenario: "since"/"until" parameter: from metadata
 
     Given a time bounded query
     When the request is made
