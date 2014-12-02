@@ -41,6 +41,12 @@ The configuration file allows configuration of the various parameters passed to 
     grunt --config="config-my-test-suite.json"
     grunt --config="/path/to/my/repo/src/config-my-test-suite.json"
 
+If you do not already have a config.json file in place, you can set basic lrs options via command line and grunt will create the config.json file for you from the template. To do this, execute the following command with no config.json file in place.
+
+    grunt --endpoint=http://endpoint.lrs --username=user1 --password=pwd1 --xapi-version=1.0.0
+
+If you do not have a config.json file and do not provide the options, grunt will fail and require you to create the config file before continuing.
+
 The repository is setup to ignore files matching `config*.json`.
 
 ### General Configuration

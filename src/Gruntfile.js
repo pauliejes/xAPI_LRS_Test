@@ -30,6 +30,7 @@ module.exports = function(grunt) {
     //"use strict";
 
     var cfgFile = __dirname + "/config.json",
+        templateFile,
         cfg,
         mochaTestOpts = {
             reporter: "progress",
@@ -42,6 +43,23 @@ module.exports = function(grunt) {
         cfgFile = grunt.option("config");
         if (! /^\//.test(cfgFile)) {
             cfgFile = __dirname + "/" + cfgFile;
+        }
+    }
+
+    if (! grunt.file.exists(cfgFile)) {
+        if (grunt.option("endpoint")) {
+            // config file doesn't exist yet, so create it from template with empty values
+            templateFile = grunt.file.readJSON("./config.json.template");
+
+            templateFile.lrs.endpoint = grunt.option("endpoint");
+            templateFile.lrs.username = grunt.option("username");
+            templateFile.lrs.password = grunt.option("password");
+            templateFile.lrs.version = grunt.option("xapi-version");
+
+            grunt.file.write(cfgFile, JSON.stringify(templateFile, null, 2));
+        }
+        else {
+            grunt.fail.fatal("You must provide endpoint, username, password and xapi-version as parameters if you don't have a config.json file already.");
         }
     }
 
@@ -131,7 +149,8 @@ module.exports = function(grunt) {
         "bail",
         "timeout",
         "slow",
-        "grep"
+        "grep",
+        "captureFile",
     ].forEach(
         function (key) {
             if (typeof grunt.option(key) !== "undefined") {
