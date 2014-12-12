@@ -18,7 +18,7 @@ Learning (ADL) Initiative.
 * All tests must be passed to achieve conformance, as opposed to “passing” all requirements in the TR document (these should be the same, but conformance is driven by the test results)
 * It is anticipated that additional tests for communities of practice may be created, such as for CMI5.  Those collections of tests can be included in this group, but are not part of the conformance endorsed by ADL.
 
-### Conformance Testing Requirments Document
+### Conformance Testing Requirements Document
 
 * All conformance requirements will be listed in the Testing Requirements (TR) document in a means which tests/documents can refer to a specific requirement number.
 * All conformance requirements in the TR document will link directly to the specification by section and requirement # within that section.
