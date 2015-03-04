@@ -57,7 +57,7 @@ The repository is setup to ignore files matching `config*.json`.
     * `password`
     * `version`
 * `bail` indicates that the test suite should stop when it encounters the first failed test, defaults to 'false' (or off)
-* `reporter` controls which reporter is used to output the test results, defaults to 'spec' (see `node_modules/.bin/mocha --reporters`)
+* `reporter` controls which reporter is used to output the test results, defaults to 'progress' (run `./node_modules/grunt-mocha-test/node_modules/mocha/bin/mocha --reporters`)
 * `timeout` controls how long in ms a scenario is allowed to take before it is marked failing, defaults to 10000
 * `slow` controls how long in ms a step can take before it is indicated as being slow, defaults to 1000
 * `grep` allows for a regular expression to select specific scenario(s) to be run
