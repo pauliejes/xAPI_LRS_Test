@@ -37,7 +37,8 @@ module.exports = function(grunt) {
             bail: false,
             timeout: 10000,
             slow: 1000
-        };
+        },
+        aliases;
 
     if (grunt.option("config")) {
         cfgFile = grunt.option("config");
@@ -72,6 +73,7 @@ module.exports = function(grunt) {
 
     cfg._logger = console.log;
     cfg.diagnostics = cfg.diagnostics || {};
+    cfg.developer = cfg.developer || false;
 
     //
     // provide a quick flag to turn them all on
@@ -263,65 +265,38 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-mocha-test");
     grunt.loadTasks("tasks");
 
-    grunt.registerTask(
-        "adhoc",
-        [
-            "jshint",
+    aliases = {
+        adhoc: [
             "mochaTest:stage1-adhocValid",
             "mochaTest:stage1-adhocInvalid"
-        ]
-    );
-
-    grunt.registerTask(
-        "conflict",
-        [
-            "jshint",
+        ],
+        conflict: [
             "primeLRS:conflict",
             "mochaTest:stage1-conflict",
             "updateConsistent",
             "retrieveConflictStatements",
             "mochaTest:stage2-conflict"
-        ]
-    );
-
-    grunt.registerTask(
-        "query",
-        [
-            "jshint",
+        ],
+        query: [
             "primeLRS:query",
             "updateConsistent",
             "mochaTest:stage2-streamQueries"
-        ]
-    );
-
-    grunt.registerTask(
-        "stage1",
-        [
-            "jshint",
+        ],
+        stage1: [
             "mochaTest:stage1-core",
             "mochaTest:stage1-adhocValid",
             "mochaTest:stage1-adhocInvalid",
             "primeLRS",
             "mochaTest:stage1-conflict"
-        ]
-    );
-
-    grunt.registerTask(
-        "stage2",
-        [
-            "jshint",
+        ],
+        stage2: [
             "updateConsistent",
             "mochaTest:stage2-statementStructure",
             "retrieveConflictStatements",
             "mochaTest:stage2-conflict",
             "mochaTest:stage2-streamQueries"
-        ]
-    );
-
-    grunt.registerTask(
-        "default",
-        [
-            "jshint",
+        ],
+        "default": [
             "mochaTest:stage1-core",
             "mochaTest:stage1-adhocValid",
             "mochaTest:stage1-adhocInvalid",
@@ -333,5 +308,13 @@ module.exports = function(grunt) {
             "mochaTest:stage2-conflict",
             "mochaTest:stage2-streamQueries"
         ]
+    };
+    Object.keys(aliases).forEach(
+        function (k) {
+            if (cfg.developer) {
+                aliases[k].unshift("jshint");
+            }
+            grunt.registerTask(k, aliases[k]);
+        }
     );
 };
