@@ -62,6 +62,7 @@ The repository is setup to ignore files matching `config*.json`.
 * `slow` controls how long in ms a step can take before it is indicated as being slow, defaults to 1000
 * `grep` allows for a regular expression to select specific scenario(s) to be run
 * `persistence` controls various settings for the storage of temporary files, and to read adhoc files
+    * `logs` path where files will be stored that capture runtime output, defaults to 'var/log/'
     * `statementStore` path where temporary files will be stored for use during stage2 statement structure validation, defaults to 'var/statements/'
     * `statementRead` array of paths to read for statements to be fetched and matched against the LRS includes `statementStore` automatically
     * `adhocValid` array of paths to read for files containing presumed good statements to be sent to the LRS
@@ -118,6 +119,18 @@ The following are the most common commands:
     > grunt reset
     > grunt clean
     > grunt clearSandbox
+
+#### Individual Tasks
+
+The following tasks are available to run smaller chunks of the test suite and still include a summary of results. Some of them may require other tasks to be run first, in general they are for developers who are more familiar with the test suite internals:
+
+    > grunt stage1-core
+    > grunt stage1-conflict
+    > grunt stage1-adhocValid
+    > grunt stage1-adhocInvalid
+    > grunt stage2-statementStructure
+    > grunt stage2-conflict
+    > grunt stage2-streamQueries
 
 ### Flags
 

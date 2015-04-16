@@ -1,13 +1,13 @@
-/* global featureFile, after, _suiteCfg */
+/* global featureFile, beforeEach, after, afterEach, _suiteCfg */
 "use strict";
 
-var Yadda = require("yadda"),
+var taskName = "stage1:core",
+    Yadda = require("yadda"),
     Glob = require("glob").Glob,
     stringify = require("json-stable-stringify"),
-    helpers = require("../helpers"),
+    helpers = require("../helpers")(taskName),
     fixtures = require("../../fixtures/loader"),
     libraries = [ require("../../steps/base"), require("../../steps/verify") ],
-    utilRequest = require("../../utils/request"),
     utilCleanup = require("../../utils/cleanup"),
     interpreterContext = {},
     runner = new Yadda.Yadda(libraries, interpreterContext),
@@ -60,6 +60,11 @@ fixtures.load(
 );
 
 Yadda.plugins.mocha.StepLevelPlugin.init();
+helpers.init();
+
+beforeEach(helpers.beforeEach);
+afterEach(helpers.afterEach);
+after(helpers.after);
 
 Object.keys(_suiteCfg.stage1.pending).forEach(
     function (key) {
@@ -85,7 +90,7 @@ function runFeatureFile (file) {
     featureFile(
         file,
         function (feature) {
-            helpers.runFeature(runner, feature, _suiteCfg, { hashes: hashes, markPending: markPending });
+            helpers.runFeature(runner, feature, _suiteCfg, { hashes: hashes, markPending: markPending, taskName: taskName });
         }
     );
 }
@@ -147,9 +152,15 @@ after(
             i,
             len;
 
-        if (_suiteCfg.diagnostics.requestCount) {
-            utilRequest.stat(_suiteCfg._logger);
-            utilRequest.statReset();
+        //
+        // determine if they limited the scope of tests in some way
+        // and only provide for a partial pass in that case
+        //
+        if (_suiteCfg.stage1.featureSpec !== "features") {
+            _suiteCfg._results[taskName].limited = "features: " + _suiteCfg.stage1.featureSpec;
+        }
+        else if (_suiteCfg.stage1._grepFromCLI) {
+            _suiteCfg._results[taskName].limited = "grep: " + _suiteCfg.stage1._grepFromCLI;
         }
 
         //

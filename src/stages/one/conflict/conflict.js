@@ -1,12 +1,12 @@
-/* global featureFile, after, _suiteCfg */
+/* global featureFile, beforeEach, after, afterEach, _suiteCfg */
 "use strict";
 
-var Yadda = require("yadda"),
+var taskName = "stage1:conflict",
+    Yadda = require("yadda"),
     fs = require("fs"),
     path = require("path"),
-    helpers = require("../../helpers"),
+    helpers = require("../../helpers")(taskName),
     fixtures = require("../../../fixtures/loader"),
-    utilRequest = require("../../../utils/request"),
     libraries = [ require("../../../steps/base"), require("../../../steps/conflict") ],
     runner = new Yadda.Yadda(libraries, {});
 
@@ -18,6 +18,11 @@ fixtures.load(
 );
 
 Yadda.plugins.mocha.StepLevelPlugin.init();
+helpers.init();
+
+beforeEach(helpers.beforeEach);
+afterEach(helpers.afterEach);
+after(helpers.after);
 
 fs.readdirSync(_suiteCfg.persistence.conflicts).forEach(
     function (dir) {
@@ -33,14 +38,5 @@ fs.readdirSync(_suiteCfg.persistence.conflicts).forEach(
                 );
             }
         );
-    }
-);
-
-after(
-    function () {
-        if (_suiteCfg.diagnostics.requestCount) {
-            utilRequest.stat(_suiteCfg._logger);
-            utilRequest.statReset();
-        }
     }
 );

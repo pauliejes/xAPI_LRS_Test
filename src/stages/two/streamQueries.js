@@ -1,16 +1,30 @@
-/* global featureFile, after, _suiteCfg */
+/* global features, beforeEach, after, afterEach, _suiteCfg */
 "use strict";
 
-var Yadda = require("yadda"),
+/*
+ * For this particular stage source file we are going to parse our
+ * own feature file into a feature object that we can manipulate
+ * ourselves on each control statement pass, calling the more
+ * conventional Yadda function `featureFile` does effectively
+ * the same thing but doesn't afford us the opportunity to
+ * manipulate the feature title and annotations before calling the
+ * underlying `describe` routine
+ */
+var taskName = "stage2:streamQueries",
+    Yadda = require("yadda"),
+    YaddaEnglish = require("yadda/lib/localisation/English"),
+    YaddaFeatureFileParser = require("yadda/lib/parsers/FeatureFileParser"),
     fs = require("fs"),
     path = require("path"),
     stageHelpers = require("./helpers"),
-    helpers = require("../helpers"),
+    helpers = require("../helpers")(taskName),
     fixtures = require("../../fixtures/loader"),
-    utilRequest = require("../../utils/request"),
     libraries = [ require("../../steps/queries.js"), require("../../steps/base") ],
     jsonFileRe = /^[-\w]+\.json$/,
     runner = new Yadda.Yadda(libraries, {}),
+    parser = new YaddaFeatureFileParser(YaddaEnglish),
+    feature = parser.parse("stages/two/streamQueries.feature"),
+    origFeatureTitle = feature.title,
     hashes = {},
     markPending = {};
 
@@ -23,6 +37,11 @@ fixtures.load(
 );
 
 Yadda.plugins.mocha.StepLevelPlugin.init();
+helpers.init();
+
+beforeEach(helpers.beforeEach);
+afterEach(helpers.afterEach);
+after(helpers.after);
 
 Object.keys(_suiteCfg.stage2.queries.pending).forEach(
     function (key) {
@@ -45,25 +64,20 @@ fs.readdirSync(_suiteCfg.persistence.queries).forEach(
 
         query = require(path.resolve(_suiteCfg.persistence.queries, fname));
         isConsistent = stageHelpers.isConsistent(query.end);
+        if (! isConsistent) {
+            _suiteCfg._results[taskName].pendingConsistency += 1;
+            feature.annotations.pending = true;
+        }
 
-        featureFile(
-            "stages/two/streamQueries.feature",
+        feature.title = origFeatureTitle + " (query grouping: " + query.registration + ")";
+
+        features(
+            feature,
             function (feature) {
-                feature.title += " (query grouping: " + query.registration + ")";
-                if (! isConsistent) {
-                    feature.annotations.pending = true;
-                }
-                helpers.runFeature(runner, feature, _suiteCfg, { hashes: hashes, markPending: markPending }, { queryMeta: query });
+                helpers.runFeature(runner, feature, _suiteCfg, { hashes: hashes, markPending: markPending, taskName: taskName }, { queryMeta: query });
+
+                delete feature.annotations.pending;
             }
         );
-    }
-);
-
-after(
-    function () {
-        if (_suiteCfg.diagnostics.requestCount) {
-            utilRequest.stat(_suiteCfg._logger);
-            utilRequest.statReset();
-        }
     }
 );

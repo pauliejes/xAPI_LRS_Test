@@ -1,20 +1,23 @@
-/* global after, features, _suiteCfg */
+/* global beforeEach, after, afterEach, features, _suiteCfg */
 "use strict";
 
-var fs = require("fs"),
-    path = require("path"),
+var taskName = "stage2:conflict",
     Yadda = require("yadda"),
+    fs = require("fs"),
+    path = require("path"),
+    helpers = require("../helpers")(taskName),
     libraries = [ require("../../steps/conflict"), require("../../steps/consistent") ],
-    utilRequest = require("../../utils/request"),
-    jsonFileRe = /^[-\w]+\.json$/,
-    helpers = require("../helpers"),
     stageHelpers = require("./helpers"),
+    jsonFileRe = /^[-\w]+\.json$/,
     featureList = [],
-    runner;
+    runner = new Yadda.Yadda(libraries);
 
 Yadda.plugins.mocha.StepLevelPlugin.init();
+helpers.init();
 
-runner = new Yadda.Yadda(libraries);
+beforeEach(helpers.beforeEach);
+afterEach(helpers.afterEach);
+after(helpers.after);
 
 fs.readdirSync(_suiteCfg.persistence.conflicts).forEach(
     function (idDir) {
@@ -22,7 +25,9 @@ fs.readdirSync(_suiteCfg.persistence.conflicts).forEach(
             feature = {
                 title: "Conflicting Statement ID: " + idDir,
                 scenarios: []
-            };
+            },
+            isConsistent = stageHelpers.isConsistent(require(path.join(conflictDir, "control.json")).stored);
+
         feature.scenarios.push(
             {
                 title: "Control matches Retrieved for ID: " + idDir,
@@ -31,9 +36,13 @@ fs.readdirSync(_suiteCfg.persistence.conflicts).forEach(
                     "When the control structure is loaded",
                     "Then the LRS structure was maintained"
                 ],
-                annotations: stageHelpers.isConsistent(require(path.join(conflictDir, "control.json")).stored) ? {} : { pending: true }
+                annotations: isConsistent ? {} : { pending: true }
             }
         );
+        if (! isConsistent) {
+            _suiteCfg._results[taskName].pendingConsistency += 1;
+        }
+
         fs.readdirSync(conflictDir).forEach(
             function (testCategoryDir) {
                 if (jsonFileRe.exec(testCategoryDir)) {
@@ -53,9 +62,12 @@ fs.readdirSync(_suiteCfg.persistence.conflicts).forEach(
                                     "When the conflicting structure is loaded",
                                     "Then the LRS was not updated"
                                 ],
-                                annotations: stageHelpers.isConsistent(require(path.join(conflictDir, "control.json")).stored) ? {} : { pending: true }
+                                annotations: isConsistent ? {} : { pending: true }
                             }
                         );
+                        if (! isConsistent) {
+                            _suiteCfg._results[taskName].pendingConsistency += 1;
+                        }
                     }
                 );
             }
@@ -68,14 +80,5 @@ features(
     featureList,
     function (feature) {
         helpers.runFeature(runner, feature, _suiteCfg, null, { conflictBaseDir: _suiteCfg.persistence.conflicts });
-    }
-);
-
-after(
-    function () {
-        if (_suiteCfg.diagnostics.requestCount) {
-            utilRequest.stat(_suiteCfg._logger);
-            utilRequest.statReset();
-        }
     }
 );

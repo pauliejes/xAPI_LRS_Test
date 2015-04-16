@@ -1,5 +1,7 @@
 var path = require("path"),
     mkdirp = require("mkdirp"),
+    uuid = require("node-uuid"),
+    colors = require("colors"),
     invalidPersistent = function (arr) {
         /* jshint strict: false */
         //"use strict";
@@ -27,18 +29,22 @@ module.exports = function(grunt) {
     // set a global that is picked up by the mocha 'src' files
     //
     /* jshint strict: false */
-    //"use strict";
 
-    var cfgFile = __dirname + "/config.json",
+    var pkg = grunt.file.readJSON("package.json"),
+        conformance = grunt.file.readJSON("conformance.json"),
+        cfgFile = __dirname + "/config.json",
         templateFile,
         cfg,
         mochaTestOpts = {
+            quiet: true,
             reporter: "progress",
             bail: false,
             timeout: 10000,
             slow: 1000
         },
-        aliases;
+        aliases,
+        runId = uuid.v4(),
+        captureExtension = "log";
 
     if (grunt.option("config")) {
         cfgFile = grunt.option("config");
@@ -73,7 +79,37 @@ module.exports = function(grunt) {
 
     cfg._logger = console.log;
     cfg.diagnostics = cfg.diagnostics || {};
-    cfg.developer = cfg.developer || false;
+    cfg.developer = cfg.developer || grunt.option("developer") || false;
+
+    if (cfg.developer) {
+        runId = "development";
+    }
+    else {
+        grunt.log.muted = true;
+    }
+
+    if (cfg.lrs.endpoint.slice(-1) !== "/") {
+        cfg.lrs.endpoint += "/";
+    }
+
+    cfg._results = {
+        "softwareVersion": pkg.version,
+        "conformanceVersion": conformance.version,
+        "initiatedAt": grunt.template.today("isoUtcDateTime"),
+        "runId": runId,
+        "lrs": {
+            "endpoint": cfg.lrs.endpoint,
+            "username": cfg.lrs.username,
+            "version": cfg.lrs.version
+        },
+        "stage1:core": null,
+        "stage1:adhocValid": null,
+        "stage1:adhocInvalid": null,
+        "stage1:conflict": null,
+        "stage2:statementStructure": null,
+        "stage2:conflict": null,
+        "stage2:streamQueries": null
+    };
 
     //
     // provide a quick flag to turn them all on
@@ -94,17 +130,21 @@ module.exports = function(grunt) {
         cfg.diagnostics.stepHash = true;
     }
 
-    if (cfg.lrs.endpoint.slice(-1) !== "/") {
-        cfg.lrs.endpoint += "/";
-    }
-
     //
     // if we take this logic out of Gruntfile, will need to add a
-    // path.relative(".", "../to/Gruntfile") then add the statementStore path
+    // path.relative(".", "../to/Gruntfile") then add the relevant path
     // to the end of that. This is because the config and gruntfile are in the
     // same location, and it makes more sense to let the user set the relative path
     // from there rather than a subdirectory
     //
+    if (invalidPersistent(cfg.persistence.logs)) {
+        cfg.persistence.logs = "./var/log";
+    }
+    mkdirp.sync(cfg.persistence.logs);
+    cfg.persistence.logs = path.resolve(cfg.persistence.logs);
+    cfg._logDir = cfg.persistence.logs + "/" + runId;
+    mkdirp.sync(cfg._logDir);
+
     if (invalidPersistent(cfg.persistence.statementStore)) {
         cfg.persistence.statementStore = "./var/statements";
     }
@@ -147,12 +187,12 @@ module.exports = function(grunt) {
     cfg.persistence.queries = path.resolve(cfg.persistence.queries);
 
     [
+        "quiet",
         "reporter",
         "bail",
         "timeout",
         "slow",
-        "grep",
-        "captureFile",
+        "grep"
     ].forEach(
         function (key) {
             if (typeof grunt.option(key) !== "undefined") {
@@ -164,8 +204,34 @@ module.exports = function(grunt) {
         }
     );
 
+    cfg._runDetails = [
+        colors.underline.yellow("xAPI LRS Test Suite\n"),
+        "Software Version: " + cfg._results.softwareVersion,
+        "Conformance Version: " + cfg._results.conformanceVersion,
+        "Endpoint: " + cfg.lrs.endpoint,
+        "Username: " + cfg.lrs.username,
+        "xAPI Version: " + cfg.lrs.version,
+        "Initiated at: " + cfg._results.initiatedAt,
+        "Run ID: " + cfg._results.runId,
+        "\n"
+    ].join("\n");
+    process.stdout.write(cfg._runDetails);
+
+    if (mochaTestOpts.reporter === "json" || mochaTestOpts.reporter === "json-stream") {
+        captureExtension = "json";
+    }
+    else if (mochaTestOpts.reporter === "doc") {
+        captureExtension = "html";
+    }
+    else if (mochaTestOpts.reporter === "xunit") {
+        captureExtension = "xml";
+    }
+    else if (mochaTestOpts.reporter === "markdown") {
+        captureExtension = "md";
+    }
+
     grunt.initConfig({
-        pkg: grunt.file.readJSON("package.json"),
+        pkg: pkg,
 
         jshint: {
             all: [
@@ -189,6 +255,7 @@ module.exports = function(grunt) {
                         _suiteCfg.stage1 = _suiteCfg.stage1 || {};
                         _suiteCfg.stage1.featureSpec = _suiteCfg.stage1.featureSpec || "features";
                         _suiteCfg.stage1._featureSpecFromCLI = _suiteCfg.stage1._featureSpecFromCLI || false;
+                        _suiteCfg.stage1._grepFromCLI = _suiteCfg.stage1._grepFromCLI || false;
                         _suiteCfg.stage1.pending = _suiteCfg.stage1.pending || {};
                         _suiteCfg.stage1.stalePending = _suiteCfg.stage1.stalePending || false;
 
@@ -200,37 +267,46 @@ module.exports = function(grunt) {
                             _suiteCfg.stage1._featureSpecFromCLI = true;
                             _suiteCfg.stage1.featureSpec = grunt.option("feature") || grunt.option("features");
                         }
-                    }
+                        if (grunt.option("grep")) {
+                            _suiteCfg.stage1._grepFromCLI = grunt.option("grep");
+                        }
+                    },
+                    captureFile: cfg._logDir + "/stage1-core." + captureExtension
                 },
                 src: ["stages/one/core.js"]
             },
             "stage1-conflict": {
                 options: {
-                    require: commonMochaTestRequire.bind(cfg)
+                    require: commonMochaTestRequire.bind(cfg),
+                    captureFile: cfg._logDir + "/stage1-conflict." + captureExtension
                 },
                 src: ["stages/one/conflict/conflict.js"]
             },
             "stage1-adhocValid": {
                 options: {
-                    require: commonMochaTestRequire.bind(cfg)
+                    require: commonMochaTestRequire.bind(cfg),
+                    captureFile: cfg._logDir + "/stage1-adhocValid." + captureExtension
                 },
                 src: ["stages/one/adhocValid.js"]
             },
             "stage1-adhocInvalid": {
                 options: {
-                    require: commonMochaTestRequire.bind(cfg)
+                    require: commonMochaTestRequire.bind(cfg),
+                    captureFile: cfg._logDir + "/stage1-adhocInvalid." + captureExtension
                 },
                 src: ["stages/one/adhocInvalid.js"]
             },
             "stage2-statementStructure": {
                 options: {
-                    require: commonMochaTestRequire.bind(cfg)
+                    require: commonMochaTestRequire.bind(cfg),
+                    captureFile: cfg._logDir + "/stage2-statementStructure." + captureExtension
                 },
                 src: ["stages/two/statementStructure.js"]
             },
             "stage2-conflict": {
                 options: {
-                    require: commonMochaTestRequire.bind(cfg)
+                    require: commonMochaTestRequire.bind(cfg),
+                    captureFile: cfg._logDir + "/stage2-conflict." + captureExtension
                 },
                 src: ["stages/two/conflict.js"]
             },
@@ -244,16 +320,18 @@ module.exports = function(grunt) {
                         _suiteCfg.stage2 = _suiteCfg.stage2 || {};
                         _suiteCfg.stage2.queries = _suiteCfg.stage2.queries || {};
                         _suiteCfg.stage2.queries.pending = _suiteCfg.stage2.queries.pending || {};
-                    }
+                    },
+                    captureFile: cfg._logDir + "/stage2-streamQueries." + captureExtension
                 },
                 src: ["stages/two/streamQueries.js"]
             }
         },
 
         clean: [
-            cfg.persistence.statementStore + "/*.json",
-            cfg.persistence.statementStore + "/.consistent.json",
+            cfg.persistence.logs,
+            cfg.persistence.statementStore,
             cfg.persistence.conflicts,
+            cfg.persistence.queries,
             "var"
         ],
 
@@ -263,57 +341,97 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-mocha-test");
+    grunt.loadNpmTasks("grunt-continue");
     grunt.loadTasks("tasks");
 
     aliases = {
         adhoc: [
+            "continue:on",
             "mochaTest:stage1-adhocValid",
-            "mochaTest:stage1-adhocInvalid"
+            "mochaTest:stage1-adhocInvalid",
+            "continue:off"
         ],
         conflict: [
             "primeLRS:conflict",
+            "continue:on",
             "mochaTest:stage1-conflict",
+            "continue:off",
             "updateConsistent",
             "retrieveConflictStatements",
-            "mochaTest:stage2-conflict"
+            "continue:on",
+            "mochaTest:stage2-conflict",
+            "continue:off"
         ],
         query: [
             "primeLRS:query",
             "updateConsistent",
-            "mochaTest:stage2-streamQueries"
+            "continue:on",
+            "mochaTest:stage2-streamQueries",
+            "continue:off"
         ],
         stage1: [
+            "continue:on",
             "mochaTest:stage1-core",
             "mochaTest:stage1-adhocValid",
             "mochaTest:stage1-adhocInvalid",
+            "continue:off",
             "primeLRS",
-            "mochaTest:stage1-conflict"
+            "continue:on",
+            "mochaTest:stage1-conflict",
+            "continue:off"
         ],
         stage2: [
             "updateConsistent",
+            "continue:on",
             "mochaTest:stage2-statementStructure",
+            "continue:off",
             "retrieveConflictStatements",
+            "continue:on",
             "mochaTest:stage2-conflict",
-            "mochaTest:stage2-streamQueries"
+            "mochaTest:stage2-streamQueries",
+            "continue:off"
         ],
         "default": [
+            "continue:on",
             "mochaTest:stage1-core",
             "mochaTest:stage1-adhocValid",
             "mochaTest:stage1-adhocInvalid",
+            "continue:off",
             "primeLRS",
+            "continue:on",
             "mochaTest:stage1-conflict",
+            "continue:off",
             "updateConsistent",
+            "continue:on",
             "mochaTest:stage2-statementStructure",
+            "continue:off",
             "retrieveConflictStatements",
+            "continue:on",
             "mochaTest:stage2-conflict",
-            "mochaTest:stage2-streamQueries"
+            "mochaTest:stage2-streamQueries",
+            "continue:off"
         ]
     };
+
+    //
+    // add a set of aliases that maps to the mochaTest subtasks to
+    // allow easy running of the subtask + summary
+    //
+    Object.keys(grunt.config.get("mochaTest")).forEach(
+        function (k) {
+            if (k === "options") {
+                return;
+            }
+            aliases[k] = [ "continue:on", "mochaTest:" + k, "continue:off" ];
+        }
+    );
+
     Object.keys(aliases).forEach(
         function (k) {
             if (cfg.developer) {
                 aliases[k].unshift("jshint");
             }
+            aliases[k].push("summary");
             grunt.registerTask(k, aliases[k]);
         }
     );

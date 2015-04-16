@@ -4,8 +4,21 @@ var consistentThrough;
 
 module.exports = {
     isConsistent: function (value) {
+        var consistentFile = _suiteCfg.persistence.statementStore + "/.consistent.json",
+            consistentValue;
+
         if (! consistentThrough) {
-            consistentThrough = new Date(require(_suiteCfg.persistence.statementStore + "/.consistent.json"));
+            try {
+                consistentValue = require(consistentFile);
+            }
+            catch (e) {
+                if (e.code === "MODULE_NOT_FOUND") {
+                    throw new Error(".consistent.json does not exist (hint: run 'updateConsistent' task)");
+                }
+                throw new Error(".consistent.json could not be required: " + e);
+            }
+
+            consistentThrough = new Date(consistentValue);
         }
 
         //
