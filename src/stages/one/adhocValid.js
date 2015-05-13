@@ -1,17 +1,18 @@
-/* global features, after, _suiteCfg */
+/* global features, beforeEach, after, afterEach, _suiteCfg */
 "use strict";
 
-var Yadda = require("yadda"),
+var taskName = "stage1:adhocValid",
+    Yadda = require("yadda"),
     fs = require("fs"),
-    utilRequest = require("../../utils/request"),
-    helpers = require("../helpers"),
+    helpers = require("../helpers")(taskName),
     fixtures = require("../../fixtures/loader"),
     libraries = [ require("../../steps/base"), require("../../steps/verify") ],
     runner = new Yadda.Yadda(libraries, {}),
     feature = {
         title: "Adhoc valid statement sending",
         scenarios: []
-    };
+    },
+    jsonFileRe = /^[-\w]+\.json$/;
 
 fixtures.load(
     [
@@ -21,6 +22,11 @@ fixtures.load(
 );
 
 Yadda.plugins.mocha.StepLevelPlugin.init();
+helpers.init();
+
+beforeEach(helpers.beforeEach);
+afterEach(helpers.afterEach);
+after(helpers.after);
 
 //
 // construct the adhoc scenarios
@@ -29,6 +35,10 @@ _suiteCfg.persistence.adhocValid.forEach(
     function (dir) {
         fs.readdirSync(dir).forEach(
             function (fname) {
+                if (! jsonFileRe.exec(fname)) {
+                    return;
+                }
+
                 feature.scenarios.push(
                     {
                         title: "Sending valid statement from file: " + fname,
@@ -56,12 +66,3 @@ if (feature.scenarios.length > 0) {
         }
     );
 }
-
-after(
-    function () {
-        if (_suiteCfg.diagnostics.requestCount) {
-            utilRequest.stat(_suiteCfg._logger);
-            utilRequest.statReset();
-        }
-    }
-);

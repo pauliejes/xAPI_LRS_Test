@@ -1,19 +1,20 @@
-/* global features, scenarios, steps, after, _suiteCfg */
+/* global features, scenarios, steps, beforeEach, after, afterEach, _suiteCfg */
 "use strict";
 
-var fs = require("fs"),
-    path = require("path"),
+var taskName = "stage2:statementStructure",
     Yadda = require("yadda"),
+    fs = require("fs"),
+    path = require("path"),
+    helpers = require("../helpers")(taskName),
     stageHelpers = require("./helpers"),
     fixtures = require("../../fixtures/loader"),
     libraries = require("../../steps/consistent"),
-    utilRequest = require("../../utils/request"),
     statementRe = /^[-\w]+\.json$/,
     feature = {
         title: "Loadable statement matching",
         scenarios: []
     },
-    runner;
+    runner = new Yadda.Yadda(libraries);
 
 fixtures.load(
     [
@@ -23,29 +24,40 @@ fixtures.load(
 );
 
 Yadda.plugins.mocha.StepLevelPlugin.init();
+helpers.init();
 
-runner = new Yadda.Yadda(libraries);
+beforeEach(helpers.beforeEach);
+afterEach(helpers.afterEach);
+after(helpers.after);
 
 _suiteCfg.persistence.statementRead.forEach(
     function (dir) {
         fs.readdirSync(dir).forEach(
             function (fname) {
+                var scenario,
+                    isConsistent;
+
                 if (! statementRe.exec(fname)) {
                     return;
                 }
-                feature.scenarios.push(
-                    {
-                        title: "Fetching statement matches locally stored statement: " + fname,
-                        steps: [
-                            "Given a loadable statement with filename: " + dir + "/" + fname,
-                            "When the statement is retrieved",
-                            "Then the statement structure matches",
-                        ],
-                        annotations: stageHelpers.isConsistent(
-                            require(path.resolve(dir, fname)).stored
-                        ) ? {} : { pending: true }
-                    }
-                );
+
+                isConsistent = stageHelpers.isConsistent(require(path.resolve(dir, fname)).stored);
+
+                scenario = {
+                    title: "Fetching statement matches locally stored statement: " + fname,
+                    steps: [
+                        "Given a loadable statement with filename: " + dir + "/" + fname,
+                        "When the statement is retrieved",
+                        "Then the statement structure matches",
+                    ],
+                    annotations: {}
+                };
+                if (! isConsistent) {
+                    scenario.annotations.pending = true;
+                    _suiteCfg._results[taskName].pendingConsistency += 1;
+                }
+
+                feature.scenarios.push(scenario);
             }
         );
     }
@@ -74,14 +86,5 @@ features(
                 );
             }
         );
-    }
-);
-
-after(
-    function () {
-        if (_suiteCfg.diagnostics.requestCount) {
-            utilRequest.stat(_suiteCfg._logger);
-            utilRequest.statReset();
-        }
     }
 );

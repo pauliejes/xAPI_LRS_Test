@@ -1,5 +1,6 @@
 src/config.json
 src/config*.json
+src/var/log/
 src/var/statements/
 src/var/conflicts/
 src/var/queries/

@@ -10,6 +10,7 @@
         "stepHash": false
     },
     "persistence": {
+        "logs": "./var/log",
         "statementStore": "./var/statements",
         "statementRead": [],
         "adhocValid": [],

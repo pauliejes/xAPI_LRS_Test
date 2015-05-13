@@ -43,6 +43,9 @@ module.exports = function (grunt) {
                                     utilRequest.makeRequest(
                                         conflictReq,
                                         function (err, res) {
+                                            if (res.statusCode !== 200) {
+                                                err = res.statusCode + ": " + res.body;
+                                            }
                                             if (err) {
                                                 next(new Error("Request failed: " + err));
                                                 return;
