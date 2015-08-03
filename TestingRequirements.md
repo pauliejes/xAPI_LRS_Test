@@ -364,7 +364,7 @@ by one of "mbox", "mbox_sha1sum", "open_id", or "account" being used (4.1.2.2.ta
 * An LRS's Statement API accepts PUT requests only if the "statementId" parameter is a String (Type, 7.2.1.table1.b)
 * An LRS cannot modify a Statement, state, or Object in the event it receives a Statement with statementID equal to a Statement in the LRS already. (7.2.1.a, 7.2.2.b)
 * An LRS's Statement API upon processing a successful PUT request returns code 204 No Content (7.2.1)
-* An LRS's Statement API rejects with error code 409 Conflict any Statement with the "statementID" parameter equal to a Statement in the LRS already **Implicit** (7.2.1.b, 7.2.2.b)
+* An LRS's Statement API rejects with error code 409 Conflict any Statement with the "statementId" parameter equal to a Statement in the LRS already **Implicit** (7.2.1.b, 7.2.2.b)
 * A POST request is defined as a "pure" POST, as opposed to a GET taking on the form of a POST (7.2.2.e)
 * An LRS's Statement API accepts POST requests (7.2.2)
 * An LRS's Statement API upon processing a successful POST request returns code 204 No Content and all Statement UUIDs within the POST **Implicit** (7.2.2)
@@ -570,3 +570,14 @@ by one of "mbox", "mbox_sha1sum", "open_id", or "account" being used (4.1.2.2.ta
 
 * The display property MUST be used to illustrate the meaning which is already determined by the Verb IRI. (No way to automate this)
 * The display property MUST NOT be used to alter the meaning of a Verb. (No way to validate this)
+*
+
+## 3.0 Special Warnings
+
+In the duration of time between xAPI version 1.0 and 1.1/2.0, certain issues were found that could impact conformance.  
+The Conformance Test Suite behaves uniformally to all 1.0.X versions of xAPI, but some practices that were allowed in 
+earlier 1.0.X versions were later found to be against best practices.  Such examples were deemed serious enough of a threat 
+to interoperabilities to warrant warnings.  This section details those warnings.
+
+*  An LRS SHOULD NOT reject a voiding Statement or Statement batch on the grounds that the "StatementId" property's 
+value does not match any "StatementId" currently in the LRS.
