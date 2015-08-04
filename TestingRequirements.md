@@ -322,9 +322,12 @@ by one of "mbox", "mbox_sha1sum", "open_id", or "account" being used (4.1.2.2.ta
 * An LRS returns a ContextActivity in an array, even if only a single ContextActivity is returned (4.1.6.2.c, 4.1.6.2.d)
 * An LRS rejects with error code 400 Bad Request, a Request whose "authority" is a Group of more than two Agents  (Format, 4.1.9.a)
 * An LRS rejects with error code 400 Bad Request, a Request whose "authority" is a Group and consists of non-O-Auth Agents  (4.1.9.a)
+* An LRS rejects with error code 400 Bad Request, a Request whose "authority" is an Anonymous Group (4.1.9.a)
 * An LRS rejects with error code 403 Forbidden a Request whose "authority" is a Agent or Group that is not authorized  (4.1.9.b, 6.4.2)
 * An LRS populates the "authority" property if it is not provided in the Statement, based on header information with the Agent corresponding to the user (contained within the header) (**Implicit**, 4.1.9.b, 4.1.9.c)
 * An LRS rejects with error code 400 Bad Request, a Request which uses "version" and has the value set to anything but "1.0" or "1.0.x", where x is the semantic versioning number (Format, 4.1.10.b, 6.2.c, 6.2.f)
+* A Request "uses Attachments" if it contains a Statement which uses the "attachments" property (Definition,
+4.1.2.1.table1.row11.a)
 * An LRS rejects with error code 400 Bad Request, a PUT or POST Request which uses Attachments and does not have a "Content-Type" header with value "application/json" or "multipart/mixed" (Format, 4.1.11.a, 4.1.11.b)
 * An LRS rejects with error code 400 Bad Request, a PUT or POST Request which uses Attachments, has a "Content-Type" header with value "application/json", and has a discrepancy in the number of Attachments vs. the number of fileURL members (4.1.11.a)
 * An LRS rejects with error code 400 Bad Request, a PUT or POST Request which uses Attachments, has a "Content Type" header with value "multipart/mixed", and does not have a body header named "Content-Type" with value "multipart/mixed" (RFC 1341)
@@ -335,6 +338,7 @@ by one of "mbox", "mbox_sha1sum", "open_id", or "account" being used (4.1.2.2.ta
 * An LRS rejects with error code 400 Bad Request, a PUT or POST Request which uses Attachments, has a "Content Type" header with value "multipart/mixed", and does not the first document part with a "Content-Type" header with a value of "application/json" (RFC 1341, 4.1.11.b.a)
 * An LRS rejects with error code 400 Bad Request, a PUT or POST Request which uses Attachments, has a "Content Type" header with value "multipart/mixed", and does not have all of the Statements in the first document part (RFC 1341, 4.1.11.b.a)
 * An LRS rejects with error code 400 Bad Request, a PUT or POST Request which uses Attachments, has a "Content Type" header with value "multipart/mixed", and for any part except the first does not have a Header named "Content-Transfer-Encoding" with a value of "binary" (4.1.11.b.c, 4.1.11.b.e)
+* An LRS 
 * An LRS rejects with error code 400 Bad Request, a PUT or POST Request which uses Attachments, has a "Content Type" header with value "multipart/mixed", and for any part except the first does not have a Header named "X-Experience-API-Hash" with a value of one of those found in a "sha2" property of a Statement in the first part of this document (4.1.11.b.c, 4.1.11.b.d)
 * An LRS's Statement API will reject a GET request having the "attachment" parameter set to "true" if it does not follow the rest of the attachment rules (7.2.3.d)
 * An LRS's Statement API will reject a GET request having the "attachment" parameter set to "false" if it includes attachment raw data (7.2.3.e)
