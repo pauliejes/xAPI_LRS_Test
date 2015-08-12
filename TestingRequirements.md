@@ -321,8 +321,7 @@ by one of "mbox", "mbox_sha1sum", "open_id", or "account" being used (4.1.2.2.ta
 * An LRS generates an "objectType" property of "Activity" to any "object" property if none is provided (Modify, 4.1.4.a) **Implicit**
 * An LRS returns a ContextActivity in an array, even if only a single ContextActivity is returned (4.1.6.2.c, 4.1.6.2.d)
 * An LRS rejects with error code 400 Bad Request, a Request whose "authority" is a Group of more than two Agents  (Format, 4.1.9.a)
-* An LRS rejects with error code 400 Bad Request, a Request whose "authority" is a Group and consists of non-O-Auth Agents  (4.1.9.a)
-* An LRS rejects with error code 400 Bad Request, a Request whose "authority" is an Anonymous Group (4.1.9.a)
+* An LRS rejects with error code 400 Bad Request, a Request whose "authority" is a Group of less than two Agents  (Format, 4.1.9.a)
 * An LRS rejects with error code 403 Forbidden a Request whose "authority" is a Agent or Group that is not authorized  (4.1.9.b, 6.4.2)
 * An LRS populates the "authority" property if it is not provided in the Statement, based on header information with the Agent corresponding to the user (contained within the header) (**Implicit**, 4.1.9.b, 4.1.9.c)
 * An LRS rejects with error code 400 Bad Request, a Request which uses "version" and has the value set to anything but "1.0" or "1.0.x", where x is the semantic versioning number (Format, 4.1.10.b, 6.2.c, 6.2.f)
@@ -367,7 +366,6 @@ by one of "mbox", "mbox_sha1sum", "open_id", or "account" being used (4.1.2.2.ta
 * An LRS's Statement API accepts PUT requests only if the "statementId" parameter is a String (Type, 7.2.1.table1.b)
 * An LRS cannot modify a Statement, state, or Object in the event it receives a Statement with statementID equal to a Statement in the LRS already. (7.2.1.a, 7.2.2.b)
 * An LRS's Statement API upon processing a successful PUT request returns code 204 No Content (7.2.1)
-* An LRS's Statement API rejects with error code 409 Conflict any Statement with the "statementId" parameter equal to a Statement in the LRS already **Implicit** (7.2.1.b, 7.2.2.b)
 * A POST request is defined as a "pure" POST, as opposed to a GET taking on the form of a POST (7.2.2.e)
 * An LRS's Statement API accepts POST requests (7.2.2)
 * An LRS's Statement API upon processing a successful POST request returns code 204 No Content and all Statement UUIDs within the POST **Implicit** (7.2.2)
