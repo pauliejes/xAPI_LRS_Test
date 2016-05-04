@@ -110,47 +110,47 @@ The details of each property of a statement are described in the table below.
 * An Agent uses the "name" property at most one time (Multiplicity, 4.1.a)
 * A "name" property is a String (Type, 4.1.2.1.table1.row2.a)
 * An "actor" property with "objectType" as "Agent" uses one of the following properties: "mbox", "mbox_sha1sum", 
-"open_id", "account" (Multiplicity, 4.1.2.1.a)  - EXAMPLE ONLY
+"openid", "account" (Multiplicity, 4.1.2.1.a)  - EXAMPLE ONLY
 * An Agent uses the "mbox" property at most one time (Multiplicity, 4.1.a)
-* An Agent does not use the "mbox" property if "mbox_sha1sum", "open_id", or 
+* An Agent does not use the "mbox" property if "mbox_sha1sum", "openid", or 
 "account" are used (Multiplicity, 4.1.2.1.b)
 * An Agent uses the "mbox_sha1sum" property at most one time (Multiplicity, 4.1.a)
-* An Agent does not use the "mbox_sha1sum" property if "mbox", "open_id", or 
+* An Agent does not use the "mbox_sha1sum" property if "mbox", "openid", or 
 "account" are used (Multiplicity, 4.1.2.1.b)
-* An Agent uses the "open_id" property at most one time (Multiplicity, 4.1.a)
-* An Agent does not use the "open_id" property if "mbox", "mbox_sha1sum", or 
+* An Agent uses the "openid" property at most one time (Multiplicity, 4.1.a)
+* An Agent does not use the "openid" property if "mbox", "mbox_sha1sum", or 
 "account" are used (Multiplicity, 4.1.2.1.b)
 * An Agent uses the "account" property at most one time (Multiplicity, 4.1.a)
 * An Agent does not use the "account" property if "mbox", "mbox_sha1sum", or 
-"open_id" are used (Multiplicity, 4.1.2.1.b)
+"openid" are used (Multiplicity, 4.1.2.1.b)
 * A Group is defined by "objectType" of an "actor" property or "object" property with value "Group" (4.1.2.2.table1.row2, 4.1.4.2.a)
 * A Group uses the "name" property at most one time (Multiplicity, 4.1.a)
 * A Group uses the "member" property at most one time (Multiplicity, 4.1.a)
 * An Anonymous Group is defined by "objectType" of an "actor" or "object" with value "Group" and
-by none of "mbox", "mbox_sha1sum", "open_id", or "account" being used (4.1.2.2.table1.row2, 4.1.2.2.table1)
+by none of "mbox", "mbox_sha1sum", "openid", or "account" being used (4.1.2.2.table1.row2, 4.1.2.2.table1)
 * An Anonymous Group uses the "member" property at most one time (Multiplicity, 4.1.a)
 * An Anonymous Group uses the "member" property (Multiplicity, 4.1.2.2.table1.row3.b)
 * The "member" property is an array of Objects following Agent requirements (4.1.2.2.table1.row3.a)
 * An Identified Group is defined by "objectType" of an "actor" or "object" with value "Group" and
-by one of "mbox", "mbox_sha1sum", "open_id", or "account" being used (4.1.2.2.table1.row2, 4.1.2.2.table2)
+by one of "mbox", "mbox_sha1sum", "openid", or "account" being used (4.1.2.2.table1.row2, 4.1.2.2.table2)
 * An Identified Group uses one of the following properties: "mbox", "mbox_sha1sum", 
-"open_id", "account" (Multiplicity, 4.1.2.1.a)  - EXAMPLE ONLY
+"openid", "account" (Multiplicity, 4.1.2.1.a)  - EXAMPLE ONLY
 * An Identified Group uses the "mbox" property at most one time (Multiplicity, 4.1.a)
-* An Identified Group does not use the "mbox" property if "mbox_sha1sum", "open_id", or 
+* An Identified Group does not use the "mbox" property if "mbox_sha1sum", "openid", or 
 "account" are used (Multiplicity, 4.1.2.1.b)
 * An Identified Group uses the "mbox_sha1sum" property at most one time (Multiplicity, 4.1.a)
-* An Identified Group does not use the "mbox_sha1sum" property if "mbox", "open_id", or 
+* An Identified Group does not use the "mbox_sha1sum" property if "mbox", "openid", or 
 "account" are used (Multiplicity, 4.1.2.1.b)
-* An Identified Group uses the "open_id" property at most one time (Multiplicity, 4.1.a)
-* An Identified Group does not use the "open_id" property if "mbox", "mbox_sha1sum", or 
+* An Identified Group uses the "openid" property at most one time (Multiplicity, 4.1.a)
+* An Identified Group does not use the "openid" property if "mbox", "mbox_sha1sum", or 
 "account" are used (Multiplicity, 4.1.2.1.b)
 * An Identified Group uses the "account" property at most one time (Multiplicity, 4.1.a)
 * An Identified Group does not use the "account" property if "mbox", "mbox_sha1sum", or 
-"open_id" are used (Multiplicity, 4.1.2.1.b)
+"openid" are used (Multiplicity, 4.1.2.1.b)
 * An "mbox" property is an IRI (Type, 4.1.2.3.table1.row1.a)
 * An "mbox" property has the form "mailto:*email address*" (Syntax, 4.1.2.3.table1.row1.b)
 * An "mbox_sha1sum" property is a String (Type, 4.1.2.3.table1.row2.a)
-* An "open_id" property is a URI (Type, 4.1.2.3.table1.row3.a)
+* An "openid" property is a URI (Type, 4.1.2.3.table1.row3.a)
 * An Account Object is the "account" property of a Group or Agent (Definition, 4.1.2.4)
 * An Account Object uses the "homePage" property at most one time (Multiplicity, 4.1.a)
 * An Account Object uses the "homePage" property (Multiplicity, 4.1.2.4.table1.row1.b)
