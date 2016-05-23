@@ -5,6 +5,9 @@ Experience API LRS Test
 
 ## Forum Link: https://groups.google.com/a/adlnet.gov/forum/#!forum/xapi-spec
 
+##Requirements
+[Testing requirements.](https://github.com/adlnet/xAPI_LRS_Test/blob/master/TestingRequirements.md)
+
 ### Goal
 
 This group exists to create a single conformance test to be used as the official Experience API 
@@ -43,3 +46,38 @@ Learning (ADL) Initiative.
 * Tests may only test things referenced within the TR document.
 * Issues can be opened within this group to perform gap analysis on whether what the test is testing should be a part of the TR document.  This will most commonly occur on existing tests as they migrate into this effort.
 * All tests upon being run must explicitly state if they pass or fail, and if there is a failure, refer to the exact requirement that has failed via the TR document numbering system.
+
+## Contributing to the Experience API LRS Test Suite
+
+### About the Branches
+
+The conformance branch exists so that LRS vendors can have a chance to make sure they are conformant before the next conformance version of the test suite is released.
+It also means that an LRS can claim conformance to a specific conformance version of the test suite, ultimately this becomes what an LRS user should be interested in.
+
+Changes can be made to the `master` branch that do not affect whether an LRS is conformant and therefore vendors do not need to track this version as closely.
+
+### Pull Requests
+
+When making a source only change submit a Pull Request against the `master` branch.
+
+When making a change that can affect whether an LRS is deemed conformant with a particular conformance version then submit a Pull Request against the `conformance` branch.
+
+It is recommended that change sets are minimal, and made against the tip of the current branch.
+
+Turn on `developer` flag in config file to make sure files are linted.
+
+## License
+   Copyright &copy;2016 Advanced Distributed Learning
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
